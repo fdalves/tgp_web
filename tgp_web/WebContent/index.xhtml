@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">      
+    <h:head></h:head>
+    
+    
+   <h:form id = "form">
+    
+   <p:growl id="growl" showDetail="true" sticky="true" />
+ 
+    <p:spacer height="10" />
+ 
+    <p:separator />
+ 
+    <p:messages id="messages" showDetail="true" autoUpdate="true" />
+ 
+    <h:panelGrid columns="2" id="matchGrid" cellpadding="5">                   
+        <h:outputLabel for="pwd" value="Senha: *" />
+        <p:password id="pwd"  value="#{usuarioMB.usuario.senha}" label="Password "  feedback="true" />
+    </h:panelGrid>
+ 
+ 	<a href="pages/usuario.xhtml">Registrar1 - Exemplo de Navegação Estática</a>
+   
+	
+	
+ 
+    
+ 	
+</h:form>
+</html>

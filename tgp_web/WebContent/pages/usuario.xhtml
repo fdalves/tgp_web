@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">      
+    <h:head></h:head>
+    
+    
+   <h:form id = "form">
+ 
+  
+    
+   <p:growl id="growl" showDetail="true" sticky="true" />
+ 
+ 	
+    
+ 
+    <p:messages id="messages" showDetail="true" autoUpdate="true" />
+ 
+ 	<p:panel header="Cadastro Usuário">
+ 	
+ 	<h:panelGrid columns="2" id="matchGrid" cellpadding="5">                   
+        <h:outputLabel for="loginiD" value="Login: *" />
+      	<p:inputText id="loginiD" value="#{usuarioMB.usuario.login}" required="true"/>  
+        <h:outputLabel for="pwd" value="Senha: *" />
+        <p:password id="pwd"  value="#{usuarioMB.usuario.senha}" label="Password " feedback="true"  match="pwd2" required="true"  />
+        <h:outputLabel for="pwd2" value="Repita Senha: *" />
+        <p:password id="pwd2"   label="Password2 "  required="true" feedback="true" />
+        <h:outputLabel for="nomeId" value="Nome: *" />
+      	<p:inputText id="nomeId" value="#{usuarioMB.usuario.nome}" required="true"/> 
+      	
+      	
+      	<h:outputLabel for="email1" value="Email*:"  />
+         <p:inputText id="email1" value="#{usuarioMB.usuario.email}" required="true">
+             <f:validator validatorId="custom.emailValidator" />
+        </p:inputText>
+    
+    <h:outputLabel  value="Foto: " />
+    <p:fileUpload fileUploadListener="#{usuarioMB.handleFileUpload}" mode="advanced" dragDropSupport="true"
+                          update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+ 
+    
+     <p:outputLabel for="superUserId" value="Super User:" />
+        <p:selectOneRadio id="superUserId" value="#{usuarioMB.usuario.superUser}">
+            <f:selectItem itemLabel="Sim" itemValue="S" />
+            <f:selectItem itemLabel="Não" itemValue="N" />
+            
+        </p:selectOneRadio>   
+       
+       
+       <p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" actionListener="#{usuarioMB.salvar()}"/>
+       
+    </h:panelGrid>
+ 
+ 	
+ 	
+  </p:panel>  
+ 	
+</h:form>
+</html>
