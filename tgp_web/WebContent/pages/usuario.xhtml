@@ -7,7 +7,7 @@
     <h:head></h:head>
     
     
-   <h:form id = "form">
+   <h:form id="form">
  
   
     
@@ -49,13 +49,65 @@
         </p:selectOneRadio>   
        
        
-       <p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" actionListener="#{usuarioMB.salvar()}"/>
-       
+     
     </h:panelGrid>
+ 	
+ 	<center>
+ 	<p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" update="@all" actionListener="#{usuarioMB.salvar}"/>
+    <p:commandButton id="btn_reset" value="Reset" type="reset"/>
+ 	</center>
+ 	
+  </p:panel> 
+  
+  <p:spacer height="50"/>
+  
+  <p:panel header="Usuários Cadastrados">
+    
+    <p:dataTable id="dataTable" var="usu" value="#{usuarioMB.usarioList}" paginator="true" rows="5">
+        <f:facet name="header">
+            Usuarios
+        </f:facet>
  
- 	
- 	
-  </p:panel>  
+        
+ 		<p:column>
+            <f:facet name="header">
+                <h:outputText value="Login" />
+            </f:facet>
+            <h:outputText value="#{usu.login}" />
+        </p:column>
+ 		
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Nome" />
+            </f:facet>
+            <h:outputText value="#{usu.nome}" />
+        </p:column>
+        
+        
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="E-mail" />
+            </f:facet>
+            <h:outputText value="#{usu.email}" />
+        </p:column>
+        
+        
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Foto" />
+            </f:facet>
+            
+        </p:column>
+        
+        
+        <p:column style="width:32px;text-align: center">
+             <p:commandButton process="@this"  ajax="true" update=":form:matchGrid" icon="ui-icon-pencil"  title="Editar">
+                <f:setPropertyActionListener value="#{usu}"  target="#{usuarioMB.usuario}" />
+            </p:commandButton>
+        </p:column>
+        
+    </p:dataTable>
+    </p:panel> 
  	
 </h:form>
 </html>
