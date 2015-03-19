@@ -10,17 +10,18 @@
    <h:form id="form">
  
   
-    
-   <p:growl id="growl" showDetail="true" sticky="true" />
+  
+  
  
+ 	<p:panel id="cadUsuer" header="Cadastro Usuário">
  	
-    
- 
-    <p:messages id="messages" showDetail="true"  />
- 
- 	<p:panel header="Cadastro Usuário">
+ 	<p:growl id="growl" showDetail="true" sticky="true" />
+   	<p:messages id="messages" showDetail="true"  /> 
  	
- 	<h:panelGrid columns="2" id="matchGrid" cellpadding="5">                   
+ 	<h:panelGrid columns="2" id="matchGrid" cellpadding="5"> 
+ 	
+ 		                 
+        
         <h:outputLabel for="loginiD" value="Login: *" />
       	<p:inputText id="loginiD" value="#{usuarioMB.usuario.login}" required="true" maxlength="100" style="width: 500px;" />  
         <h:outputLabel for="pwd" value="Senha: *" />
@@ -52,8 +53,8 @@
        
  	<center>
  		<p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" update=":form:matchGrid" process="@all" type="submit" actionListener="#{usuarioMB.salvar}"/>
-    	<p:commandButton value="Limpar" update=":form:matchGrid" process="@this" style="margin-right:20px;" >
-                <p:resetInput target=":form:matchGrid" />
+    	<p:commandButton value="Limpar" update=":form:cadUsuer,:form:matchGrid" process="@this" style="margin-right:20px;" >
+                <p:resetInput target=":form:cadUsuer,:form:matchGrid" />
             </p:commandButton>
  	</center>
      
