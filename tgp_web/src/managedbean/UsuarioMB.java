@@ -53,13 +53,47 @@ public class UsuarioMB  implements Serializable {
 	public void salvar(){
 		
 		if (usuario.getUsuarioId() == 0){
+			
+
+			if (!this.validaEmail(this.usuario.getEmail())){
+				String info = "E-mail Já Cadastrado..";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
+				return;
+			}
+			
+			
+			if (!this.validaLogin(this.usuario.getLogin())){
+				String info = "Login Já Cadastrado..";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
+				return;
+			}
+			
 			this.usuarioFacade.save(usuario);
 			String info = "Usuário Cadastrado com Sucesso";
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuário " + usuario.getLogin(), info));
 		} else {
 			Usuario usuarioPersist = this.usuarioFacade.find(usuario.getUsuarioId());
-			usuarioPersist.setEmail(this.usuario.getEmail());
-			usuarioPersist.setLogin(this.usuario.getLogin());
+			
+			if (usuarioPersist.getEmail().equalsIgnoreCase(this.usuario.getEmail())){
+				usuarioPersist.setEmail(this.usuario.getEmail());
+			} else {
+				if (!this.validaEmail(this.usuario.getEmail())){
+					String info = "E-mail Já Cadastrado..";
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
+					return;
+				}
+			}
+			
+			if (usuarioPersist.getLogin().equalsIgnoreCase(this.usuario.getLogin())){
+				usuarioPersist.setLogin(this.usuario.getLogin());
+			} else {
+				if (!this.validaLogin(this.usuario.getLogin())){
+					String info = "Login Já Cadastrado..";
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
+					return;
+				}
+			}
+			
 			usuarioPersist.setNome(this.usuario.getNome());
 			usuarioPersist.setSenha(this.usuario.getSenha());
 			usuarioPersist.setSuperUser(this.usuario.getSuperUser());
@@ -114,23 +148,35 @@ public class UsuarioMB  implements Serializable {
 
 	}
 	 
-	    private void criaArquivo(byte[] bytes, String arquivo) {
-	        FileOutputStream fos;
-	 
-	        try {
-	            fos = new FileOutputStream(arquivo);
-	            fos.write(bytes);
-	 
-	            fos.flush();
-	            fos.close();
-	        } catch (FileNotFoundException ex) {
-	            ex.printStackTrace();
-	        } catch (IOException ex) {
-	            ex.printStackTrace();
-	        }
-	    }
-	 
+	private void criaArquivo(byte[] bytes, String arquivo) {
+		FileOutputStream fos;
 
+		try {
+			fos = new FileOutputStream(arquivo);
+			fos.write(bytes);
+
+			fos.flush();
+			fos.close();
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+	
+	
+	private boolean validaEmail(String email){
+		List<Usuario> list = usuarioFacade.listarPorEmail(email);
+		return list.isEmpty();
+		
+	}
+	
+	private boolean validaLogin(String login){
+		List<Usuario> list = usuarioFacade.listarPorLogin(login);
+		return list.isEmpty();
+		
+	}
+	    
 	public UsuarioFacade getUsuarioFacade() {
 		return usuarioFacade;
 	}
