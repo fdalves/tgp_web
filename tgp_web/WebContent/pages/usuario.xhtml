@@ -16,46 +16,49 @@
  	
     
  
-    <p:messages id="messages" showDetail="true" autoUpdate="true" />
+    <p:messages id="messages" showDetail="true"  />
  
  	<p:panel header="Cadastro Usuário">
  	
  	<h:panelGrid columns="2" id="matchGrid" cellpadding="5">                   
         <h:outputLabel for="loginiD" value="Login: *" />
-      	<p:inputText id="loginiD" value="#{usuarioMB.usuario.login}" required="true"/>  
+      	<p:inputText id="loginiD" value="#{usuarioMB.usuario.login}" required="true" maxlength="100" style="width: 500px;" />  
         <h:outputLabel for="pwd" value="Senha: *" />
-        <p:password id="pwd"  value="#{usuarioMB.usuario.senha}" label="Password " feedback="true"  match="pwd2" required="true"  />
+        <p:password id="pwd"  value="#{usuarioMB.usuario.senha}" label="Password" maxlength="8" feedback="true"  match="pwd2" required="true" style="width: 500px;"  />
         <h:outputLabel for="pwd2" value="Repita Senha: *" />
-        <p:password id="pwd2"   label="Password2 "  required="true" feedback="true" />
-        <h:outputLabel for="nomeId" value="Nome: *" />
-      	<p:inputText id="nomeId" value="#{usuarioMB.usuario.nome}" required="true"/> 
+        <p:password id="pwd2"   label="Password2 " maxlength="8"  required="true" feedback="true" style="width: 500px;" />
+        <h:outputLabel for="nomeId" value="Nome: *"  maxlength="100"/>
+      	<p:inputText id="nomeId" value="#{usuarioMB.usuario.nome}" maxlength="100" required="true" style="width: 500px;"/> 
       	
       	
       	<h:outputLabel for="email1" value="Email*:"  />
-         <p:inputText id="email1" value="#{usuarioMB.usuario.email}" required="true">
+         <p:inputText id="email1" value="#{usuarioMB.usuario.email}" maxlength="100" required="true" style="width: 500px;">
              <f:validator validatorId="custom.emailValidator" />
         </p:inputText>
     
     <h:outputLabel  value="Foto: " />
     <p:fileUpload fileUploadListener="#{usuarioMB.handleFileUpload}" mode="advanced" dragDropSupport="true"
-                          update="messages" sizeLimit="100000" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+                          update="messages" sizeLimit="1000000000" allowTypes="/(\.|\/)(jpg|gif|jpeg|png)$/" />
  
     
      <p:outputLabel for="superUserId" value="Super User:" />
         <p:selectOneRadio id="superUserId" value="#{usuarioMB.usuario.superUser}">
             <f:selectItem itemLabel="Sim" itemValue="S" />
             <f:selectItem itemLabel="Não" itemValue="N" />
-            
         </p:selectOneRadio>   
        
-       
-     
     </h:panelGrid>
- 	
+    <p:separator></p:separator>
+       
  	<center>
- 	<p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" update="@all" actionListener="#{usuarioMB.salvar}"/>
-    <p:commandButton id="btn_reset" value="Reset" type="reset"/>
+ 		<p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" update=":form:matchGrid" process="@all" type="submit" actionListener="#{usuarioMB.salvar}"/>
+    	<p:commandButton value="Limpar" update=":form:matchGrid" process="@this" style="margin-right:20px;" >
+                <p:resetInput target=":form:matchGrid" />
+            </p:commandButton>
  	</center>
+     
+    
+ 	
  	
   </p:panel> 
   
@@ -92,22 +95,45 @@
         </p:column>
         
         
-        <p:column>
+        <p:column style="width:80px;text-align: center">
             <f:facet name="header">
                 <h:outputText value="Foto" />
             </f:facet>
-            
+            <center>
+            <p:graphicImage url="../temp/#{usu.usuarioId}.jpg" width="60px" height="60px"/>
+            </center>
         </p:column>
         
         
-        <p:column style="width:32px;text-align: center">
+        
+        
+        <p:column style="width:55px;text-align: center">
+       		 <f:facet name="header">
+                <h:outputText value="Editar" />
+            </f:facet>
              <p:commandButton process="@this"  ajax="true" update=":form:matchGrid" icon="ui-icon-pencil"  title="Editar">
                 <f:setPropertyActionListener value="#{usu}"  target="#{usuarioMB.usuario}" />
             </p:commandButton>
         </p:column>
         
-    </p:dataTable>
+        <p:column style="width:55px;text-align: center">
+          <f:facet name="header">
+                <h:outputText value="Excluir" />
+            </f:facet>
+            
+            <p:commandButton icon="ui-icon-trash"  title="Excluir" update=":form:dataTable" process="@this" ajax="true" action="#{usuarioMB.excluir(usu)}" immediate="true" >
+        		<p:confirm header="Confirmação Exclusão" message="Você tem certeza?" icon="ui-icon-alert" />
+        	</p:commandButton>
+        </p:column>
+        
+ 	</p:dataTable>
     </p:panel> 
- 	
+
+<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+        <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+ </p:confirmDialog>
+  	
 </h:form>
+
 </html>
