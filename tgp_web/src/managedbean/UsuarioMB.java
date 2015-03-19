@@ -1,7 +1,10 @@
 package managedbean;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -14,7 +17,7 @@ import org.primefaces.event.FileUploadEvent;
 
 import ejb.UsuarioFacade;
 
-@ManagedBean
+@ManagedBean(name="usuarioMB")
 @ViewScoped
 public class UsuarioMB  implements Serializable {
 	
@@ -23,6 +26,7 @@ public class UsuarioMB  implements Serializable {
 	@EJB
 	private UsuarioFacade usuarioFacade;
 	private Usuario usuario =  new  Usuario();
+	private List<Usuario> usarioList = new ArrayList<Usuario>();
 	
 	
 	
@@ -30,6 +34,13 @@ public class UsuarioMB  implements Serializable {
 
 	}
 
+	
+	@PostConstruct
+	public void ini(){
+		
+		usarioList = usuarioFacade.findAll();
+	}
+	
 	
 	public void salvar(){
 		usuarioFacade.save(usuario);
@@ -39,7 +50,10 @@ public class UsuarioMB  implements Serializable {
 						"Usuário " + usuario.getLogin(), info));
 		
 		usuario = new Usuario();
+		usarioList = usuarioFacade.findAll();
 	}
+	
+	
 	
 	
 	 public void handleFileUpload(FileUploadEvent event) {
@@ -62,6 +76,16 @@ public class UsuarioMB  implements Serializable {
 
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
+	}
+
+
+	public List<Usuario> getUsarioList() {
+		return usarioList;
+	}
+
+
+	public void setUsarioList(List<Usuario> usarioList) {
+		this.usarioList = usarioList;
 	}
 	
 	
