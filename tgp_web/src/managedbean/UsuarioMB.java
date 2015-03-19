@@ -1,5 +1,9 @@
 package managedbean;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +14,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 
 import model.Usuario;
 
@@ -38,21 +43,43 @@ public class UsuarioMB  implements Serializable {
 	@PostConstruct
 	public void ini(){
 		
-		usarioList = usuarioFacade.findAll();
+		this.usarioList = usuarioFacade.findAll();
+		this.listaFotosUser();
+		this.usuario =  new  Usuario();
 	}
+	
 	
 	
 	public void salvar(){
-		usuarioFacade.save(usuario);
 		
-		String info = "Usu�rio Cadastrado com Sucesso";
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,
-						"Usu�rio " + usuario.getLogin(), info));
+		if (usuario.getUsuarioId() == 0){
+			this.usuarioFacade.save(usuario);
+			String info = "Usuário Cadastrado com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuário " + usuario.getLogin(), info));
+		} else {
+			Usuario usuarioPersist = this.usuarioFacade.find(usuario.getUsuarioId());
+			usuarioPersist.setEmail(this.usuario.getEmail());
+			usuarioPersist.setLogin(this.usuario.getLogin());
+			usuarioPersist.setNome(this.usuario.getNome());
+			usuarioPersist.setSenha(this.usuario.getSenha());
+			usuarioPersist.setSuperUser(this.usuario.getSuperUser());
+			usuarioPersist.setFoto(this.getUsuario().getFoto());
+			
+			this.usuarioFacade.update(usuarioPersist);
+			String info = "Usuário Alterado com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuário " + usuario.getLogin(), info));
+		}
 		
-		usuario = new Usuario();
-		usarioList = usuarioFacade.findAll();
+		this.ini();
 	}
 	
+	
+	public void excluir(Usuario usuario){
+		this.usuarioFacade.delete(usuario);
+		String info = "Usuário Excluído com Sucesso";
+		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+		this.ini();
+	}
 	
 	
 	
@@ -61,6 +88,48 @@ public class UsuarioMB  implements Serializable {
 	        usuario.setFoto(event.getFile().getContents());
 	        FacesContext.getCurrentInstance().addMessage(null, message);
 	    }
+	 
+	 
+	
+	private void listaFotosUser() {
+
+		try {
+			ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+			File folder = new File(sContext.getRealPath("/temp"));
+			if (!folder.exists())
+				folder.mkdirs();
+
+			for (Usuario u : usarioList) {
+				if (u.getFoto() != null) {
+					String nomeArquivo = u.getUsuarioId() + ".jpg";
+					String arquivo = sContext.getRealPath("/temp")
+							+ File.separator + nomeArquivo;
+
+					criaArquivo(u.getFoto(), arquivo);
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+	}
+	 
+	    private void criaArquivo(byte[] bytes, String arquivo) {
+	        FileOutputStream fos;
+	 
+	        try {
+	            fos = new FileOutputStream(arquivo);
+	            fos.write(bytes);
+	 
+	            fos.flush();
+	            fos.close();
+	        } catch (FileNotFoundException ex) {
+	            ex.printStackTrace();
+	        } catch (IOException ex) {
+	            ex.printStackTrace();
+	        }
+	    }
+	 
 
 	public UsuarioFacade getUsuarioFacade() {
 		return usuarioFacade;
