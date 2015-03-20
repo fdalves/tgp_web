@@ -4,7 +4,17 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://java.sun.com/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">      
-    <h:head></h:head>
+    
+    
+    <f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		</f:facet>
+
+	</h:head>
+</f:view>
     
     
    <h:form id="form">
@@ -69,11 +79,8 @@
         </f:facet>
  
         
- 		<p:column>
-            <f:facet name="header">
-                <h:outputText value="Login" />
-            </f:facet>
-            <h:outputText value="#{usu.login}" />
+ 		<p:column filterBy="#{usu.login}" headerText="Login" footerText="contains" filterMatchMode="contains">
+ 		    <h:outputText value="#{usu.login}" />
         </p:column>
  		
         <p:column>
@@ -94,15 +101,22 @@
         
         <p:column style="width:80px;text-align: center">
             <f:facet name="header">
+                <h:outputText value="Super User" />
+            </f:facet>
+            <center>
+            <p:graphicImage url="../imagens/green-fa-check-circle.png" width="20px" height="20px"  rendered="#{usu.superUser == 'S'}"/>
+            <p:graphicImage url="../imagens/red-fa-times-circle.png" width="20px" height="20px"  rendered="#{usu.superUser == 'N'}"/>
+            </center>
+        </p:column>
+        
+        <p:column style="width:80px;text-align: center">
+            <f:facet name="header">
                 <h:outputText value="Foto" />
             </f:facet>
             <center>
             <p:graphicImage url="../temp/#{usu.usuarioId}.jpg" width="60px" height="60px"/>
             </center>
         </p:column>
-        
-        
-        
         
         <p:column style="width:55px;text-align: center">
        		 <f:facet name="header">
