@@ -56,21 +56,21 @@ public class UsuarioMB  implements Serializable {
 			
 
 			if (!this.validaEmail(this.usuario.getEmail())){
-				String info = "E-mail J√° Cadastrado..";
+				String info = "E-mail j· Cadastrado..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
 				return;
 			}
 			
 			
 			if (!this.validaLogin(this.usuario.getLogin())){
-				String info = "Login J√° Cadastrado..";
+				String info = "Login j· Cadastrado..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
 				return;
 			}
 			
 			this.usuarioFacade.save(usuario);
-			String info = "Usu√°rio Cadastrado com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usu√°rio " + usuario.getLogin(), info));
+			String info = "Usuario Cadastrado com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usu·rio " + usuario.getLogin(), info));
 		} else {
 			Usuario usuarioPersist = this.usuarioFacade.find(usuario.getUsuarioId());
 			
@@ -78,7 +78,7 @@ public class UsuarioMB  implements Serializable {
 				usuarioPersist.setEmail(this.usuario.getEmail());
 			} else {
 				if (!this.validaEmail(this.usuario.getEmail())){
-					String info = "E-mail J√° Cadastrado..";
+					String info = "E-mail J· Cadastrado..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
 					return;
 				}
@@ -88,7 +88,7 @@ public class UsuarioMB  implements Serializable {
 				usuarioPersist.setLogin(this.usuario.getLogin());
 			} else {
 				if (!this.validaLogin(this.usuario.getLogin())){
-					String info = "Login J√° Cadastrado..";
+					String info = "Login J· Cadastrado..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
 					return;
 				}
@@ -100,8 +100,8 @@ public class UsuarioMB  implements Serializable {
 			usuarioPersist.setFoto(this.getUsuario().getFoto());
 			
 			this.usuarioFacade.update(usuarioPersist);
-			String info = "Usu√°rio Alterado com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usu√°rio " + usuario.getLogin(), info));
+			String info = "Usuario Alterado com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usu·rio " + usuario.getLogin(), info));
 		}
 		
 		this.ini();
@@ -110,7 +110,7 @@ public class UsuarioMB  implements Serializable {
 	
 	public void excluir(Usuario usuario){
 		this.usuarioFacade.delete(usuario);
-		String info = "Usu√°rio Exclu√≠do com Sucesso";
+		String info = "Usu·rio Excluido com Sucesso";
 		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
 		this.ini();
 	}
