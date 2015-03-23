@@ -59,12 +59,13 @@
        
  	<center>
  		<p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" update=":form:matchGrid" process="@all" type="submit" actionListener="#{usuarioMB.salvar}"/>
-    	<p:commandButton value="Limpar" update=":form:cadUsuer,:form:matchGrid" process="@this" style="margin-right:20px;" >
+    	<p:commandButton value="Limpar" icon="ui-icon-close" update=":form:cadUsuer,:form:matchGrid" process="@this" style="margin-right:20px;" >
                 <p:resetInput target=":form:cadUsuer,:form:matchGrid" />
             </p:commandButton>
  	</center>
      
     
+ 	
  	
  	
   </p:panel> 

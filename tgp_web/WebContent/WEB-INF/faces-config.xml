@@ -5,6 +5,10 @@
   <referenced-bean-name>usuarioMB</referenced-bean-name>
   <referenced-bean-class>managedbean.UsuarioMB</referenced-bean-class>
  </referenced-bean>
+ <referenced-bean>
+  <referenced-bean-name>projetoMB</referenced-bean-name>
+  <referenced-bean-class>managedbean.ProjetoMB</referenced-bean-class>
+ </referenced-bean>
  <validator>
   <validator-id>custom.emailValidator</validator-id>
   <validator-class>util.EmailValidator</validator-class>

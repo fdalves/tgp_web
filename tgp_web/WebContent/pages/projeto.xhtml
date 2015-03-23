@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">      
+    
+    
+    <f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		</f:facet>
+
+	</h:head>
+</f:view>
+    
+    
+   <h:form id="form">
+ 
+ 	<p:panel id="cadProj" header="Cadastro Projeto">
+ 	
+ 	<p:growl id="growl" showDetail="true" sticky="true" />
+   	<p:messages id="messages" showDetail="true"  /> 
+ 	
+ 	<h:panelGrid columns="2" id="matchGrid" cellpadding="5"> 
+ 		
+ 		<h:outputLabel for="nomeprojId" value="Nome Projeto: *" />
+      	<p:inputText id="nomeprojId" value="#{projetoMB.projeto.nomeProjeto}" required="true" maxlength="100" style="width: 500px;" />  
+        <h:outputLabel for="siglaProjetoId" value="Sigla Projeto: *"  maxlength="10"/>
+      	<p:inputText id="siglaProjetoId" value="#{projetoMB.projeto.siglaProjeto}" maxlength="100" required="true" style="width: 500px;"/> 
+      	<h:outputLabel  value="Sigla Projeto: *"  />
+      	<p:inputTextarea  rows="5" cols="30" counter="display" maxlength="255" counterTemplate="{0} characters remaining." autoResize="false" value="#{projetoMB.projeto.descProjeto}" />
+      	<h:outputText id="display" />
+      	<h:inputHidden id="hidden" />
+      	<p:outputLabel for="escopoFechadoId" value="Escopo Fechado:" />
+        <p:selectOneRadio id="escopoFechadoId" value="#{projetoMB.projeto.escopoFecahdo}" >
+        	<p:ajax update=":form:cadProj,:form:matchGrid,:form:dateId" process="@this" event="change"/>
+            <f:selectItem itemLabel="Sim" itemValue="true"/>
+            <f:selectItem itemLabel="Não" itemValue="false" />
+        </p:selectOneRadio>
+        
+        <h:inputHidden id="hidden2" />
+        <h:panelGroup id="dateId"  cellpadding="5" columns="5" rendered="#{projetoMB.projeto.escopoFecahdo}" >
+        <p:outputLabel for="dt_ini" value="Data Inicio:" />
+        <p:calendar id="dt_ini" value="#{projetoMB.projeto.data_ini}" pattern="dd-MM-yyyy" mask="true" />
+ 	    <p:outputLabel style="padding-left: 20px;" for="dt_fim" value="Data Final:" />
+        <p:calendar id="dt_fim" value="#{projetoMB.projeto.data_fim}" pattern="dd-MM-yyyy" mask="true" />    	
+        </h:panelGroup>
+       
+    </h:panelGrid>
+    <p:separator></p:separator>
+       
+ 	<center>
+ 		<p:commandButton value="Save" ajax="false" icon="ui-icon-check" validateClient="true" update=":form:matchGrid" process="@all" type="submit" actionListener="#{projetoMB.salvar}"/>
+    	<p:commandButton value="Limpar" update=":form:cadProj,:form:matchGrid" icon="ui-icon-close" process="@this" style="margin-right:20px;" >
+                <p:resetInput target=":form:cadProj,:form:matchGrid" />
+            </p:commandButton>
+ 	</center>
+    
+  </p:panel>
+ 
+ 	<p:spacer height="50"/>
+  
+  <p:panel header="Projetos Cadastrados">
+    
+    <p:dataTable id="dataTable" var="pro" value="#{projetoMB.projetosList}" paginator="true" rows="5">
+        <f:facet name="header">
+            Projetos
+        </f:facet>
+ 
+        
+ 		<p:column filterBy="#{pro.nomeProjeto}" headerText="Nome" footerText="contains" filterMatchMode="contains">
+ 		    <h:outputText value="#{pro.nomeProjeto}" />
+        </p:column>
+        
+        
+        <p:column filterBy="#{pro.siglaProjeto}" headerText="Sigla Projeto" footerText="contains" filterMatchMode="contains">
+ 		    <h:outputText value="#{pro.siglaProjeto}" />
+        </p:column>
+ 		
+        <p:column>
+            <f:facet name="header">
+                <h:outputText value="Desc. projeto" />
+            </f:facet>
+            <h:outputText value="#{pro.descProjeto}" />
+        </p:column>
+        
+       
+        
+        <p:column style="width:80px;text-align: center">
+            <f:facet name="header">
+                <h:outputText value="Escopo Fechado" />
+            </f:facet>
+            <center>
+            <p:graphicImage url="../imagens/green-fa-check-circle.png" width="20px" height="20px"  rendered="#{pro.escopoFecahdo}"/>
+            <p:graphicImage url="../imagens/red-fa-times-circle.png" width="20px" height="20px"  rendered="#{pro.escopoFecahdo}}"/>
+            </center>
+        </p:column>
+        
+       
+        
+        <p:column style="width:55px;text-align: center">
+       		 <f:facet name="header">
+                <h:outputText value="Editar" />
+            </f:facet>
+             <p:commandButton process="@this"  ajax="true" update=":form:matchGrid" icon="ui-icon-pencil"  title="Editar">
+                <f:setPropertyActionListener value="#{pro}"  target="#{projetoMB.projeto}" />
+            </p:commandButton>
+        </p:column>
+        
+        <p:column style="width:55px;text-align: center">
+          <f:facet name="header">
+                <h:outputText value="Excluir" />
+            </f:facet>
+            
+            <p:commandButton icon="ui-icon-trash"  title="Excluir" update=":form:dataTable" process="@this" ajax="true" action="#{projetoMB.excluir(pro)}" immediate="true" >
+        		<p:confirm header="Confirmação Exclusão" message="Você tem certeza?" icon="ui-icon-alert" />
+        	</p:commandButton>
+        </p:column>
+        
+ 	</p:dataTable>
+ 	
+ 	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+        <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+ </p:confirmDialog>
+ 
+    </p:panel> 
+  
+    
+  	
+</h:form>
+
+</html>
