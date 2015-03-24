@@ -31,6 +31,16 @@ public class ProjetoMB  implements Serializable {
 	}
 
 	
+	public void onTabChange(){
+		
+	}
+	
+	
+	public void onTabClose(){
+		
+	}
+	
+	
 	@PostConstruct
 	public void ini(){
 		this.projeto = new Projeto();
@@ -44,14 +54,14 @@ public class ProjetoMB  implements Serializable {
 		if(this.projeto.getProjetoId() == 0){
 			
 			if (!this.validaNomeProjeto(this.projeto.getNomeProjeto())){
-				String info = "Nome Projeto já Cadastrado..";
+				String info = "Nome Projeto jï¿½ Cadastrado..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Nome Projeto " + projeto.getNomeProjeto(), info));
 				return;
 			}
 			
 			
 			if (!this.validaSiglaProjeto(this.projeto.getSiglaProjeto())){
-				String info = "Sigla já Cadastrada..";
+				String info = "Sigla jï¿½ Cadastrada..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + projeto.getSiglaProjeto(), info));
 				return;
 			}
@@ -69,7 +79,7 @@ public class ProjetoMB  implements Serializable {
 				projetoPersist.setNomeProjeto(this.projeto.getNomeProjeto());
 			} else {
 				if (!this.validaNomeProjeto(this.projeto.getNomeProjeto())){
-					String info = "Nome Projeto Já Cadastrado..";
+					String info = "Nome Projeto Jï¿½ Cadastrado..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Projeto " + projeto.getNomeProjeto(), info));
 					return;
 				}
@@ -79,7 +89,7 @@ public class ProjetoMB  implements Serializable {
 				projetoPersist.setSiglaProjeto(this.projeto.getSiglaProjeto());
 			} else {
 				if (!this.validaSiglaProjeto(this.projeto.getSiglaProjeto())){
-					String info = "Sigla Projeto Já Cadastrado..";
+					String info = "Sigla Projeto Jï¿½ Cadastrado..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Sigla Projeto " + projeto.getSiglaProjeto(), info));
 					return;
 				}

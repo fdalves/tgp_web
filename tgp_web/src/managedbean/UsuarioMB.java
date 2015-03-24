@@ -1,5 +1,8 @@
 package managedbean;
 
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -14,6 +17,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
 
 import model.Usuario;
@@ -56,21 +60,27 @@ public class UsuarioMB  implements Serializable {
 			
 
 			if (!this.validaEmail(this.usuario.getEmail())){
-				String info = "E-mail já Cadastrado..";
+				String info = "E-mail jï¿½ Cadastrado..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
 				return;
 			}
 			
 			
 			if (!this.validaLogin(this.usuario.getLogin())){
-				String info = "Login já Cadastrado..";
+				String info = "Login jï¿½ Cadastrado..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
 				return;
 			}
 			
+			
+			if (this.usuario.getFoto() == null){
+				this.usuario.setFoto(this.getFotoDefault());
+			}
+			
+			
 			this.usuarioFacade.save(usuario);
 			String info = "Usuario Cadastrado com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuário " + usuario.getLogin(), info));
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuï¿½rio " + usuario.getLogin(), info));
 		} else {
 			Usuario usuarioPersist = this.usuarioFacade.find(usuario.getUsuarioId());
 			
@@ -78,7 +88,7 @@ public class UsuarioMB  implements Serializable {
 				usuarioPersist.setEmail(this.usuario.getEmail());
 			} else {
 				if (!this.validaEmail(this.usuario.getEmail())){
-					String info = "E-mail Já Cadastrado..";
+					String info = "E-mail Jï¿½ Cadastrado..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
 					return;
 				}
@@ -88,7 +98,7 @@ public class UsuarioMB  implements Serializable {
 				usuarioPersist.setLogin(this.usuario.getLogin());
 			} else {
 				if (!this.validaLogin(this.usuario.getLogin())){
-					String info = "Login Já Cadastrado..";
+					String info = "Login Jï¿½ Cadastrado..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
 					return;
 				}
@@ -99,18 +109,48 @@ public class UsuarioMB  implements Serializable {
 			usuarioPersist.setSuperUser(this.usuario.getSuperUser());
 			usuarioPersist.setFoto(this.getUsuario().getFoto());
 			
+			
+			
 			this.usuarioFacade.update(usuarioPersist);
 			String info = "Usuario Alterado com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuário " + usuario.getLogin(), info));
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuï¿½rio " + usuario.getLogin(), info));
 		}
 		
 		this.ini();
 	}
 	
 	
+	private byte[] getFotoDefault() {
+		
+		BufferedImage imagem = null;
+		try {
+			ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+			String arquivo = sContext.getRealPath("/imagens")+ File.separator + "default2.jpg";
+			imagem = ImageIO.read(new File(arquivo));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		BufferedImage bi = new BufferedImage(imagem.getWidth(null),imagem.getHeight(null),BufferedImage.TYPE_INT_RGB);  
+	    Graphics bg = bi.getGraphics();  
+	    bg.drawImage(imagem, 0, 0, null);  
+	    bg.dispose();  
+	      
+	    ByteArrayOutputStream buff = new ByteArrayOutputStream();         
+	    try {    
+	        ImageIO.write(bi, "JPG", buff);    
+	    } catch (IOException e) {    
+	        e.printStackTrace();    
+	    }    
+	    return buff.toByteArray();        
+		
+	}
+
+
 	public void excluir(Usuario usuario){
 		this.usuarioFacade.delete(usuario);
-		String info = "Usuário Excluido com Sucesso";
+		String info = "Usuï¿½rio Excluido com Sucesso";
 		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
 		this.ini();
 	}

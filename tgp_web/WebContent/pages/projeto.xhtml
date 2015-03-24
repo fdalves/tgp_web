@@ -34,27 +34,30 @@
       	<p:inputText id="nomeprojId" value="#{projetoMB.projeto.nomeProjeto}" required="true" maxlength="100" style="width: 500px;" />  
         <h:outputLabel for="siglaProjetoId" value="Sigla Projeto: *"  maxlength="10"/>
       	<p:inputText id="siglaProjetoId" value="#{projetoMB.projeto.siglaProjeto}" maxlength="100" required="true" style="width: 500px;"/> 
-      	<h:outputLabel  value="Sigla Projeto: *"  />
+      	<h:outputLabel  value="Desc. Projeto: *"  />
       	<p:inputTextarea  rows="5" cols="30" counter="display" maxlength="255" counterTemplate="{0} characters remaining." autoResize="false" value="#{projetoMB.projeto.descProjeto}" />
       	<h:inputHidden id="hidden3" />
       	<h:outputText id="display" />
       	
       	<p:outputLabel for="escopoFechadoId" value="Escopo Fechado:" />
-        <p:selectOneRadio id="escopoFechadoId" value="#{projetoMB.projeto.escopoFecahdo}" >
-        	<p:ajax update=":form:cadProj,:form:matchGrid,:form:dateId" process="@this" event="change"/>
+        <p:selectOneRadio id="escopoFechadoId" value="#{projetoMB.projeto.escopoFecahdo}"   >
+        	<p:ajax update=":form:dateId" process="@this" event="change"/>
             <f:selectItem itemLabel="Sim" itemValue="true"/>
-            <f:selectItem itemLabel="Não" itemValue="false" />
+            <f:selectItem itemLabel="Não" itemValue="false"/>
         </p:selectOneRadio>
         
-        <h:inputHidden id="hidden2" />
-        <h:panelGroup id="dateId"  cellpadding="5" columns="5" rendered="#{projetoMB.projeto.escopoFecahdo}" >
-        <p:outputLabel for="dt_ini" value="Data Inicio:" />
-        <p:calendar id="dt_ini" value="#{projetoMB.projeto.data_ini}" pattern="dd/MM/yyyy" mask="true" />
- 	    <p:outputLabel style="padding-left: 20px;" for="dt_fim" value="Data Final:" />
-        <p:calendar id="dt_fim" value="#{projetoMB.projeto.data_fim}" pattern="dd/MM/yyyy" mask="true" />    	
-        </h:panelGroup>
+       
        
     </h:panelGrid>
+    
+     <h:inputHidden id="hidden2" />
+        <p:panelGrid id="dateId"  cellpadding="5" columns="5" >
+        <p:outputLabel for="dt_ini" value="Data Inicio:" rendered="#{projetoMB.projeto.escopoFecahdo}"  />
+        <p:calendar id="dt_ini" value="#{projetoMB.projeto.data_ini}" pattern="dd/MM/yyyy" mask="true" rendered="#{projetoMB.projeto.escopoFecahdo}" />
+ 	    <p:outputLabel style="padding-left: 20px;" for="dt_fim" value="Data Final:" rendered="#{projetoMB.projeto.escopoFecahdo}" />
+        <p:calendar id="dt_fim" value="#{projetoMB.projeto.data_fim}" pattern="dd/MM/yyyy" mask="true" rendered="#{projetoMB.projeto.escopoFecahdo}" />    	
+        </p:panelGrid>
+        
     <p:separator></p:separator>
        
  	<center>
