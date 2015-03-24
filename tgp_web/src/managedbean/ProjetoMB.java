@@ -10,9 +10,17 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
+
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.TransferEvent;
+import org.primefaces.event.UnselectEvent;
+import org.primefaces.model.DualListModel;
 
 import model.Projeto;
+import model.Usuario;
 import ejb.ProjetoFacade;
+import ejb.UsuarioFacade;
 
 @ManagedBean(name="projetoMB")
 @ViewScoped
@@ -22,8 +30,15 @@ public class ProjetoMB  implements Serializable {
 	private static final long serialVersionUID = 1L;
 	@EJB
 	private ProjetoFacade projetoFacade;
+	@EJB
+	private UsuarioFacade usuarioFacade; 
 	private Projeto projeto = new Projeto();
 	private List<Projeto> projetosList =  new  ArrayList<Projeto>();
+	private List<SelectItem> projetoSelectItems = new ArrayList<SelectItem>();
+	private int projetoSelecionadoAba2 = 0;
+	private DualListModel<Usuario> usuListModel = new DualListModel<Usuario>();
+	private List<Usuario> usuariosListDisponiveis = new ArrayList<Usuario>();
+	private List<Usuario> usuariosListSelecionados = new ArrayList<Usuario>();
 	
 	
 	public ProjetoMB() {
@@ -32,7 +47,7 @@ public class ProjetoMB  implements Serializable {
 
 	
 	public void onTabChange(){
-		
+		this.ini();
 	}
 	
 	
@@ -45,6 +60,21 @@ public class ProjetoMB  implements Serializable {
 	public void ini(){
 		this.projeto = new Projeto();
 		projetosList = projetoFacade.findAll();
+		
+		projetoSelectItems = new ArrayList<SelectItem>();
+		
+		for (Projeto projeto : projetosList) {
+			SelectItem item = new SelectItem(projeto.getProjetoId(), projeto.getDescProjeto() + " - " + projeto.getNomeProjeto());
+			projetoSelectItems.add(item);
+		}
+		
+		projetoSelecionadoAba2 = 0;
+		
+		usuariosListDisponiveis = usuarioFacade.findAll();
+		usuariosListSelecionados = usuarioFacade.findAll();
+		usuListModel = new DualListModel<Usuario>(usuariosListDisponiveis, usuariosListSelecionados);
+		
+		
 	}
 	
 	
@@ -122,9 +152,42 @@ public class ProjetoMB  implements Serializable {
 	public void excluir(Projeto projeto){
 		this.projetoFacade.delete(projeto);
 		String info = "Projeto Excluido com Sucesso";
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Projeto Excluido com Sucesso", info));
 		this.ini();
 	}
+	
+	
+	
+	
+	public void onTransfer(TransferEvent event) {
+        StringBuilder builder = new StringBuilder();
+        for(Object item : event.getItems()) {
+            builder.append(((Usuario) item).getNome()).append("<br />");
+        }
+         
+        FacesMessage msg = new FacesMessage();
+        msg.setSeverity(FacesMessage.SEVERITY_INFO);
+        msg.setSummary("Items Transferred");
+        msg.setDetail(builder.toString());
+         
+        FacesContext.getCurrentInstance().addMessage(null, msg);
+    } 
+ 
+    public void onSelect(SelectEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().toString()));
+    }
+     
+    public void onUnselect(UnselectEvent event) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().toString()));
+    }
+     
+    public void onReorder() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
+    } 
+	
 
 	public ProjetoFacade getProjetoFacade() {
 		return projetoFacade;
@@ -152,6 +215,69 @@ public class ProjetoMB  implements Serializable {
 	public void setProjetosList(List<Projeto> projetosList) {
 		this.projetosList = projetosList;
 	}
+
+
+	public List<SelectItem> getProjetoSelectItems() {
+		return projetoSelectItems;
+	}
+
+
+	public void setProjetoSelectItems(List<SelectItem> projetoSelectItems) {
+		this.projetoSelectItems = projetoSelectItems;
+	}
+
+
+	public int getProjetoSelecionadoAba2() {
+		return projetoSelecionadoAba2;
+	}
+
+
+	public void setProjetoSelecionadoAba2(int projetoSelecionadoAba2) {
+		this.projetoSelecionadoAba2 = projetoSelecionadoAba2;
+	}
+
+
+	public UsuarioFacade getUsuarioFacade() {
+		return usuarioFacade;
+	}
+
+
+	public void setUsuarioFacade(UsuarioFacade usuarioFacade) {
+		this.usuarioFacade = usuarioFacade;
+	}
+
+
+	public DualListModel<Usuario> getUsuListModel() {
+		return usuListModel;
+	}
+
+
+	public void setUsuListModel(DualListModel<Usuario> usuListModel) {
+		this.usuListModel = usuListModel;
+	}
+
+
+	public List<Usuario> getUsuariosListDisponiveis() {
+		return usuariosListDisponiveis;
+	}
+
+
+	public void setUsuariosListDisponiveis(List<Usuario> usuariosListDisponiveis) {
+		this.usuariosListDisponiveis = usuariosListDisponiveis;
+	}
+
+
+	public List<Usuario> getUsuariosListSelecionados() {
+		return usuariosListSelecionados;
+	}
+
+
+	public void setUsuariosListSelecionados(List<Usuario> usuariosListSelecionados) {
+		this.usuariosListSelecionados = usuariosListSelecionados;
+	}
+
+	
+	
 	
 	
 	
