@@ -26,14 +26,7 @@ public class ProjetoMB  implements Serializable {
 	private List<Projeto> projetosList =  new  ArrayList<Projeto>();
 	
 	
-	
-	public void change(){
-		
-		System.out.println(this.projeto.getEscopoFecahdo());
-	}
-	
 	public ProjetoMB() {
-
 		
 	}
 
@@ -48,15 +41,79 @@ public class ProjetoMB  implements Serializable {
 	
 	public void salvar(){
 	
-		this.projetoFacade.save(projeto);
-		String info = "Projeto Cadastrado com Sucesso";
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Projeto " + projeto.getNomeProjeto(), info));
+		if(this.projeto.getProjetoId() == 0){
+			
+			if (!this.validaNomeProjeto(this.projeto.getNomeProjeto())){
+				String info = "Nome Projeto já Cadastrado..";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Nome Projeto " + projeto.getNomeProjeto(), info));
+				return;
+			}
+			
+			
+			if (!this.validaSiglaProjeto(this.projeto.getSiglaProjeto())){
+				String info = "Sigla já Cadastrada..";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + projeto.getSiglaProjeto(), info));
+				return;
+			}
+			
+			this.projetoFacade.save(projeto);
+			String info = "Projeto Cadastrado com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Projeto " + projeto.getNomeProjeto(), info));
+			
+			
+		} else{
+			
+			Projeto projetoPersist = this.projetoFacade.find(projeto.getProjetoId());
+			
+			if (projetoPersist.getNomeProjeto().equalsIgnoreCase(this.projeto.getNomeProjeto())){
+				projetoPersist.setNomeProjeto(this.projeto.getNomeProjeto());
+			} else {
+				if (!this.validaNomeProjeto(this.projeto.getNomeProjeto())){
+					String info = "Nome Projeto Já Cadastrado..";
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Projeto " + projeto.getNomeProjeto(), info));
+					return;
+				}
+			}
+			
+			if (projetoPersist.getSiglaProjeto().equalsIgnoreCase(this.projeto.getSiglaProjeto())){
+				projetoPersist.setSiglaProjeto(this.projeto.getSiglaProjeto());
+			} else {
+				if (!this.validaSiglaProjeto(this.projeto.getSiglaProjeto())){
+					String info = "Sigla Projeto Já Cadastrado..";
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Sigla Projeto " + projeto.getSiglaProjeto(), info));
+					return;
+				}
+			}
+			
+			projetoPersist.setDescProjeto(this.projeto.getDescProjeto());
+			projetoPersist.setEscopoFecahdo(this.projeto.getEscopoFecahdo());
+			projetoPersist.setData_ini(this.projeto.getData_ini());
+			projetoPersist.setData_fim(this.projeto.getData_fim());
+			
+			this.projetoFacade.update(projetoPersist);
+			String info = "Projeto Alterado com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"projeto " + projeto.getNomeProjeto(), info));
+		}
+		
 		this.ini();
 	}
 
 	
-	public void excluir(Projeto projeto){
+	private boolean validaSiglaProjeto(String siglaProjeto) {
+		List<Projeto> list = projetoFacade.listarPorSiglaProjeto(siglaProjeto);
+ 		return list.isEmpty();
+	}
 
+	private boolean validaNomeProjeto(String nomeProjeto) {
+		List<Projeto> list = projetoFacade.listarPorNomeProjeto(nomeProjeto);
+ 		return list.isEmpty();
+	}
+
+	public void excluir(Projeto projeto){
+		this.projetoFacade.delete(projeto);
+		String info = "Projeto Excluido com Sucesso";
+		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+		this.ini();
 	}
 
 	public ProjetoFacade getProjetoFacade() {

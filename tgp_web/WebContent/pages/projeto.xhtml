@@ -6,6 +6,10 @@
     xmlns:p="http://primefaces.org/ui">      
     
     
+    
+    
+    
+    
     <f:view contentType="text/html">
 	<h:head>
 		<f:facet name="first">
@@ -32,8 +36,9 @@
       	<p:inputText id="siglaProjetoId" value="#{projetoMB.projeto.siglaProjeto}" maxlength="100" required="true" style="width: 500px;"/> 
       	<h:outputLabel  value="Sigla Projeto: *"  />
       	<p:inputTextarea  rows="5" cols="30" counter="display" maxlength="255" counterTemplate="{0} characters remaining." autoResize="false" value="#{projetoMB.projeto.descProjeto}" />
+      	<h:inputHidden id="hidden3" />
       	<h:outputText id="display" />
-      	<h:inputHidden id="hidden" />
+      	
       	<p:outputLabel for="escopoFechadoId" value="Escopo Fechado:" />
         <p:selectOneRadio id="escopoFechadoId" value="#{projetoMB.projeto.escopoFecahdo}" >
         	<p:ajax update=":form:cadProj,:form:matchGrid,:form:dateId" process="@this" event="change"/>
@@ -44,9 +49,9 @@
         <h:inputHidden id="hidden2" />
         <h:panelGroup id="dateId"  cellpadding="5" columns="5" rendered="#{projetoMB.projeto.escopoFecahdo}" >
         <p:outputLabel for="dt_ini" value="Data Inicio:" />
-        <p:calendar id="dt_ini" value="#{projetoMB.projeto.data_ini}" pattern="dd-MM-yyyy" mask="true" />
+        <p:calendar id="dt_ini" value="#{projetoMB.projeto.data_ini}" pattern="dd/MM/yyyy" mask="true" />
  	    <p:outputLabel style="padding-left: 20px;" for="dt_fim" value="Data Final:" />
-        <p:calendar id="dt_fim" value="#{projetoMB.projeto.data_fim}" pattern="dd-MM-yyyy" mask="true" />    	
+        <p:calendar id="dt_fim" value="#{projetoMB.projeto.data_fim}" pattern="dd/MM/yyyy" mask="true" />    	
         </h:panelGroup>
        
     </h:panelGrid>
@@ -99,7 +104,14 @@
             </center>
         </p:column>
         
-       
+       <p:column  headerText="Data Ini"  style="width:110px;text-align: center" >
+ 		    <p:inputMask id="date" value="#{pro.data_ini}" style="width:100px;" disabled="true" mask="99/99/9999"/>
+        </p:column>
+ 		
+       <p:column  headerText="Data Fim"  style="width:110px;text-align: center" >
+ 		    <p:inputMask id="datefim" value="#{pro.data_fim}" style="width:100px;" disabled="true" mask="99/99/9999"/>
+        </p:column>
+ 		
         
         <p:column style="width:55px;text-align: center">
        		 <f:facet name="header">
@@ -125,7 +137,7 @@
  	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
         <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
         <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
- </p:confirmDialog>
+ 	</p:confirmDialog>
  
     </p:panel> 
   
