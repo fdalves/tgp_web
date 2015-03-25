@@ -18,17 +18,20 @@
 			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
 			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
 		</f:facet>
-		
+
 		<style type="text/css" media="screen">
 .ui-picklist .ui-picklist-list {
-list-style-type: none;
-margin: 0;
-padding: 0;
-overflow: auto;
-height: 200px;
-width: 400px;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: auto;
+	height: 400px;
+	width: 400px;
 }
 
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
 </style>
 
 	</h:head>
@@ -36,22 +39,22 @@ width: 400px;
 
 
 
-<h:form id="form">
+<h:form id="form" style="width:60%">
 
 	<p:messages id="msgs" showDetail="true" />
-	<p:growl id="growl" showDetail="true" sticky="true" />
-	
+	<p:growl id="growl" showDetail="true" sticky="false" life="3000" />
+
 	<h3>Crud Projeto</h3>
-	<p:tabView id="tab1" dynamic="true" cache="true" >
+	<p:tabView id="tab1" dynamic="true" cache="true">
 		<p:ajax event="tabChange" listener="#{projetoMB.onTabChange}"
 			update=":form:msgs" />
-		
+
 		<p:tab title="Cadastro Projeto">
 
 
 			<p:panel id="cadProj" header="Cadastro Projeto">
 
-				
+
 				<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
 
 					<h:outputLabel for="nomeprojId" value="Nome Projeto: *" />
@@ -103,8 +106,8 @@ width: 400px;
 						validateClient="true" update=":form:matchGrid" process="@all"
 						type="submit" actionListener="#{projetoMB.salvar}" />
 					<p:commandButton value="Limpar"
-						update=":form:tab1:cadProj,:form:tab1:matchGrid" icon="ui-icon-close"
-						process="@this" style="margin-right:20px;">
+						update=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs"
+						icon="ui-icon-close" process="@this" style="margin-right:20px;">
 						<p:resetInput target=":form:tab1:cadProj,:form:tab1:matchGrid" />
 					</p:commandButton>
 				</center>
@@ -113,112 +116,153 @@ width: 400px;
 
 			<p:spacer height="50" />
 
-		<p:panel header="Projetos Cadastrados">
-    
-    	<p:dataTable id="dataTable" var="pro" value="#{projetoMB.projetosList}" paginator="true" rows="5">
-        <f:facet name="header">
+			<p:panel header="Projetos Cadastrados">
+
+				<p:dataTable id="dataTable" var="pro"
+					value="#{projetoMB.projetosList}" paginator="true" rows="5">
+					<f:facet name="header">
             Projetos
         </f:facet>
- 
-        
- 		<p:column filterBy="#{pro.nomeProjeto}" headerText="Nome" footerText="contains" filterMatchMode="contains">
- 		    <h:outputText value="#{pro.nomeProjeto}" />
-        </p:column>
-        
-        
-        <p:column filterBy="#{pro.siglaProjeto}" headerText="Sigla Projeto" footerText="contains" filterMatchMode="contains">
- 		    <h:outputText value="#{pro.siglaProjeto}" />
-        </p:column>
- 		
-        <p:column>
-            <f:facet name="header">
-                <h:outputText value="Desc. projeto" />
-            </f:facet>
-            <h:outputText value="#{pro.descProjeto}" />
-        </p:column>
-        
-       
-        
-        <p:column style="width:80px;text-align: center">
-            <f:facet name="header">
-                <h:outputText value="Escopo Fechado" />
-            </f:facet>
-            <center>
-            <p:graphicImage url="../imagens/green-fa-check-circle.png" width="20px" height="20px"  rendered="#{pro.escopoFecahdo}"/>
-            <p:graphicImage url="../imagens/red-fa-times-circle.png" width="20px" height="20px"  rendered="#{pro.escopoFecahdo}}"/>
-            </center>
-        </p:column>
-        
-       <p:column  headerText="Data Ini"  style="width:110px;text-align: center" >
- 		    <p:inputMask id="date" value="#{pro.data_ini}" style="width:100px;" disabled="true" mask="99/99/9999"/>
-        </p:column>
- 		
-       <p:column  headerText="Data Fim"  style="width:110px;text-align: center" >
- 		    <p:inputMask id="datefim" value="#{pro.data_fim}" style="width:100px;" disabled="true" mask="99/99/9999"/>
-        </p:column>
- 		
-        
-        <p:column style="width:55px;text-align: center">
-       		 <f:facet name="header">
-                <h:outputText value="Editar" />
-            </f:facet>
-             <p:commandButton process="@this"  ajax="true" update=":form:tab1:matchGrid" icon="ui-icon-pencil"  title="Editar">
-                <f:setPropertyActionListener value="#{pro}"  target="#{projetoMB.projeto}" />
-            </p:commandButton>
-        </p:column>
-        
-        <p:column style="width:55px;text-align: center">
-          <f:facet name="header">
-                <h:outputText value="Excluir" />
-            </f:facet>
-            
-            <p:commandButton icon="ui-icon-trash"  title="Excluir" update=":form:tab1:dataTable" process="@this" ajax="true" action="#{projetoMB.excluir(pro)}" immediate="true" >
-        		<p:confirm header="Confirmação Exclusão" message="Você tem certeza?" icon="ui-icon-alert" />
-        	</p:commandButton>
-        </p:column>
-        
- 	</p:dataTable>
- 	
- 	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
-        <p:commandButton value="Yes" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
- 	</p:confirmDialog>
- 
-    </p:panel>
+
+
+					<p:column filterBy="#{pro.nomeProjeto}" headerText="Nome"
+						footerText="contains" filterMatchMode="contains">
+						<h:outputText value="#{pro.nomeProjeto}" />
+					</p:column>
+
+
+					<p:column filterBy="#{pro.siglaProjeto}" headerText="Sigla Projeto"
+						footerText="contains" filterMatchMode="contains">
+						<h:outputText value="#{pro.siglaProjeto}" />
+					</p:column>
+
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Desc. projeto" />
+						</f:facet>
+						<h:outputText value="#{pro.descProjeto}" />
+					</p:column>
+
+
+
+					<p:column style="width:80px;text-align: center">
+						<f:facet name="header">
+							<h:outputText value="Escopo Fechado" />
+						</f:facet>
+						<center>
+							<p:graphicImage url="../imagens/green-fa-check-circle.png"
+								width="20px" height="20px" rendered="#{pro.escopoFecahdo}" />
+							<p:graphicImage url="../imagens/red-fa-times-circle.png"
+								width="20px" height="20px" rendered="#{pro.escopoFecahdo}}" />
+						</center>
+					</p:column>
+
+					<p:column headerText="Data Ini"
+						style="width:110px;text-align: center">
+						<p:inputMask id="date" value="#{pro.data_ini}"
+							style="width:100px;" readonly="true" mask="99/99/9999" />
+					</p:column>
+
+					<p:column headerText="Data Fim"
+						style="width:110px;text-align: center">
+						<p:inputMask id="datefim" value="#{pro.data_fim}"
+							style="width:100px;" readonly="true" mask="99/99/9999" />
+					</p:column>
+
+
+					<p:column style="width:55px;text-align: center">
+						<f:facet name="header">
+							<h:outputText value="Editar" />
+						</f:facet>
+						<p:commandButton process="@this" ajax="true"
+							update=":form:tab1:matchGrid" icon="ui-icon-pencil"
+							title="Editar">
+							<f:setPropertyActionListener value="#{pro}"
+								target="#{projetoMB.projeto}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column style="width:55px;text-align: center">
+						<f:facet name="header">
+							<h:outputText value="Excluir" />
+						</f:facet>
+
+						<p:commandButton icon="ui-icon-trash" title="Excluir"
+							update=":form:tab1:dataTable" process="@this" ajax="true"
+							action="#{projetoMB.excluir(pro)}" immediate="true">
+							<p:confirm header="Confirmação Exclusão"
+								message="Você tem certeza?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+
+				</p:dataTable>
+
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+						icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+
+			</p:panel>
 
 
 		</p:tab>
-		<p:tab title="Recursos do projeto" >
-			<h:panelGrid columns="2" cellpadding="10">
+		<p:tab title="Recursos do projeto" id="tab2" style="width:70%">
+			<h:panelGrid id="grid2" columns="2" cellpadding="10">
 				<h:outputText value="Projetos Cadastrados* :" />
+
+				<p:selectOneMenu id="projSelect"
+					value="#{projetoMB.projetoSelecionadoAba2}" filter="true"
+					filterMatchMode="startsWith" effect="fade" style="width:400px">
+					
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItems value="#{projetoMB.projetoSelectItems}" />
+					<f:ajax listener="#{projetoMB.selectProjeto()}" execute="@this" render=":form:tab1:usuarios" /> 
+				</p:selectOneMenu>
+
+				<h:outputText value="Recursos Cadastrados* :" />
+				<p:pickList id="usuarios" value="#{projetoMB.usuListModel}"
+					var="usuarios" 
+					effect="bounce" converter="usuarioConverter"
+					showSourceControls="true" showTargetControls="true"
+					showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
+					filterMatchMode="contains">
+					<p:ajax event="transfer" listener="#{projetoMB.onTransfer}" update="@this" process="@this,:form:tab1:usuarios" />
+					<f:facet name="sourceCaption">Recursos Disponiveis</f:facet>
+					<f:facet name="targetCaption">Recursos Alocados No Projeto</f:facet>
+
+					<p:column style="width:15%">
+						<p:graphicImage url="../temp/#{usuarios.usuarioId}.jpg"
+							width="60px" height="60px" />
+					</p:column>
+
+					<p:column style="width:85%;">
+						<h:outputText value="#{usuarios.nome}" />
+					</p:column>
+
+				</p:pickList>
+
+				</h:panelGrid>
 				
-				 <p:selectOneMenu id="projSelect" value="#{projetoMB.projetoSelecionadoAba2}"  filter="true" filterMatchMode="startsWith" effect="fade" style="width:400px" >
-            		<f:selectItem itemLabel="Select One" itemValue="" />
-            		<f:selectItems value="#{projetoMB.projetoSelectItems}" />
-        		</p:selectOneMenu>
-        		
-        		<h:outputText value="Recursos Cadastrados* :" />
-        		<p:pickList id="usuarios"    value="#{projetoMB.usuListModel}" var="usuarios"  itemLabel="#{usuarios.nome}" itemValue="#{usuarios}" effect="bounce"
- 				converter="usuarioConverter" showSourceControls="true" showTargetControls="true" showCheckbox="true"  showSourceFilter="true" showTargetFilter="true" filterMatchMode="contains">
- 				
- 				<f:facet name="sourceCaption">Recursos Disponiveis</f:facet>
- 				<f:facet name="targetCaption">Recursos Alocados No Projeto</f:facet>
- 				
- 				<p:column style="width:15%">
-            		<p:graphicImage url="../temp/#{usuarios.usuarioId}.jpg" width="60px" height="60px"/>
-        		</p:column>
- 
-        		<p:column style="width:85%;">
-            		<h:outputText value="#{usuarios.nome}" />
-        		</p:column>
- 				
- 				</p:pickList>
-        	
-        		
+				<p:separator></p:separator>
+
+				<center>
+					
+					<p:commandButton id='varassociate' action="#{projetoMB.salvarUsuariosProjeto()}" value='Associate' ajax='false' process="@this,:form:tab1:usuarios" immediate="true" />
 				
-			</h:panelGrid>
+					<p:commandButton value="Save"  icon="ui-icon-check" ajax="false"
+						actionListener="#{projetoMB.salvarUsuariosProjeto()}" />
+					<p:commandButton value="Limpar"
+						update="@all" actionListener="#{projetoMB.ini()}"
+						icon="ui-icon-close" process="@this" style="margin-right:20px;">
+						<p:resetInput target="@all" />
+					</p:commandButton>
+				</center>
+				
 		</p:tab>
-		<p:tab title="Godfather Part III" >
+		<p:tab title="Godfather Part III">
 			<h:panelGrid columns="2" cellpadding="10">
 				<p:graphicImage name="demo/images/godfather/godfather3.jpg" />
 			</h:panelGrid>

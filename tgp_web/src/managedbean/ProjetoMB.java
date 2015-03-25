@@ -19,6 +19,7 @@ import org.primefaces.model.DualListModel;
 
 import model.Projeto;
 import model.Usuario;
+import model.UsuarioProjeto;
 import ejb.ProjetoFacade;
 import ejb.UsuarioFacade;
 
@@ -71,13 +72,14 @@ public class ProjetoMB  implements Serializable {
 		projetoSelecionadoAba2 = 0;
 		
 		usuariosListDisponiveis = usuarioFacade.findAll();
-		usuariosListSelecionados = usuarioFacade.findAll();
+		usuariosListSelecionados = new ArrayList<Usuario>();
 		usuListModel = new DualListModel<Usuario>(usuariosListDisponiveis, usuariosListSelecionados);
 		
 		
 	}
 	
 	
+	//--tab1----------------------------------
 	
 	public void salvar(){
 	
@@ -163,8 +165,11 @@ public class ProjetoMB  implements Serializable {
         StringBuilder builder = new StringBuilder();
         for(Object item : event.getItems()) {
             builder.append(((Usuario) item).getNome()).append("<br />");
+            this.usuariosListSelecionados.add((Usuario)item);
         }
-         
+        
+        
+        
         FacesMessage msg = new FacesMessage();
         msg.setSeverity(FacesMessage.SEVERITY_INFO);
         msg.setSummary("Items Transferred");
@@ -187,8 +192,87 @@ public class ProjetoMB  implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
     } 
-	
 
+
+    // tab 2 ---------------------------------------------------------------------------
+    
+    
+    public void salvarTab2(){
+    	
+    	System.out.println(projetoSelecionadoAba2);
+    }
+    
+    
+    public void selectProjeto(){
+    	
+    	System.out.println("-------------" + projetoSelecionadoAba2);
+    	
+    	if (projetoSelecionadoAba2 == 0){
+    		this.usuariosListDisponiveis = usuarioFacade.findAll();
+    		this.usuariosListSelecionados = new ArrayList<Usuario>();
+    		this.usuListModel = new DualListModel<Usuario>(usuariosListDisponiveis, usuariosListSelecionados);
+    		return;
+    	}
+    	
+    	Projeto projeto = projetoFacade.find(projetoSelecionadoAba2);
+    	List<UsuarioProjeto> usuarioProjetos = projeto.getUsuarioProjetos();
+    	
+    	List<Usuario> usuariosSelecionados = new ArrayList<Usuario>();
+    	
+    	for (UsuarioProjeto usuarioProjeto : usuarioProjetos) {
+			usuariosSelecionados.add(usuarioProjeto.getUsuario());
+		}
+    	
+    	List<Usuario> usuariosDispoveis = new ArrayList<Usuario>();
+    	
+    	List<Usuario> usuariosAll= usuarioFacade.findAll();
+    	
+    	for (Usuario usuario : usuariosAll) {
+			
+    		boolean contem = false;
+    		
+    		for (Usuario usuarioProjeto : usuariosSelecionados) {
+				
+    			if(usuario.getUsuarioId() == usuarioProjeto.getUsuarioId()) contem = true;
+			}
+    		
+    		if (!contem) usuariosDispoveis.add(usuario);
+    		
+		}
+    	
+    	this.usuariosListSelecionados = usuariosSelecionados;
+    	this.usuariosListDisponiveis = usuariosDispoveis;
+    	
+    	this.usuListModel = new DualListModel<Usuario>(usuariosListDisponiveis,usuariosListSelecionados);
+    	
+    }
+    
+    
+    
+    public void salvarUsuariosProjeto(){
+    	
+    	Projeto projeto = projetoFacade.find(projetoSelecionadoAba2);
+    	
+    	projeto.setUsuarioProjetos(null);
+    	
+    	projeto = projetoFacade.update(projeto);
+    	
+    	List<UsuarioProjeto> list = new ArrayList<UsuarioProjeto>();
+    	
+    	for (Usuario usuario : this.usuariosListSelecionados ) {
+			UsuarioProjeto usuarioProjeto = new UsuarioProjeto();
+			usuarioProjeto.setProjeto(projeto);
+			usuarioProjeto.setUsuario(usuario);
+			list.add(usuarioProjeto);
+    	}
+    	projeto.setUsuarioProjetos(list);
+    	
+    	
+    	projetoFacade.update(projeto);
+    	
+    }
+    
+    
 	public ProjetoFacade getProjetoFacade() {
 		return projetoFacade;
 	}

@@ -35,6 +35,8 @@ public class UsuarioConverter implements Converter {
 	 public String getAsString(FacesContext fc, UIComponent uic, Object o) {
 	 Usuario usu = new Usuario();
 	 usu = (Usuario) o;
+	 
+	 if (usu == null) return "";
 	 return usu.getLogin();
 	 }
 	 
