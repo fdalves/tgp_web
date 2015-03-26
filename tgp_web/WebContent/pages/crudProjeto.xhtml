@@ -39,7 +39,7 @@
 
 
 
-<h:form id="form" style="width:60%">
+<h:form id="form" >
 
 	<p:messages id="msgs" showDetail="true" />
 	<p:growl id="growl" showDetail="true" sticky="false" life="3000" />
@@ -188,8 +188,8 @@
 						</f:facet>
 
 						<p:commandButton icon="ui-icon-trash" title="Excluir"
-							update=":form:tab1:dataTable" process="@this" ajax="true"
-							action="#{projetoMB.excluir(pro)}" immediate="true">
+							update=":form:tab1:dataTable,:form:msgs,:form:growl" process="@this" ajax="true"
+							action="#{projetoMB.excluir(pro)}"  immediate="true">
 							<p:confirm header="Confirmação Exclusão"
 								message="Você tem certeza?" icon="ui-icon-alert" />
 						</p:commandButton>
@@ -209,7 +209,7 @@
 
 
 		</p:tab>
-		<p:tab title="Recursos do projeto" id="tab2" style="width:70%">
+		<p:tab title="Recursos do projeto" id="tab2" >
 			<h:panelGrid id="grid2" columns="2" cellpadding="10">
 				<h:outputText value="Projetos Cadastrados* :" />
 
@@ -223,26 +223,31 @@
 				</p:selectOneMenu>
 
 				<h:outputText value="Recursos Cadastrados* :" />
-				<p:pickList id="usuarios" value="#{projetoMB.usuListModel}"
-					var="usuarios" 
-					effect="bounce" converter="usuarioConverter"
-					showSourceControls="true" showTargetControls="true"
-					showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
-					filterMatchMode="contains">
-					<p:ajax event="transfer" listener="#{projetoMB.onTransfer}" update="@this" process="@this,:form:tab1:usuarios" />
-					<f:facet name="sourceCaption">Recursos Disponiveis</f:facet>
-					<f:facet name="targetCaption">Recursos Alocados No Projeto</f:facet>
-
-					<p:column style="width:15%">
-						<p:graphicImage url="../temp/#{usuarios.usuarioId}.jpg"
-							width="60px" height="60px" />
-					</p:column>
+				
+				
+				
+				<p:pickList iconOnly="true" id="usuarios" converter="usuarioConverter"  
+                     showSourceControls="true" showTargetControls="true"
+					 showCheckbox="true" showSourceFilter="true" showTargetFilter="true"
+					 filterMatchMode="contains"  
+                     addAllLabel="Adicionar todos Usuários"   
+                     addLabel="Adionar Selecionado" removeLabel="Remover Usuário"   
+                     removeAllLabel="Remover todos Usuários"    effect="bounce"
+                     value="#{projetoMB.usuListModel}" var="usuario"   
+                     itemLabel="#{usuario.nome}" itemValue="#{usuario}">    
+                    
+                         <f:facet name="sourceCaption">Recursos Disponiveis</f:facet>    
+                         <f:facet name="targetCaption">Recursos Alocados No Projeto</f:facet>    
+                      	
+                      	<p:column style="width:15%">
+						<p:graphicImage url="../temp/#{usuario.usuarioId}.jpg" width="60px"	height="60px" />
+						</p:column>
 
 					<p:column style="width:85%;">
 						<h:outputText value="#{usuarios.nome}" />
 					</p:column>
-
-				</p:pickList>
+                      			
+                  </p:pickList> 
 
 				</h:panelGrid>
 				
@@ -250,15 +255,13 @@
 
 				<center>
 					
-					<p:commandButton id='varassociate' action="#{projetoMB.salvarUsuariosProjeto()}" value='Associate' ajax='false' process="@this,:form:tab1:usuarios" immediate="true" />
+					<p:commandButton id='varassociate' actionListener="#{projetoMB.salvarUsuariosProjeto()}" value="Save" icon="ui-icon-check" process="@this,:form:tab1:usuarios" update=":form:msgs,:form:growl" />
+					
+					<p:commandButton value="Limpar" icon="ui-icon-close" actionListener="#{projetoMB.ini()}" update=":form:tab1:cadProj,:form:tab1:grid2,:form:msgs,:form:growl" process="@this"
+						style="margin-right:20px;">
+					<p:resetInput target=":form:tab1:matchGrid,:form:tab1:grid2" />
+				   </p:commandButton>
 				
-					<p:commandButton value="Save"  icon="ui-icon-check" ajax="false"
-						actionListener="#{projetoMB.salvarUsuariosProjeto()}" />
-					<p:commandButton value="Limpar"
-						update="@all" actionListener="#{projetoMB.ini()}"
-						icon="ui-icon-close" process="@this" style="margin-right:20px;">
-						<p:resetInput target="@all" />
-					</p:commandButton>
 				</center>
 				
 		</p:tab>

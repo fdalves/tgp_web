@@ -12,8 +12,8 @@
 			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
 			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
 		</f:facet>
-<style type="text/css" media="screen">
-.ui-widget,.ui-widget .ui-widget {
+		<style type="text/css" media="screen">
+.ui-widget, .ui-widget .ui-widget {
 	font-size: 11px !important;
 }
 </style>
@@ -23,11 +23,9 @@
 
 <h:form id="form">
 
+	<p:growl id="growl" showDetail="true" sticky="true" />
+	<p:messages id="messages" showDetail="true" />
 	<p:panel id="cadUsuer" header="Cadastro Usuário">
-
-		<p:growl id="growl" showDetail="true" sticky="true" />
-		<p:messages id="messages" showDetail="true" />
-
 		<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
 
 
@@ -74,14 +72,11 @@
 				validateClient="true" update=":form:matchGrid" process="@all"
 				type="submit" actionListener="#{usuarioMB.salvar}" />
 			<p:commandButton value="Limpar" icon="ui-icon-close"
-				update=":form:cadUsuer,:form:matchGrid" process="@this"
+				update=":form:matchGrid,:form:messages,:form:growl" process="@this"
 				style="margin-right:20px;">
-				<p:resetInput target=":form:cadUsuer,:form:matchGrid" />
+				<p:resetInput target=":form:matchGrid,:form:messages,:form:growl" />
 			</p:commandButton>
 		</center>
-
-
-
 
 
 	</p:panel>
@@ -157,7 +152,7 @@
 				</f:facet>
 
 				<p:commandButton icon="ui-icon-trash" title="Excluir"
-					update=":form:dataTable" process="@this" ajax="true"
+					update=":form:dataTable,:form:messages,:form:growl" process="@this" ajax="true"
 					action="#{usuarioMB.excluir(usu)}" immediate="true">
 					<p:confirm header="Confirmação Exclusão"
 						message="Você tem certeza?" icon="ui-icon-alert" />

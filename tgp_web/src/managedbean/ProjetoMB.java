@@ -12,14 +12,12 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.TransferEvent;
-import org.primefaces.event.UnselectEvent;
-import org.primefaces.model.DualListModel;
-
 import model.Projeto;
 import model.Usuario;
 import model.UsuarioProjeto;
+
+import org.primefaces.model.DualListModel;
+
 import ejb.ProjetoFacade;
 import ejb.UsuarioFacade;
 
@@ -161,37 +159,7 @@ public class ProjetoMB  implements Serializable {
 	
 	
 	
-	public void onTransfer(TransferEvent event) {
-        StringBuilder builder = new StringBuilder();
-        for(Object item : event.getItems()) {
-            builder.append(((Usuario) item).getNome()).append("<br />");
-            this.usuariosListSelecionados.add((Usuario)item);
-        }
-        
-        
-        
-        FacesMessage msg = new FacesMessage();
-        msg.setSeverity(FacesMessage.SEVERITY_INFO);
-        msg.setSummary("Items Transferred");
-        msg.setDetail(builder.toString());
-         
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-    } 
- 
-    public void onSelect(SelectEvent event) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().toString()));
-    }
-     
-    public void onUnselect(UnselectEvent event) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().toString()));
-    }
-     
-    public void onReorder() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
-    } 
+	
 
 
     // tab 2 ---------------------------------------------------------------------------
@@ -204,8 +172,6 @@ public class ProjetoMB  implements Serializable {
     
     
     public void selectProjeto(){
-    	
-    	System.out.println("-------------" + projetoSelecionadoAba2);
     	
     	if (projetoSelecionadoAba2 == 0){
     		this.usuariosListDisponiveis = usuarioFacade.findAll();
@@ -251,9 +217,13 @@ public class ProjetoMB  implements Serializable {
     
     public void salvarUsuariosProjeto(){
     	
+    	
+    	this.usuariosListDisponiveis = this.usuListModel.getSource();
+    	this.usuariosListSelecionados = this.usuListModel.getTarget();
+    	
     	Projeto projeto = projetoFacade.find(projetoSelecionadoAba2);
     	
-    	projeto.setUsuarioProjetos(null);
+    	projeto.setUsuarioProjetos(new ArrayList<UsuarioProjeto>());
     	
     	projeto = projetoFacade.update(projeto);
     	
@@ -269,6 +239,11 @@ public class ProjetoMB  implements Serializable {
     	
     	
     	projetoFacade.update(projeto);
+    	
+    	FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", this.projeto.getNomeProjeto()));
+        String info = "Usuário(s) Associado(s) ao projeto";
+        FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuário(s) Associado(s) ao projeto", info));
     	
     }
     
