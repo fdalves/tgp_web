@@ -12,12 +12,15 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 
+import model.DocProjeto;
 import model.Projeto;
 import model.Usuario;
 import model.UsuarioProjeto;
 
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.DualListModel;
 
+import ejb.DocProjetoFacade;
 import ejb.ProjetoFacade;
 import ejb.UsuarioFacade;
 
@@ -27,17 +30,24 @@ public class ProjetoMB  implements Serializable {
 	
 	
 	private static final long serialVersionUID = 1L;
+	
 	@EJB
 	private ProjetoFacade projetoFacade;
 	@EJB
-	private UsuarioFacade usuarioFacade; 
+	private UsuarioFacade usuarioFacade;
+	@EJB
+	private DocProjetoFacade docProjetoFacade;
+	
 	private Projeto projeto = new Projeto();
 	private List<Projeto> projetosList =  new  ArrayList<Projeto>();
 	private List<SelectItem> projetoSelectItems = new ArrayList<SelectItem>();
 	private int projetoSelecionadoAba2 = 0;
+	private int projetoSelecionadoAba3 = 0;
 	private DualListModel<Usuario> usuListModel = new DualListModel<Usuario>();
 	private List<Usuario> usuariosListDisponiveis = new ArrayList<Usuario>();
 	private List<Usuario> usuariosListSelecionados = new ArrayList<Usuario>();
+	private DocProjeto docProjeto = new DocProjeto();
+	private List<DocProjeto> docProjetosList = new ArrayList<DocProjeto>();
 	
 	
 	public ProjetoMB() {
@@ -72,7 +82,8 @@ public class ProjetoMB  implements Serializable {
 		usuariosListDisponiveis = usuarioFacade.findAll();
 		usuariosListSelecionados = new ArrayList<Usuario>();
 		usuListModel = new DualListModel<Usuario>(usuariosListDisponiveis, usuariosListSelecionados);
-		
+		docProjeto = new DocProjeto(); 
+		docProjetosList = docProjetoFacade.findAll();
 		
 	}
 	
@@ -84,14 +95,14 @@ public class ProjetoMB  implements Serializable {
 		if(this.projeto.getProjetoId() == 0){
 			
 			if (!this.validaNomeProjeto(this.projeto.getNomeProjeto())){
-				String info = "Nome Projeto jï¿½ Cadastrado..";
+				String info = "Nome Projeto ja Cadastrado..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Nome Projeto " + projeto.getNomeProjeto(), info));
 				return;
 			}
 			
 			
 			if (!this.validaSiglaProjeto(this.projeto.getSiglaProjeto())){
-				String info = "Sigla jï¿½ Cadastrada..";
+				String info = "Sigla ja Cadastrada..";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + projeto.getSiglaProjeto(), info));
 				return;
 			}
@@ -109,7 +120,7 @@ public class ProjetoMB  implements Serializable {
 				projetoPersist.setNomeProjeto(this.projeto.getNomeProjeto());
 			} else {
 				if (!this.validaNomeProjeto(this.projeto.getNomeProjeto())){
-					String info = "Nome Projeto Jï¿½ Cadastrado..";
+					String info = "Nome Projeto Ja Cadastrado..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Projeto " + projeto.getNomeProjeto(), info));
 					return;
 				}
@@ -119,7 +130,7 @@ public class ProjetoMB  implements Serializable {
 				projetoPersist.setSiglaProjeto(this.projeto.getSiglaProjeto());
 			} else {
 				if (!this.validaSiglaProjeto(this.projeto.getSiglaProjeto())){
-					String info = "Sigla Projeto Jï¿½ Cadastrado..";
+					String info = "Sigla Projeto Ja Cadastrada..";
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Sigla Projeto " + projeto.getSiglaProjeto(), info));
 					return;
 				}
@@ -240,10 +251,45 @@ public class ProjetoMB  implements Serializable {
     	
     	projetoFacade.update(projeto);
     	
-    	FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "", this.projeto.getNomeProjeto()));
-        String info = "Usuário(s) Associado(s) ao projeto";
-        FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuário(s) Associado(s) ao projeto", info));
+    	String info = "Usuario(s) Associado(s) ao projeto";
+        FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+    	
+    }
+    
+    
+    
+    //----------------tab3---
+    
+    public void handleFileUpload(FileUploadEvent event) {
+        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        this.docProjeto.setDoc(event.getFile().getContents());
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+    
+    
+    public void selectProjetoTab3(){
+    	
+    	
+    	
+    }
+    
+    public void salvarDoc(){
+    	
+    	if (this.docProjeto.getDoc() == null){
+    		String info = "Selecione um Documento";
+    	    FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"", info));
+    	    return;
+    	}
+    	
+    	Projeto projeto = this.projetoFacade.find(this.projetoSelecionadoAba3);
+    	docProjeto.setProjeto(projeto);
+    	this.docProjetoFacade.save(docProjeto);
+    	
+    	
+        String info = "Documento Associado ao projeto";
+        FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+        
+        this.ini();
     	
     }
     
@@ -333,6 +379,46 @@ public class ProjetoMB  implements Serializable {
 
 	public void setUsuariosListSelecionados(List<Usuario> usuariosListSelecionados) {
 		this.usuariosListSelecionados = usuariosListSelecionados;
+	}
+
+
+	public DocProjeto getDocProjeto() {
+		return docProjeto;
+	}
+
+
+	public void setDocProjeto(DocProjeto docProjeto) {
+		this.docProjeto = docProjeto;
+	}
+
+
+	public int getProjetoSelecionadoAba3() {
+		return projetoSelecionadoAba3;
+	}
+
+
+	public void setProjetoSelecionadoAba3(int projetoSelecionadoAba3) {
+		this.projetoSelecionadoAba3 = projetoSelecionadoAba3;
+	}
+
+
+	public DocProjetoFacade getDocProjetoFacade() {
+		return docProjetoFacade;
+	}
+
+
+	public void setDocProjetoFacade(DocProjetoFacade docProjetoFacade) {
+		this.docProjetoFacade = docProjetoFacade;
+	}
+
+
+	public List<DocProjeto> getDocProjetosList() {
+		return docProjetosList;
+	}
+
+
+	public void setDocProjetosList(List<DocProjeto> docProjetosList) {
+		this.docProjetosList = docProjetosList;
 	}
 
 	

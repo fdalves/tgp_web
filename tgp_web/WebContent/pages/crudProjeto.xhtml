@@ -66,7 +66,7 @@
 					<p:inputText id="siglaProjetoId"
 						value="#{projetoMB.projeto.siglaProjeto}" maxlength="100"
 						required="true" style="width: 500px;" />
-					<h:outputLabel value="Desc. Projeto: *" />
+					<h:outputLabel value="Desc. Projeto:" />
 					<p:inputTextarea rows="5" cols="30" counter="display"
 						maxlength="255" counterTemplate="{0} characters remaining."
 						autoResize="false" value="#{projetoMB.projeto.descProjeto}" />
@@ -102,13 +102,14 @@
 				<p:separator></p:separator>
 
 				<center>
-					<p:commandButton value="Save" ajax="false" icon="ui-icon-check"
-						validateClient="true" update=":form:matchGrid" process="@all"
-						type="submit" actionListener="#{projetoMB.salvar}" />
+				
+					<p:commandButton value="Savar" update=":form:tab1:matchGrid,:form:tab1:cadProj,:form:msgs,:form:growl" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
 					<p:commandButton value="Limpar"
 						update=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs"
 						icon="ui-icon-close" process="@this" style="margin-right:20px;">
 						<p:resetInput target=":form:tab1:cadProj,:form:tab1:matchGrid" />
+						
+						
 					</p:commandButton>
 				</center>
 
@@ -275,13 +276,87 @@
 		</p:tab>
 		<p:tab title="Documentos do Projeto">
 			
-			<h:panelGrid columns="2" cellpadding="10">
-				<h:inputText value="#{projetoMB.projeto.nomeProjeto}" required="true" />
-				<p:commandButton value="Save" ajax="false" icon="ui-icon-check"
-						validateClient="true" update=":form:formDoc" process="@all"
-						type="submit" actionListener="#{projetoMB.salvar}" />
-			</h:panelGrid>
+			<h:panelGrid id="grid3" columns="2" cellpadding="10">
 			
+			<h:outputText value="Projetos Cadastrados* :" />
+			<p:selectOneMenu id="projSelect2" required="true"
+					value="#{projetoMB.projetoSelecionadoAba3}" filter="true"
+					filterMatchMode="startsWith" effect="fade" style="width:400px">
+
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItems value="#{projetoMB.projetoSelectItems}" />
+					<f:ajax listener="#{projetoMB.selectProjetoTab3()}" execute="@this"/>
+				</p:selectOneMenu>
+				
+			<h:outputLabel for="docName" value="Nome Documento: *" />
+			<p:inputText id="docName" value="#{projetoMB.docProjeto.nomeDoc}"
+				required="true" maxlength="100" style="width: 500px;" />
+			
+			
+			<h:outputLabel value="Desc. Documento:" />
+					<p:inputTextarea rows="5" cols="30" counter="display2"
+						maxlength="255" counterTemplate="{0} characters remaining."
+						autoResize="false" value="#{projetoMB.docProjeto.descDoc}" />
+					<h:inputHidden id="hidden4" />
+					<h:outputText id="display2" />
+			
+			<h:outputLabel value="Documento: *" />
+			<p:fileUpload fileUploadListener="#{projetoMB.handleFileUpload}" required="true"
+				mode="advanced" dragDropSupport="true" update=":form:msgs"
+				sizeLimit="1000000000" />
+				
+				
+			</h:panelGrid>
+			<p:separator></p:separator>
+			<center>
+			<p:commandButton value="salvar" update=":form:tab1:grid3,:form:msgs,:form:growl" process="@this,:form:tab1:grid3" icon="ui-icon-check"  acvalidateClient="true"  actionListener="#{projetoMB.salvarDoc()}" style="margin-right:10px"/>
+			</center>
+			
+			<p:spacer></p:spacer>
+			
+			<p:panel header="Documentos Cadastrados">
+
+				<p:dataTable id="dataTableDoc" var="doc"
+					value="#{projetoMB.docProjetosList}" paginator="true" rows="5">
+					<f:facet name="header">
+            			Documentos
+        			</f:facet>
+        			
+        			
+        			<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Nome" filterMatchMode="contains">
+						<h:outputText value="#{doc.projeto.nomeProjeto}" />
+					</p:column>
+					
+					
+					<p:column filterBy="#{doc.nomeDoc}" headerText="Nome" filterMatchMode="contains">
+						<h:outputText value="#{doc.nomeDoc}" />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Desc. Doc" />
+						</f:facet>
+						<h:outputText value="#{doc.descDoc}" />
+					</p:column>
+					
+					
+					<p:column style="width:55px;text-align: center">
+						<f:facet name="header">
+							<h:outputText value="Donwload" />
+						</f:facet>
+						
+						<p:commandButton>
+							 <p:graphicImage value="../imagens/download.jpg" width="60px" height="60px"/> 
+						</p:commandButton>	 
+						
+							
+					</p:column>
+					
+       			</p:dataTable>
+       			
+      		</p:panel>
+        			
+					
 		</p:tab>
 	</p:tabView>
 
