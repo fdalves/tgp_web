@@ -34,7 +34,7 @@
 }
 
 .download {  
-    background-image: url("../imagens/download.jpg") !important;
+    background-image: url("../imagens/download-icon.pn") !important;
     height: 60px;
 	width: 60px;  
 }  
@@ -123,7 +123,7 @@
 
 			<p:spacer height="50" />
 
-			<p:panel header="Projetos Cadastrados">
+			<p:panel >
 
 				<p:dataTable id="dataTable" var="pro"
 					value="#{projetoMB.projetosList}" paginator="true" rows="5">
@@ -181,7 +181,7 @@
 						<f:facet name="header">
 							<h:outputText value="Editar" />
 						</f:facet>
-						<p:commandButton process="@this" ajax="true"
+						<p:commandButton process="@this" ajax="true" 
 							update=":form:tab1:matchGrid" icon="ui-icon-pencil"
 							title="Editar">
 							<f:setPropertyActionListener value="#{pro}"
@@ -218,6 +218,9 @@
 
 		</p:tab>
 		<p:tab title="Recursos do projeto" id="tab2">
+			
+			<p:panel id="cadrec" header="Cadastro Recursos">
+			
 			<h:panelGrid id="grid2" columns="2" cellpadding="10">
 				<h:outputText value="Projetos Cadastrados* :" />
 
@@ -260,7 +263,7 @@
 				</p:pickList>
 
 			</h:panelGrid>
-
+			</p:panel>
 			<p:separator></p:separator>
 
 			<center>
@@ -282,6 +285,7 @@
 		</p:tab>
 		<p:tab title="Documentos do Projeto">
 			
+			<p:panel id="cadDoc" header="Cadastro Documentos">
 			<h:panelGrid id="grid3" columns="2" cellpadding="10">
 			
 			<h:outputText value="Projetos Cadastrados* :" />
@@ -291,7 +295,7 @@
 
 					<f:selectItem itemLabel="Select One" itemValue="" />
 					<f:selectItems value="#{projetoMB.projetoSelectItems}" />
-					<f:ajax listener="#{projetoMB.selectProjetoTab3()}" execute="@this"/>
+					<f:ajax  execute="@this"/>
 				</p:selectOneMenu>
 				
 			<h:outputLabel for="docName" value="Nome Documento: *" />
@@ -313,14 +317,19 @@
 				
 				
 			</h:panelGrid>
-			<p:separator></p:separator>
+			</p:panel>
+			
+			
 			<center>
-			<p:commandButton value="salvar" update=":form:tab1:grid3,:form:msgs,:form:growl" process="@this,:form:tab1:grid3" icon="ui-icon-check"  acvalidateClient="true"  actionListener="#{projetoMB.salvarDoc()}" style="margin-right:10px"/>
+			<p:commandButton value="salvar" update=":form:tab1:grid3,:form:tab1:dataTableDoc,:form:msgs,:form:growl" process="@this,:form:tab1:grid3" icon="ui-icon-check"  acvalidateClient="true"  actionListener="#{projetoMB.salvarDoc()}" style="margin-right:10px"/>
+			<p:commandButton value="Limpar"	update=":form:tab1:grid3,:form:msgs" actionListener="#{projetoMB.ini()}"
+						icon="ui-icon-close" process="@this" style="margin-right:20px;">
+						<p:resetInput target=":form:tab1:grid3,:form:msgs" />
+			</p:commandButton>
 			</center>
-			
-			<p:spacer></p:spacer>
-			
-			<p:panel header="Documentos Cadastrados">
+			<p:separator></p:separator>
+			<p:spacer height="50"/>
+			<p:panel>
 
 				<p:dataTable id="dataTableDoc" var="doc"
 					value="#{projetoMB.docProjetosList}" paginator="true" rows="5">
@@ -351,11 +360,37 @@
 							<h:outputText value="Donwload" />
 						</f:facet>
 						
-						<p:commandButton icon="fa fa-download"  style="height: 80px;width: 80px;">
-						</p:commandButton>	 
-						
-							
+						<p:commandButton icon="fa fa-download" action="#{projetoMB.downloadDoc(doc)}" process="@this" ajax="false" type="submit" immediate="true"/>
+							 
 					</p:column>
+					
+					
+					<p:column style="width:55px;text-align: center">
+						<f:facet name="header">
+							<h:outputText value="Editar" />
+						</f:facet>
+						<p:commandButton process="@this" ajax="true"
+							update=":form:tab1:grid3" icon="ui-icon-pencil" actionListener="#{projetoMB.setProjetoDoc(doc)}"
+							title="Editar">
+							<f:setPropertyActionListener value="#{doc}"
+								target="#{projetoMB.docProjeto}" />
+						</p:commandButton>
+					</p:column>
+
+					<p:column style="width:55px;text-align: center">
+						<f:facet name="header">
+							<h:outputText value="Excluir" />
+						</f:facet>
+
+						<p:commandButton icon="ui-icon-trash" title="Excluir"
+							update=":form:tab1:dataTableDoc,:form:msgs,:form:growl"
+							process="@this" ajax="true" action="#{projetoMB.excluirDoc(doc)}"
+							immediate="true">
+							<p:confirm header="Confirmação Exclusão"
+								message="Você tem certeza?" icon="ui-icon-alert" />
+						</p:commandButton>
+					</p:column>
+					
 					
        			</p:dataTable>
        			

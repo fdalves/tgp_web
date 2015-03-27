@@ -1,5 +1,11 @@
 package managedbean;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,8 +15,11 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import model.DocProjeto;
 import model.Projeto;
@@ -60,11 +69,7 @@ public class ProjetoMB  implements Serializable {
 	}
 	
 	
-	public void onTabClose(){
 		
-	}
-	
-	
 	@PostConstruct
 	public void ini(){
 		this.projeto = new Projeto();
@@ -78,6 +83,7 @@ public class ProjetoMB  implements Serializable {
 		}
 		
 		projetoSelecionadoAba2 = 0;
+		projetoSelecionadoAba3 = 0;
 		
 		usuariosListDisponiveis = usuarioFacade.findAll();
 		usuariosListSelecionados = new ArrayList<Usuario>();
@@ -176,11 +182,7 @@ public class ProjetoMB  implements Serializable {
     // tab 2 ---------------------------------------------------------------------------
     
     
-    public void salvarTab2(){
-    	
-    	System.out.println(projetoSelecionadoAba2);
-    }
-    
+   
     
     public void selectProjeto(){
     	
@@ -263,35 +265,119 @@ public class ProjetoMB  implements Serializable {
     public void handleFileUpload(FileUploadEvent event) {
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
         this.docProjeto.setDoc(event.getFile().getContents());
+        this.docProjeto.setType(event.getFile().getContentType());
+        String extensao = event.getFile().getFileName().substring(event.getFile().getFileName().lastIndexOf('.') + 1); 
+        this.docProjeto.setExtensao("."+extensao);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
     
     
-    public void selectProjetoTab3(){
-    	
-    	
-    	
+    public void setProjetoDoc(DocProjeto docProjeto){
+    	this.projetoSelecionadoAba3 = docProjeto.getProjeto().getProjetoId();
     }
     
+        
     public void salvarDoc(){
-    	
-    	if (this.docProjeto.getDoc() == null){
-    		String info = "Selecione um Documento";
-    	    FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"", info));
-    	    return;
-    	}
     	
     	Projeto projeto = this.projetoFacade.find(this.projetoSelecionadoAba3);
     	docProjeto.setProjeto(projeto);
-    	this.docProjetoFacade.save(docProjeto);
     	
     	
-        String info = "Documento Associado ao projeto";
-        FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+    	if (this.docProjeto.getDocProjetoId() == 0){
+	    	
+	    	if (this.docProjeto.getDoc() == null){
+	    		String info = "Selecione um Documento";
+	    	    FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"", info));
+	    	    return;
+	    	}
+	    	this.docProjetoFacade.save(docProjeto);
+	        String info = "Documento Associado ao projeto";
+	        FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+	        
+    	} else {
+    		
+    		DocProjeto docProjetoPersist = this.docProjetoFacade.find(this.docProjeto.getDocProjetoId());
+    		
+    		docProjetoPersist.setDescDoc(this.docProjeto.getDescDoc());
+    		docProjetoPersist.setNomeDoc(this.docProjeto.getNomeDoc());
+    		docProjetoPersist.setProjeto(projeto);
+    		if (docProjeto.getDoc() != null){
+    			
+    			docProjetoPersist.setDoc(docProjeto.getDoc());
+    			docProjetoPersist.setType(docProjeto.getType());
+    			docProjetoPersist.setExtensao(docProjeto.getExtensao());
+    		}
+    		
+    		this.docProjetoFacade.update(docProjetoPersist);
+    		String info = "Documento alterado com sucesso";
+ 	        FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+    		
+    	}
         
         this.ini();
     	
     }
+    
+    
+    public void excluirDoc(DocProjeto docProjeto){
+    	this.docProjetoFacade.delete(docProjeto);
+		String info = "Doc Projeto Excluido com Sucesso";
+		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Documento Excluido com Sucesso", info));
+		this.ini();
+    	
+    }
+    
+    
+	public void downloadDoc(DocProjeto docProjeto) {
+
+		ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+		String arquivo = sContext.getRealPath("/temp") + File.separator	+ docProjeto.getNomeDoc() + docProjeto.getExtensao();
+
+		File file = new File(arquivo);
+
+		try {
+			FileOutputStream fileOuputStream = new FileOutputStream(file);
+			fileOuputStream.write(docProjeto.getDoc());
+			fileOuputStream.close();
+
+			System.out.println("Done");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String fileName = (docProjeto.getNomeDoc() + docProjeto.getExtensao());
+		
+		this.downloadFile(fileName, file, docProjeto.getType(), FacesContext.getCurrentInstance());
+		
+	}
+
+	public  void downloadFile(String filename, File file,String mimeType, FacesContext facesContext) {
+		FileInputStream in = null;
+		try {
+			ExternalContext context = facesContext.getExternalContext();
+			System.out.println("Aqui para baixar o " + filename);
+			HttpServletResponse response = (HttpServletResponse) context
+					.getResponse();
+			response.setHeader("Content-Disposition", "attachment;filename=\""
+					+ filename + "\"");
+			response.setContentLength((int) file.length());
+			response.setContentType(mimeType);
+			in = new FileInputStream(file);
+			OutputStream out = response.getOutputStream();
+			byte[] buf = new byte[(int) file.length()];
+			int count;
+			while ((count = in.read(buf)) >= 0) {
+				out.write(buf, 0, count);
+			}
+			facesContext.responseComplete();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+			
+		
+ 
+    }
+    
     
     
 	public ProjetoFacade getProjetoFacade() {

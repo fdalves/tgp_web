@@ -35,7 +35,17 @@
   <context-param>  
     <param-name>primefaces.THEME</param-name>  
     <param-value>redmond</param-value>  
-</context-param>  
+</context-param>
+
+<mime-mapping>
+        <extension>woff</extension>
+        <mime-type>application/font-woff</mime-type>
+</mime-mapping>  
+  
+  <context-param>
+   <param-name>primefaces.FONT_AWESOME</param-name>
+   <param-value>true</param-value>
+</context-param>
   
   <welcome-file-list>
     <welcome-file>index.xhtml</welcome-file>
