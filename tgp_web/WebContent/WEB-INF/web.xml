@@ -41,6 +41,9 @@
         <extension>woff</extension>
         <mime-type>application/font-woff</mime-type>
 </mime-mapping>  
+
+
+
   
   <context-param>
    <param-name>primefaces.FONT_AWESOME</param-name>
