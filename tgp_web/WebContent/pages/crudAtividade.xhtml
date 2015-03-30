@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		</f:facet>
+		<style type="text/css" media="screen">
+.ui-widget, .ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+</style>
+	</h:head>
+</f:view>
+
+
+<h:form id="form">
+
+	<p:growl id="growl" showDetail="true" sticky="true" />
+	<p:messages id="messages" showDetail="true" />
+	<p:panel id="cadUsuer" header="Cadastro Atividades">
+		<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
+			<h:outputLabel for="NomeAtividade" value="Atividade: *" />
+			<p:inputText id="NomeAtividade" value="#{atividadeMB.atividade.atividadeNome}"
+				required="true" maxlength="100" style="width: 500px;" />
+				
+			<h:outputLabel value="Desc. Atividade:" />
+					<p:inputTextarea rows="8" cols="30" counter="display" style="width: 500px;"
+						maxlength="500" counterTemplate="{0} characters remaining."
+						autoResize="false" value="#{atividadeMB.atividade.descAtividade}" />
+					<h:inputHidden id="hidden3" />
+					<h:outputText id="display" />	
+			
+			
+			<h:outputLabel value="Duração"/>
+			
+			<h:panelGroup columns="4">
+				
+				<p:outputLabel for="dt_ini" value="Data Inicio:" />
+						
+					<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}"
+						pattern="dd/MM/yyyy" mask="true"/>
+					<p:outputLabel style="padding-left: 20px;" for="dt_fim"	value="Data Final:" />
+					<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}"
+						pattern="dd/MM/yyyy" mask="true" >
+					<p:ajax event="dateSelect" listener="#{atividadeMB.calculadata()}" />	
+					</p:calendar> 
+				
+			</h:panelGroup>
+		</h:panelGrid>
+		<p:separator></p:separator>
+
+		<center>
+			<p:commandButton value="Savar" ajax="false" icon="ui-icon-check"
+				validateClient="true" update=":form:matchGrid" process="@all"
+				type="submit" actionListener="#{atividadeMB.salvar}" />
+			<p:commandButton value="Limpar" icon="ui-icon-close"
+				update=":form:matchGrid,:form:messages,:form:growl" process="@this"
+				style="margin-right:20px;">
+				<p:resetInput target=":form:matchGrid,:form:messages,:form:growl" />
+			</p:commandButton>
+		</center>
+
+
+	</p:panel>
+
+	<p:spacer height="50" />
+
+	
+
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+		<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+			icon="ui-icon-check" />
+		<p:commandButton value="No" type="button"
+			styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	</p:confirmDialog>
+
+</h:form>
+
+</html>

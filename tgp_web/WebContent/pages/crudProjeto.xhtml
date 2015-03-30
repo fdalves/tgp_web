@@ -338,7 +338,7 @@
             			Documentos
         			</f:facet>
         			
-        	<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Projetos" footerText="exact" filterMatchMode="exact">
+        	<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Projetos"  filterMatchMode="exact">
             <f:facet name="filter">
                 <p:selectOneMenu onchange="PF('docTable').filter()"  >
                     <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
@@ -346,11 +346,8 @@
                 </p:selectOneMenu>
             </f:facet>
             <h:outputText value="#{doc.projeto.nomeProjeto}" />
+        	
         	</p:column>
-        			
-        		
-					
-					
 					<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
 						<h:outputText value="#{doc.nomeDoc}" />
 					</p:column>
@@ -361,15 +358,11 @@
 						</f:facet>
 						<h:outputText value="#{doc.descDoc}" />
 					</p:column>
-					
-					
 					<p:column style="width:55px;text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Donwload" />
 						</f:facet>
-						
 						<p:commandButton icon="fa fa-download" action="#{projetoMB.downloadDoc(doc)}" process="@this" ajax="false" type="submit" immediate="true"/>
-							 
 					</p:column>
 					
 					
@@ -398,18 +391,10 @@
 								message="Você tem certeza?" icon="ui-icon-alert" />
 						</p:commandButton>
 					</p:column>
-					
-					
        			</p:dataTable>
-       			
       		</p:panel>
-        			
-					
 		</p:tab>
 	</p:tabView>
-
-
-
 </h:form>
 
 </html>
