@@ -57,6 +57,7 @@ public class ProjetoMB  implements Serializable {
 	private List<Usuario> usuariosListSelecionados = new ArrayList<Usuario>();
 	private DocProjeto docProjeto = new DocProjeto();
 	private List<DocProjeto> docProjetosList = new ArrayList<DocProjeto>();
+	private List<SelectItem> nomesProjetos = new ArrayList<SelectItem>();
 	
 	
 	public ProjetoMB() {
@@ -90,6 +91,12 @@ public class ProjetoMB  implements Serializable {
 		usuListModel = new DualListModel<Usuario>(usuariosListDisponiveis, usuariosListSelecionados);
 		docProjeto = new DocProjeto(); 
 		docProjetosList = docProjetoFacade.findAll();
+		
+		for (Projeto projeto : projetosList) {
+			SelectItem item = new SelectItem(projeto.getNomeProjeto(),projeto.getNomeProjeto());
+			nomesProjetos.add(item);
+		}
+		
 		
 	}
 	
@@ -507,6 +514,21 @@ public class ProjetoMB  implements Serializable {
 		this.docProjetosList = docProjetosList;
 	}
 
+
+	public List<SelectItem> getNomesProjetos() {
+		return nomesProjetos;
+	}
+
+
+	public void setNomesProjetos(List<SelectItem> nomesProjetos) {
+		this.nomesProjetos = nomesProjetos;
+	}
+
+
+	
+
+
+	
 	
 	
 	
