@@ -47,8 +47,8 @@
 
 <h:form id="form">
 
-	<p:messages id="msgs" showDetail="true" />
-	<p:growl id="growl" showDetail="true" sticky="false" life="3000" />
+	<p:messages id="msgs" showDetail="false" closable="true"/>
+	<p:growl id="growl" showDetail="false" sticky="false" life="3000" />
 
 	<h3>Crud Projeto</h3>
 	<p:tabView id="tab1" dynamic="true" cache="true">
@@ -73,7 +73,7 @@
 						value="#{projetoMB.projeto.siglaProjeto}" maxlength="100"
 						required="true" style="width: 500px;" />
 					<h:outputLabel value="Desc. Projeto:" />
-					<p:inputTextarea rows="5" cols="30" counter="display"
+					<p:inputTextarea rows="5" cols="30" counter="display" style="width: 500px;"
 						maxlength="255" counterTemplate="{0} characters remaining."
 						autoResize="false" value="#{projetoMB.projeto.descProjeto}" />
 					<h:inputHidden id="hidden3" />
@@ -109,7 +109,7 @@
 
 				<center>
 				
-					<p:commandButton value="Savar" update=":form:tab1:dataTableDoc,:form:tab1:cadDoc,:form:tab1:matchGrid,:form:tab1:cadProj,:form:msgs,:form:growl" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
+					<p:commandButton value="Savar" update=":form:tab1:dataTableDoc,:form:tab1:cadDoc,:form:tab1:matchGrid,:form:tab1:cadProj,:form:tab1:projSelect2,:form:msgs,:form:growl,:form:tab1:projSelect" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
 					<p:commandButton value="Limpar"
 						update=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs"
 						icon="ui-icon-close" process="@this" style="margin-right:20px;">
@@ -133,13 +133,13 @@
 
 
 					<p:column filterBy="#{pro.nomeProjeto}" headerText="Nome"
-						footerText="contains" filterMatchMode="contains">
+						 filterMatchMode="contains">
 						<h:outputText value="#{pro.nomeProjeto}" />
 					</p:column>
 
 
 					<p:column filterBy="#{pro.siglaProjeto}" headerText="Sigla Projeto"
-						footerText="contains" filterMatchMode="contains">
+						 filterMatchMode="contains">
 						<h:outputText value="#{pro.siglaProjeto}" />
 					</p:column>
 
@@ -182,7 +182,7 @@
 							<h:outputText value="Editar" />
 						</f:facet>
 						<p:commandButton process="@this" ajax="true" 
-							update=":form:tab1:matchGrid,:form:tab1:dataTableDoc" icon="ui-icon-pencil"
+							update=":form:tab1:matchGrid,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect" icon="ui-icon-pencil"
 							title="Editar">
 							<f:setPropertyActionListener value="#{pro}"
 								target="#{projetoMB.projeto}" />
@@ -195,7 +195,7 @@
 						</f:facet>
 
 						<p:commandButton icon="ui-icon-trash" title="Excluir"
-							update=":form:tab1:dataTable,:form:msgs,:form:growl,:form:tab1:dataTableDoc"
+							update=":form:tab1:dataTable,:form:msgs,:form:growl,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect"
 							process="@this" ajax="true" action="#{projetoMB.excluir(pro)}"
 							immediate="true">
 							<p:confirm header="Confirmação Exclusão"
@@ -257,7 +257,7 @@
 					</p:column>
 
 					<p:column style="width:85%;">
-						<h:outputText value="#{usuarios.nome}" />
+						<h:outputText value="#{usuario.nome}" />
 					</p:column>
 
 				</p:pickList>
@@ -332,26 +332,23 @@
 			<p:spacer height="50"/>
 			<p:panel>
 
-				<p:dataTable id="dataTableDoc" var="doc"
+				<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
 					value="#{projetoMB.docProjetosList}" paginator="true" rows="5">
 					<f:facet name="header">
             			Documentos
         			</f:facet>
         			
-        <p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Brand" footerText="exact" filterMatchMode="exact">
+        	<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Projetos" footerText="exact" filterMatchMode="exact">
             <f:facet name="filter">
-                <p:selectOneMenu onchange="PF('dataTableDoc').filter()" >
+                <p:selectOneMenu onchange="PF('docTable').filter()"  >
                     <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
                     <f:selectItems value="#{projetoMB.nomesProjetos}" />
                 </p:selectOneMenu>
             </f:facet>
             <h:outputText value="#{doc.projeto.nomeProjeto}" />
-        </p:column>
+        	</p:column>
         			
-        			
-        			<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Projeto" filterMatchMode="contains">
-						<h:outputText value="#{doc.projeto.nomeProjeto}" />
-					</p:column>
+        		
 					
 					
 					<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
