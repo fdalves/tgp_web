@@ -109,7 +109,7 @@
 
 				<center>
 				
-					<p:commandButton value="Savar" update=":form:tab1:matchGrid,:form:tab1:cadProj,:form:msgs,:form:growl" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
+					<p:commandButton value="Savar" update=":form:tab1:dataTableDoc,:form:tab1:cadDoc,:form:tab1:matchGrid,:form:tab1:cadProj,:form:msgs,:form:growl" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
 					<p:commandButton value="Limpar"
 						update=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs"
 						icon="ui-icon-close" process="@this" style="margin-right:20px;">
@@ -182,7 +182,7 @@
 							<h:outputText value="Editar" />
 						</f:facet>
 						<p:commandButton process="@this" ajax="true" 
-							update=":form:tab1:matchGrid" icon="ui-icon-pencil"
+							update=":form:tab1:matchGrid,:form:tab1:dataTableDoc" icon="ui-icon-pencil"
 							title="Editar">
 							<f:setPropertyActionListener value="#{pro}"
 								target="#{projetoMB.projeto}" />
@@ -195,7 +195,7 @@
 						</f:facet>
 
 						<p:commandButton icon="ui-icon-trash" title="Excluir"
-							update=":form:tab1:dataTable,:form:msgs,:form:growl"
+							update=":form:tab1:dataTable,:form:msgs,:form:growl,:form:tab1:dataTableDoc"
 							process="@this" ajax="true" action="#{projetoMB.excluir(pro)}"
 							immediate="true">
 							<p:confirm header="Confirmação Exclusão"
@@ -264,14 +264,15 @@
 
 			</h:panelGrid>
 			</p:panel>
+			
 			<p:separator></p:separator>
-
+			<p:spacer></p:spacer>
 			<center>
 
 				<p:commandButton id='varassociate'
 					actionListener="#{projetoMB.salvarUsuariosProjeto()}" value="Save"
 					icon="ui-icon-check" process="@this,:form:tab1:usuarios"
-					update=":form:msgs,:form:growl" />
+					update=":form:msgs,:form:growl,:form:tab1:dataTableDoc" />
 
 				<p:commandButton value="Limpar" icon="ui-icon-close"
 					actionListener="#{projetoMB.ini()}"
@@ -291,8 +292,8 @@
 			<h:outputText value="Projetos Cadastrados* :" />
 			<p:selectOneMenu id="projSelect2" required="true"
 					value="#{projetoMB.projetoSelecionadoAba3}" filter="true"
-					filterMatchMode="startsWith" effect="fade" style="width:400px">
-
+					filterMatchMode="startsWith" effect="fade" style="width:300px" requiredMessage="Selecione Um Projeto">
+					
 					<f:selectItem itemLabel="Select One" itemValue="" />
 					<f:selectItems value="#{projetoMB.projetoSelectItems}" />
 					<f:ajax  execute="@this"/>
@@ -300,18 +301,18 @@
 				
 			<h:outputLabel for="docName" value="Nome Documento: *" />
 			<p:inputText id="docName" value="#{projetoMB.docProjeto.nomeDoc}"
-				required="true" maxlength="100" style="width: 500px;" />
+				required="true" maxlength="100" style="width: 300px;" requiredMessage="informe nome do documento" />
 			
 			
 			<h:outputLabel value="Desc. Documento:" />
-					<p:inputTextarea rows="5" cols="30" counter="display2"
+					<p:inputTextarea rows="5" style="width: 300px;" cols="30" counter="display2"
 						maxlength="255" counterTemplate="{0} characters remaining."
 						autoResize="false" value="#{projetoMB.docProjeto.descDoc}" />
 					<h:inputHidden id="hidden4" />
 					<h:outputText id="display2" />
 			
 			<h:outputLabel value="Documento: *" />
-			<p:fileUpload fileUploadListener="#{projetoMB.handleFileUpload}" required="true"
+			<p:fileUpload fileUploadListener="#{projetoMB.handleFileUpload}" required="true" requiredMessage="carregue um documento"
 				mode="advanced" dragDropSupport="true" update=":form:msgs"
 				sizeLimit="1000000000" />
 				
@@ -337,13 +338,23 @@
             			Documentos
         			</f:facet>
         			
+        <p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Brand" footerText="exact" filterMatchMode="exact">
+            <f:facet name="filter">
+                <p:selectOneMenu onchange="PF('dataTableDoc').filter()" >
+                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
+                    <f:selectItems value="#{projetoMB.nomesProjetos}" />
+                </p:selectOneMenu>
+            </f:facet>
+            <h:outputText value="#{doc.projeto.nomeProjeto}" />
+        </p:column>
         			
-        			<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Nome" filterMatchMode="contains">
+        			
+        			<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Projeto" filterMatchMode="contains">
 						<h:outputText value="#{doc.projeto.nomeProjeto}" />
 					</p:column>
 					
 					
-					<p:column filterBy="#{doc.nomeDoc}" headerText="Nome" filterMatchMode="contains">
+					<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
 						<h:outputText value="#{doc.nomeDoc}" />
 					</p:column>
 					
