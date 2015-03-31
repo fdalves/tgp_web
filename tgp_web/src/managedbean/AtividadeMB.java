@@ -2,6 +2,9 @@ package managedbean;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -24,6 +27,7 @@ public class AtividadeMB  implements Serializable {
 	private AtividadeFacade atividadeFacade;
 	private Atividade atividade =  new  Atividade();
 	private List<Atividade> atividadeList = new ArrayList<Atividade>();
+	private int diasTrabalhados = 0;
 	
 	
 	
@@ -37,6 +41,7 @@ public class AtividadeMB  implements Serializable {
 		
 		this.atividadeList = atividadeFacade.findAll();
 		this.atividade =  new  Atividade();
+		this.diasTrabalhados = 0;
 	}
 	
 	
@@ -63,18 +68,62 @@ public class AtividadeMB  implements Serializable {
 			
 			this.atividadeFacade.update(atividadePersist);
 			String info = "Atividae Alterada com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Atividade " + atividade.getAtividadeNome(), info));
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Atividade " + atividade.getAtividadeNome()+ info, null));
 		}
 		
 		this.ini();
 	}
 	
 	
-
-	public void calculadata(){
-		System.out.println("calcula....");
+	
+	public void calculaData(){
 		
-	}
+		Date initialDate = this.atividade.getDtIni(); 
+		Date finalDate = this.atividade.getDtFim();
+	    
+		if(initialDate == null || finalDate == null){
+			
+			return;
+		}
+		
+		if (initialDate.getTime() > finalDate.getTime()){
+			String info = "Data Inicial deve ser menor que a data final";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, null));
+			this.atividade.setDtIni(null);
+			
+		}
+		
+	        int diasT = 0;  
+	        int totD = somaDias( initialDate, finalDate );        
+	          
+	        Calendar calendar = new GregorianCalendar();  
+	          
+	        
+	        calendar.setTime(initialDate);  
+	          
+	        for( int i = 0; i <= totD; i++ ) {  
+	              
+	            if( !( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ) && !( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ) ) {  
+	                diasT++;  
+	            }  
+	            calendar.add( Calendar.DATE, 1 );  
+	              
+	        }         
+	        this.diasTrabalhados = diasT;  
+	    }  
+	
+
+	private int somaDias( Date initialDate, Date finalDate ) {  
+    
+    if( initialDate == null || finalDate == null ) {  
+        return 0;  
+    }  
+  
+    int days = ( int ) ( ( finalDate.getTime() - initialDate.getTime() )/( 24*60*60*1000 ) );  
+      
+      
+    return ( days > 0 ? days : 0 ) ;  
+	}  
 
 	public void excluir(Atividade atividade){
 		this.atividadeFacade.delete(atividade);
@@ -111,6 +160,16 @@ public class AtividadeMB  implements Serializable {
 
 	public void setAtividadeList(List<Atividade> atividadeList) {
 		this.atividadeList = atividadeList;
+	}
+
+
+	public int getDiasTrabalhados() {
+		return diasTrabalhados;
+	}
+
+
+	public void setDiasTrabalhados(int diasTrabalhados) {
+		this.diasTrabalhados = diasTrabalhados;
 	}
 	
 	

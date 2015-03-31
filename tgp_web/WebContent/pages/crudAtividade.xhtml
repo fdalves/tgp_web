@@ -23,8 +23,8 @@
 
 <h:form id="form">
 
-	<p:growl id="growl" showDetail="true" sticky="true" />
-	<p:messages id="messages" showDetail="true" />
+	<p:growl id="growl" showDetail="true" sticky="true" closable="true" />
+	<p:messages id="messages" showDetail="true" closable="true" />
 	<p:panel id="cadUsuer" header="Cadastro Atividades">
 		<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
 			<h:outputLabel for="NomeAtividade" value="Atividade: *" />
@@ -40,20 +40,32 @@
 			
 			
 			<h:outputLabel value="Duração"/>
-			
-			<h:panelGroup columns="4">
+			<p:panel>
+			<h:panelGrid  id="teste" columns="4" cellpadding="4">
 				
-				<p:outputLabel for="dt_ini" value="Data Inicio:" />
+				    <p:outputLabel for="dt_ini" value="Data Inicio:" />
 						
-					<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}"
-						pattern="dd/MM/yyyy" mask="true"/>
+					<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}" 
+						pattern="dd/MM/yyyy" mask="true">
+					<p:ajax process="@this,:form:dt_fim" update=":form:teste,:form:diasId,:form:messages,:form:growl" event="dateSelect" listener="#{atividadeMB.calculaData()}" />	
+					</p:calendar>
 					<p:outputLabel style="padding-left: 20px;" for="dt_fim"	value="Data Final:" />
 					<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}"
 						pattern="dd/MM/yyyy" mask="true" >
-					<p:ajax event="dateSelect" listener="#{atividadeMB.calculadata()}" />	
-					</p:calendar> 
-				
-			</h:panelGroup>
+					<p:ajax process="@this,:form:dt_ini" update=":form:teste,:form:diasId,:form:messages,:form:growl" event="dateSelect" listener="#{atividadeMB.calculaData()}" />	
+					</p:calendar>
+					
+					<h:outputLabel style="font-weight:bold;font-size:13px;cellpadding=5;" id="diasId" value="Dias Trabalho: '#{atividadeMB.diasTrabalhados}'" />
+					<h:outputLabel style="font-weight:bold;font-size:13px;padding-left: 50‒;cellpadding=5;padding-left: 10px;padding-right: 10;" id="horasId" value="Horas de Trabalho: '#{atividadeMB.diasTrabalhados}'" />
+					
+			
+			</h:panelGrid>
+			<center>
+			<p:commandButton  icon="fa fa-wrench" value="Configaração Hora/Dias Úteis" onclick="PF('dlg2').show();" ></p:commandButton>
+			</center>
+			
+			
+			</p:panel>
 		</h:panelGrid>
 		<p:separator></p:separator>
 
@@ -73,7 +85,9 @@
 
 	<p:spacer height="50" />
 
-	
+	<p:dialog header="Modal Dialog" widgetVar="dlg2" modal="true" height="100">
+    <h:outputText value="This is a Modal Dialog." />
+	</p:dialog>
 
 	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
 		<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
