@@ -109,7 +109,7 @@
 
 				<center>
 				
-					<p:commandButton value="Savar" update=":form:tab1:dataTableDoc,:form:tab1:cadDoc,:form:tab1:matchGrid,:form:tab1:cadProj,:form:tab1:projSelect2,:form:msgs,:form:growl,:form:tab1:projSelect" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
+					<p:commandButton value="Savar" update=":form:tab1:dataTable,:form:tab1:dataTableDoc,:form:tab1:cadDoc,:form:tab1:matchGrid,:form:tab1:cadProj,:form:tab1:projSelect2,:form:msgs,:form:growl,:form:tab1:projSelect" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
 					<p:commandButton value="Limpar"
 						update=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs"
 						icon="ui-icon-close" process="@this" style="margin-right:20px;">
@@ -182,7 +182,7 @@
 							<h:outputText value="Editar" />
 						</f:facet>
 						<p:commandButton process="@this" ajax="true" 
-							update=":form:tab1:matchGrid,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect" icon="ui-icon-pencil"
+							update=":form:tab1:dataTable,:form:tab1:matchGrid,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect" icon="ui-icon-pencil"
 							title="Editar">
 							<f:setPropertyActionListener value="#{pro}"
 								target="#{projetoMB.projeto}" />

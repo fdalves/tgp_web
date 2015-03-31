@@ -15,6 +15,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 import model.Atividade;
+import model.ConfigAtividade;
 import ejb.AtividadeFacade;
 
 @ManagedBean(name="atividadeMB")
@@ -23,12 +24,16 @@ public class AtividadeMB  implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
+	private static final float QUANTIDADE_HORAS_DIA = 7.5f;
+	
+	
 	@EJB
 	private AtividadeFacade atividadeFacade;
 	private Atividade atividade =  new  Atividade();
 	private List<Atividade> atividadeList = new ArrayList<Atividade>();
 	private int diasTrabalhados = 0;
-	
+	private ConfigAtividade configAtividade = new ConfigAtividade(); 
+	private float teste = 0.0f;
 	
 	
 	public AtividadeMB() {
@@ -42,6 +47,15 @@ public class AtividadeMB  implements Serializable {
 		this.atividadeList = atividadeFacade.findAll();
 		this.atividade =  new  Atividade();
 		this.diasTrabalhados = 0;
+		
+		this.configAtividade = new ConfigAtividade();
+		
+		this.configAtividade.setQuantDiasFolgaFeriado(0);
+		this.configAtividade.setQuantHorasDias(QUANTIDADE_HORAS_DIA);
+		this.configAtividade.setTrabDom(false);
+		this.configAtividade.setTrabSab(false);
+		
+		this.atividade.setConfigAtividade(configAtividade);
 	}
 	
 	
@@ -170,6 +184,26 @@ public class AtividadeMB  implements Serializable {
 
 	public void setDiasTrabalhados(int diasTrabalhados) {
 		this.diasTrabalhados = diasTrabalhados;
+	}
+
+
+	public ConfigAtividade getConfigAtividade() {
+		return configAtividade;
+	}
+
+
+	public void setConfigAtividade(ConfigAtividade configAtividade) {
+		this.configAtividade = configAtividade;
+	}
+
+
+	public float getTeste() {
+		return teste;
+	}
+
+
+	public void setTeste(float teste) {
+		this.teste = teste;
 	}
 	
 	
