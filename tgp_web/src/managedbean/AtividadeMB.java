@@ -20,6 +20,7 @@ import javax.faces.context.FacesContext;
 import model.Atividade;
 import model.ConfigAtividade;
 import model.Usuario;
+import model.UsuarioAtividade;
 
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.event.DragDropEvent;
@@ -55,7 +56,8 @@ public class AtividadeMB  implements Serializable {
 	private boolean popUpSalve = false;
 	private int maxFeriados = 0;
 	private List<Usuario> usariosList = new ArrayList<Usuario>();
-	private List<Usuario> usuariosSelect = new ArrayList<Usuario>();
+	private List<UsuarioAtividade> usuarioDispo = new ArrayList<UsuarioAtividade>();
+	private List<UsuarioAtividade> usuariosSelect = new ArrayList<UsuarioAtividade>();
 	private boolean disableTab = false;
 	private String selectType = "";
 	private float horaAtvUser = 0;
@@ -73,18 +75,29 @@ public class AtividadeMB  implements Serializable {
 		this.atividade =  new  Atividade();
 		this.diasTrabalhados = 0;
 		this.horasTrabalho = 0;
-		
 		this.iniPopUpConfig();
+		this.iniUsu();
+		
+	}
+	
+	
+	public void iniUsu(){
 		
 		this.usariosList = new ArrayList<Usuario>();
 		this.usariosList = usuarioFacade.findAll();
-		usuariosSelect = new ArrayList<Usuario>();
+		this.usuarioDispo = new ArrayList<UsuarioAtividade>();
+		this.usuariosSelect = new ArrayList<UsuarioAtividade>();
+		for (Usuario u : usariosList ) {
+			UsuarioAtividade usuarioAtividade = new UsuarioAtividade();
+			usuarioAtividade.setUsuario(u);
+			this.usuarioDispo.add(usuarioAtividade);
+		}
 		this.disableTab = true;
 		this.selectType = "R";
 		this.horaAtvUser = 0;
 		this.diaAtvUser = 0;
+		
 	}
-	
 	
 	public void iniPopUpConfig(){
 		
@@ -176,8 +189,7 @@ public class AtividadeMB  implements Serializable {
 	        	this.horasTrabalho = new Float(this.diasTrabalhados).floatValue() * QUANTIDADE_HORAS_DIA;
 	        }
 	        
-	        this.horaAtvUser = this.horasTrabalho;
-	        this.diaAtvUser = this.diasTrabalhados;
+	        this.divideReplicaTempo();
 	        
 	    }  
 	
@@ -240,16 +252,16 @@ public class AtividadeMB  implements Serializable {
 
 	
 	public void addUser(DragDropEvent ddEvent){
-		Usuario user = ((Usuario) ddEvent.getData());
+		UsuarioAtividade user = ((UsuarioAtividade) ddEvent.getData());
 		this.usuariosSelect.add(user);
-        this.usariosList.remove(user);
+        this.usuarioDispo.remove(user);
         this.divideReplicaTempo();
 	}
 	
 	
-	public void deleteUsu(Usuario user){
+	public void deleteUsu(UsuarioAtividade user){
 		this.usuariosSelect.remove(user);
-        this.usariosList.add(user);
+        this.usuarioDispo.add(user);
         this.divideReplicaTempo();
 	}
 	
@@ -417,12 +429,25 @@ public class AtividadeMB  implements Serializable {
 	}
 
 
-	public List<Usuario> getUsuariosSelect() {
+	
+
+
+	public List<UsuarioAtividade> getUsuarioDispo() {
+		return usuarioDispo;
+	}
+
+
+	public void setUsuarioDispo(List<UsuarioAtividade> usuarioDispo) {
+		this.usuarioDispo = usuarioDispo;
+	}
+
+
+	public List<UsuarioAtividade> getUsuariosSelect() {
 		return usuariosSelect;
 	}
 
 
-	public void setUsuariosSelect(List<Usuario> usuariosSelect) {
+	public void setUsuariosSelect(List<UsuarioAtividade> usuariosSelect) {
 		this.usuariosSelect = usuariosSelect;
 	}
 
