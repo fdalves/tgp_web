@@ -5,11 +5,6 @@
   <converter-id>usuarioConverter</converter-id>
   <converter-class>util.UsuarioConverter</converter-class>
  </converter>
- <managed-bean>
-  <managed-bean-name>atividadeMB</managed-bean-name>
-  <managed-bean-class>managedbean.AtividadeMB</managed-bean-class>
-  <managed-bean-scope>request</managed-bean-scope>
- </managed-bean>
  <referenced-bean>
   <referenced-bean-name>usuarioMB</referenced-bean-name>
   <referenced-bean-class>managedbean.UsuarioMB</referenced-bean-class>
@@ -17,6 +12,10 @@
  <referenced-bean>
   <referenced-bean-name>projetoMB</referenced-bean-name>
   <referenced-bean-class>managedbean.ProjetoMB</referenced-bean-class>
+ </referenced-bean>
+ <referenced-bean>
+  <referenced-bean-name>atividadeMB</referenced-bean-name>
+  <referenced-bean-class>managedbean.AtividadeMB</referenced-bean-class>
  </referenced-bean>
  <validator>
   <validator-id>custom.emailValidator</validator-id>
