@@ -1,7 +1,8 @@
 package managedbean;
 
 import java.io.Serializable;
-import java.nio.channels.SeekableByteChannel;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -13,15 +14,17 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
-import org.primefaces.event.DragDropEvent;
 
 import model.Atividade;
 import model.ConfigAtividade;
 import model.Usuario;
+
+import org.primefaces.component.accordionpanel.AccordionPanel;
+import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.TabChangeEvent;
+
 import ejb.AtividadeFacade;
 import ejb.ConfigAtividadeFacade;
 import ejb.UsuarioFacade;
@@ -48,12 +51,15 @@ public class AtividadeMB  implements Serializable {
 	private int diasTrabalhados = 0;
 	private float horasTrabalho = 0;
 	private ConfigAtividade configAtividade = new ConfigAtividade(); 
-	private float teste = 0.0f;
 	private boolean mostraPopUpConfig = false;
 	private boolean popUpSalve = false;
 	private int maxFeriados = 0;
 	private List<Usuario> usariosList = new ArrayList<Usuario>();
 	private List<Usuario> usuariosSelect = new ArrayList<Usuario>();
+	private boolean disableTab = false;
+	private String selectType = "";
+	private float horaAtvUser = 0;
+	private float diaAtvUser = 0;
 	
 	public AtividadeMB() {
 
@@ -67,10 +73,16 @@ public class AtividadeMB  implements Serializable {
 		this.atividade =  new  Atividade();
 		this.diasTrabalhados = 0;
 		this.horasTrabalho = 0;
+		
+		this.iniPopUpConfig();
+		
 		this.usariosList = new ArrayList<Usuario>();
 		this.usariosList = usuarioFacade.findAll();
 		usuariosSelect = new ArrayList<Usuario>();
-		this.iniPopUpConfig();
+		this.disableTab = true;
+		this.selectType = "R";
+		this.horaAtvUser = 0;
+		this.diaAtvUser = 0;
 	}
 	
 	
@@ -164,6 +176,9 @@ public class AtividadeMB  implements Serializable {
 	        	this.horasTrabalho = new Float(this.diasTrabalhados).floatValue() * QUANTIDADE_HORAS_DIA;
 	        }
 	        
+	        this.horaAtvUser = this.horasTrabalho;
+	        this.diaAtvUser = this.diasTrabalhados;
+	        
 	    }  
 	
 
@@ -224,40 +239,59 @@ public class AtividadeMB  implements Serializable {
 	}
 
 	
-	
 	public void addUser(DragDropEvent ddEvent){
-		
-		
-		FacesContext fc = FacesContext.getCurrentInstance();
-		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
-		
 		Usuario user = ((Usuario) ddEvent.getData());
-		
-		
-		List<Usuario> list =  (List<Usuario>) session.getAttribute("usuList");
-		
-		if (list != null){
-			for (Usuario usuario : list) {
-				this.usuariosSelect.add(usuario);
-			}
-			this.usuariosSelect.add(user);
-			 session.setAttribute("usuList", this.usuariosSelect);
-			 
-			 return;
-			
-		}
-		
-		System.out.println("entrou....");
-		
-		
-		  
-        this.usuariosSelect.add(user);
-        
+		this.usuariosSelect.add(user);
         this.usariosList.remove(user);
-        
-        session.setAttribute("usuList", this.usuariosSelect);
-        
-       System.out.println("saiu");
+        this.divideReplicaTempo();
+	}
+	
+	
+	public void deleteUsu(Usuario user){
+		this.usuariosSelect.remove(user);
+        this.usariosList.add(user);
+        this.divideReplicaTempo();
+	}
+	
+	
+	public void onTabChange(TabChangeEvent event){
+		
+		String id = event.getTab().getId();
+		
+		System.out.println(id);
+		
+		if (id.equals("t1")){
+				if (this.getAtividade().getDtIni() != null &&  this.getAtividade().getDtFim() != null ){
+				this.disableTab = false;
+			} else {
+				UIComponent components = event.getTab().getParent();
+				AccordionPanel accordionPanel = (AccordionPanel) components;
+				accordionPanel.setActiveIndex("-1");
+				System.out.println(components.getId());
+				String info = "Selecione Data Ini e Data final da atividade";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_WARN,"", info));
+			}
+		}
+	}
+	
+	
+	public void divideReplicaTempo(){
+		
+		this.diaAtvUser = this.diasTrabalhados;
+		this.horaAtvUser = this.horasTrabalho;
+		
+		if (this.selectType.equals("D") && this.usuariosSelect.size() >= 1){
+			
+			NumberFormat formatarFloat= new DecimalFormat("0.0");    
+			
+			float dias = this.diaAtvUser / this.usuariosSelect.size();
+			this.diaAtvUser = new Float(formatarFloat.format(dias));
+			
+			float horas = this.horaAtvUser / this.usuariosSelect.size();
+			this.horaAtvUser = new Float(formatarFloat.format(horas));
+		} 
+		
+		
 	}
 
 	public AtividadeFacade getAtividadeFacade() {
@@ -265,17 +299,6 @@ public class AtividadeMB  implements Serializable {
 	}
 
 
-	public void teste(){
-		System.out.println("entrou...");
-		
-		
-		Usuario u = new Usuario();
-		
-		u.setNome("SDAD");
-		
-		this.usuariosSelect.add(u);
-	}
-	
 	public void setAtividadeFacade(AtividadeFacade atividadeFacade) {
 		this.atividadeFacade = atividadeFacade;
 	}
@@ -402,6 +425,47 @@ public class AtividadeMB  implements Serializable {
 	public void setUsuariosSelect(List<Usuario> usuariosSelect) {
 		this.usuariosSelect = usuariosSelect;
 	}
+
+
+	public boolean isDisableTab() {
+		return disableTab;
+	}
+
+
+	public void setDisableTab(boolean disableTab) {
+		this.disableTab = disableTab;
+	}
+
+
+	public String getSelectType() {
+		return selectType;
+	}
+
+
+	public void setSelectType(String selectType) {
+		this.selectType = selectType;
+	}
+
+
+	public float getHoraAtvUser() {
+		return horaAtvUser;
+	}
+
+
+	public void setHoraAtvUser(float horaAtvUser) {
+		this.horaAtvUser = horaAtvUser;
+	}
+
+
+	public float getDiaAtvUser() {
+		return diaAtvUser;
+	}
+
+
+	public void setDiaAtvUser(float diaAtvUser) {
+		this.diaAtvUser = diaAtvUser;
+	}
+
 
 
 	

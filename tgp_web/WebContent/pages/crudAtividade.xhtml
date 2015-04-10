@@ -18,7 +18,7 @@
 }
 </style>
 
-<script type="text/javascript">
+		<script type="text/javascript">
     function handleDrop(event, ui) {
         var droppedCar = ui.draggable;
  
@@ -40,11 +40,7 @@
 	<p:growl id="growl" showDetail="true" sticky="true" closable="true" />
 	<p:messages id="messages" showDetail="true" closable="true" />
 	<p:panel id="cadUsuer" header="Cadastro Atividades">
-		
-		<p:inputText id="firstname" value="#{atividadeMB.atividade.atividadeNome}">
-            <p:ajax listener="#{atividadeMB.teste()}"  event="keyup" update=":form:selectedUserTable"   />
-    </p:inputText>
-		
+
 		<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
 			<h:outputLabel for="NomeAtividade" value="Atividade: *" />
 			<p:inputText id="NomeAtividade"
@@ -69,7 +65,7 @@
 					<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}"
 						pattern="dd/MM/yyyy" mask="true">
 						<p:ajax process="@this,:form:dt_fim"
-							update=":form:duracao,:form:diasId,:form:messages,:form:growl,form:slId"
+							update=":form:duracao,:form:diasId,:form:horasId,:form:messages,:form:growl,form:slId"
 							event="dateSelect" listener="#{atividadeMB.calculaData()}" />
 					</p:calendar>
 					<p:outputLabel style="padding-left: 20px;" for="dt_fim"
@@ -77,7 +73,7 @@
 					<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}"
 						pattern="dd/MM/yyyy" mask="true">
 						<p:ajax process="@this,:form:dt_ini"
-							update=":form:duracao,:form:diasId,:form:messages,:form:growl,form:slId"
+							update=":form:duracao,:form:diasId,:form:horasId,:form:messages,:form:growl,form:slId"
 							event="dateSelect" listener="#{atividadeMB.calculaData()}" />
 					</p:calendar>
 				</h:panelGrid>
@@ -105,8 +101,103 @@
 
 			<h:inputHidden value="" />
 
-			
+
+			<p:accordionPanel id="tab1" activeIndex="-1">
+				<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}" process="@this,:form:dt_fim,:form:dt_ini" update=":form:tab1:availableUser,:form:tab1,:form:tab1:t1,:form:messages,:form:growl" />
+				
+				
+				
+				
+				<p:tab id="t1" title="Usuários vinculados a Atividade" >
+					<h:panelGrid columns="1" cellpadding="10" width="500px">
+
+						<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
+        					<p:outputLabel for="typeq" value="Tempo da Atv. entre Usuários:" />
+        						<p:selectOneRadio  id="typeq" value="#{atividadeMB.selectType}">
+            						<p:ajax listener="#{atividadeMB.divideReplicaTempo}"
+    								 update=":form:tab1:selectedUserTable" process="@this" />
+            						<f:selectItem noSelectionOption="true" itemLabel="Replicar Tempo Atividade" itemValue="R" />
+            						<f:selectItem itemLabel="Dividir Tempo da Atividade" itemValue="D" />
+            					</p:selectOneRadio>
+						</h:panelGrid>
+						
+						
+						<p:fieldset id="availableUserFild" legend="Usuários Disponíveis" >
+
+							<p:dataGrid id="availableUser" var="userDispo" 
+								value="#{atividadeMB.usariosList}" columns="3">
+
+								<p:panel id="pnl" header="#{userDispo.nome}" 
+									style="text-align:center">
+									<h:panelGrid columns="1" style="width:100%">
+										<p:graphicImage url="../temp/#{userDispo.usuarioId}.jpg"
+											width="60px" height="60px" />
+									</h:panelGrid>
+								</p:panel>
+
+								<p:draggable   for="pnl" revert="true" handle=".ui-panel-titlebar"
+									stack=".ui-panel">
+								</p:draggable>
+							</p:dataGrid>
+						</p:fieldset>
+
+					
+						<p:fieldset id="selectedUser" legend="Usuários Selecionados"
+							style="margin-top:20px">
+							<p:outputPanel id="dropArea" >
+								<h:outputText value="!!!Drop Aqui!!!"
+									rendered="#{empty atividadeMB.usuariosSelect}"
+									style="font-size:24px;" />
+								<p:dataTable id="selectedUserTable" var="user" 
+									value="#{atividadeMB.usuariosSelect}">
+									<p:column headerText="Nome">
+										<h:outputText value="#{user.nome}" />
+									</p:column>
+									
+									<p:column headerText="Dias Atv.">
+										<h:outputText value="#{atividadeMB.diaAtvUser} Dias" />
+									</p:column>
+									
+									<p:column headerText="Horas Atv.">
+										<h:outputText value="#{atividadeMB.horaAtvUser} Horas" />
+									</p:column>
+									
+									<p:column style="width:55px;text-align: center">
+          								<f:facet name="header">
+                							<h:outputText value="Excluir" />
+            							</f:facet>
+            
+           						 	<p:commandButton  ajax="false" immediate="true" 
+										 icon="ui-icon-trash" update="form:tab1:selectedUser,form:tab1:availableUser" actionListener="#{atividadeMB.deleteUsu(user)}"
+										title="Excluir">
+									</p:commandButton>
+        							
+        							</p:column>
+									
+								</p:dataTable>
+							</p:outputPanel>
+						</p:fieldset>
+
+						<p:droppable for=":form:tab1:selectedUser" tolerance="touch"
+							activeStyleClass="ui-state-highlight"
+							datasource=":form:tab1:availableUser" onDrop="handleDrop">
+							<p:ajax listener="#{atividadeMB.addUser}"
+								update=":form:tab1:dropArea,:form:tab1:availableUser" />
+						</p:droppable>
+
+
+					</h:panelGrid>
+				</p:tab>
+				<p:tab title="Documentos vinculados a Atividade">
+					<h:panelGrid columns="2" cellpadding="10">
+
+					</h:panelGrid>
+				</p:tab>
+
+			</p:accordionPanel>
 		</h:panelGrid>
+
+
 		<p:separator></p:separator>
 
 		<center>
@@ -125,43 +216,9 @@
 
 	<p:spacer height="50" />
 
-	
-	
-    <p:fieldset id="availableUserFild" legend="Usuários Disponíveis">
-        
-        <p:dataGrid  id="availableUser" var="userDispo" value="#{atividadeMB.usariosList}" columns="3">
-        
-            <p:panel id="pnl" header="#{userDispo.nome}" style="text-align:center">
-                <h:panelGrid columns="1" style="width:100%">
-                    <p:graphicImage url="../temp/#{userDispo.usuarioId}.jpg" width="60px"	height="60px" />
-                </h:panelGrid>
-            </p:panel>
- 
-            <p:draggable for="pnl"  revert="true" handle=".ui-panel-titlebar" stack=".ui-panel">
-            </p:draggable>
-        </p:dataGrid>
-    </p:fieldset>
-	
-	<br/>
-	
-	<p:fieldset id="selectedUser" legend="Usuários Selecionados" style="margin-top:20px">
-        <p:outputPanel id="dropArea">
-            <h:outputText value="!!!Drop here!!!" rendered="#{empty atividadeMB.usuariosSelect}" style="font-size:24px;" />
-            <p:dataTable id="selectedUserTable" var="user" value="#{atividadeMB.usuariosSelect}" >
-                <p:column headerText="Nome">
-                    <h:outputText value="#{user.nome}" />
-                </p:column>
- 
-              </p:dataTable>
-        </p:outputPanel>
-    </p:fieldset>
-	
-	<p:droppable for=":form:selectedUser"    tolerance="touch" activeStyleClass="ui-state-highlight" datasource=":form:availableUser" onDrop="handleDrop">
-        <p:ajax listener="#{atividadeMB.addUser}"  update=":form:selectedUserTable"  />
-    </p:droppable>
 
 
-	
+
 
 	<p:dialog id="popUp" header="Configuração Horas" widgetVar="dlg2"
 		modal="true" height="200" visible="#{atividadeMB.mostraPopUpConfig}">
@@ -217,7 +274,7 @@
 	</p:confirmDialog>
 
 	<h:inputHidden id="h1" value="#{atividadeMB.popUpSalve}" />
-	
+
 </h:form>
 
 </html>
