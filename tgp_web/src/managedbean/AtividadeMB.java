@@ -18,6 +18,7 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 
 import model.Atividade;
+import model.Cargo;
 import model.ConfigAtividade;
 import model.Usuario;
 import model.UsuarioAtividade;
@@ -62,6 +63,7 @@ public class AtividadeMB  implements Serializable {
 	private String selectType = "";
 	private float horaAtvUser = 0;
 	private float diaAtvUser = 0;
+	private UsuarioAtividade usuarioAtividadeSelect =new UsuarioAtividade();
 	
 	public AtividadeMB() {
 
@@ -87,8 +89,14 @@ public class AtividadeMB  implements Serializable {
 		this.usariosList = usuarioFacade.findAll();
 		this.usuarioDispo = new ArrayList<UsuarioAtividade>();
 		this.usuariosSelect = new ArrayList<UsuarioAtividade>();
+		int tempId = 0;
 		for (Usuario u : usariosList ) {
 			UsuarioAtividade usuarioAtividade = new UsuarioAtividade();
+			usuarioAtividade.setTempId(tempId);
+			tempId++;
+			Cargo cargo = new Cargo();
+			usuarioAtividade.setCargo(cargo);
+			cargo.setUsuarioAtividade(usuarioAtividade);
 			usuarioAtividade.setUsuario(u);
 			this.usuarioDispo.add(usuarioAtividade);
 		}
@@ -96,7 +104,7 @@ public class AtividadeMB  implements Serializable {
 		this.selectType = "R";
 		this.horaAtvUser = 0;
 		this.diaAtvUser = 0;
-		
+		this.usuarioAtividadeSelect =new UsuarioAtividade();
 	}
 	
 	public void iniPopUpConfig(){
@@ -302,10 +310,24 @@ public class AtividadeMB  implements Serializable {
 			float horas = this.horaAtvUser / this.usuariosSelect.size();
 			this.horaAtvUser = new Float(formatarFloat.format(horas));
 		} 
-		
-		
+	
 	}
 
+	
+	public void salvaCargo(){
+		UsuarioAtividade usuarioAtividade = this.usuarioAtividadeSelect;
+		
+		for (UsuarioAtividade u : this.usuariosSelect) {
+			if (usuarioAtividade.getTempId() == u.getTempId()){
+				u.setCargo(usuarioAtividade.getCargo());
+				break;
+			}
+		}
+		
+		this.usuarioAtividadeSelect = new UsuarioAtividade();
+	}
+	
+	
 	public AtividadeFacade getAtividadeFacade() {
 		return atividadeFacade;
 	}
@@ -489,6 +511,16 @@ public class AtividadeMB  implements Serializable {
 
 	public void setDiaAtvUser(float diaAtvUser) {
 		this.diaAtvUser = diaAtvUser;
+	}
+
+
+	public UsuarioAtividade getUsuarioAtividadeSelect() {
+		return usuarioAtividadeSelect;
+	}
+
+
+	public void setUsuarioAtividadeSelect(UsuarioAtividade usuarioAtividadeSelect) {
+		this.usuarioAtividadeSelect = usuarioAtividadeSelect;
 	}
 
 

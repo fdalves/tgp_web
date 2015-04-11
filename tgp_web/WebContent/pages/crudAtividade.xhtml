@@ -79,15 +79,18 @@
 				</h:panelGrid>
 				<center>
 					<br />
+					<br />
 					<p:commandButton icon="fa fa-wrench"
 						value="Configaração Hora/Dias Úteis" ajax="true"
 						actionListener="#{atividadeMB.openPopupConfig()}"
 						process="@this,:form:dt_ini,:form:dt_fim,:form:diasId,:form:h1,:form:pgPop"
 						update=":form:slId,:form:popUp,:form:messages,:form:growl,:form:h1"></p:commandButton>
 					<br />
+					<br />
 					<h:outputLabel
 						style="font-weight:bold;font-size:13px;cellpadding=5;" id="diasId"
 						value="Dias Trabalho: #{atividadeMB.diasTrabalhados}" />
+					<br />
 					<br />
 					<h:outputLabel
 						style="font-weight:bold;font-size:13px;padding-left: 50‒;cellpadding=5;padding-left: 10px;padding-right: 10;"
@@ -167,7 +170,9 @@
                 							<h:outputText value="Cargo Atv." />
             						</f:facet>
             						
-            						<p:commandButton title="Cargo na Atv."  update=":form:display2" oncomplete="PF('userDialog').show()" icon="fa fa-wrench"/>
+            						<p:commandButton title="Cargo na Atv."  update=":form:display2" oncomplete="PF('userDialog').show()" icon="fa fa-wrench">
+                        				<f:setPropertyActionListener value="#{user}" target="#{atividadeMB.usuarioAtividadeSelect}" />
+                        			</p:commandButton>
                         			</p:column>
 									
 									<p:column style="width:55px;text-align: center">
@@ -275,15 +280,26 @@
 	</p:dialog>
 	
 	
-	<p:dialog header="Car Detail" widgetVar="userDialog" resizable="false" draggable="false"
+	<p:dialog header="Cargo Atividade" widgetVar="userDialog" resizable="false" draggable="false"
               showEffect="fade" hideEffect="fade" modal="true">
  
         <p:outputPanel id="display2">
-            <h:panelGrid columns="2" cellpadding="5">
-                <f:facet name="header">
-                    <p:graphicImage name="/demo/images/car/#{dndCarsView.selectedCar.brand}.gif"/>
-                </f:facet>
+            <h:panelGrid id="grid3" columns="2" cellpadding="5">
+                <f:facet name="Cargo do Usuário na Atividade"/>
+                    <h:outputText value="Testador: " />
+        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.testador}" />
+                    <h:outputText value="Programador: " />
+        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.programador}" />
+        			<h:outputText value="Analista: " />
+        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.analista}" />
+        			<h:outputText value="Gerente: " />
+        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.gerente}" />
+        			
+        		 
             </h:panelGrid>
+            <center>
+            <p:commandButton ajax="true" icon="ui-icon-check" immediate="true" update=":form:grid3" process="@this,:form:grid3" value="Salvar" actionListener="#{atividadeMB.salvaCargo()}"/>
+            </center>
         </p:outputPanel>
     </p:dialog>
 	
