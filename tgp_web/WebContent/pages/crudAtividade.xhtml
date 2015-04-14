@@ -102,7 +102,7 @@
 
 			</p:panel>
 
-			<h:inputHidden value="" />
+			<h:inputHidden />
 
 
 			<p:accordionPanel id="tab1" activeIndex="-1">
@@ -214,9 +214,9 @@
 		<p:separator></p:separator>
 
 		<center>
-			<p:commandButton value="Savar" ajax="false" icon="ui-icon-check"
-				validateClient="true" update=":form:matchGrid" process="@all"
-				type="submit" actionListener="#{atividadeMB.salvar()}" />
+			<p:commandButton value="Savar" ajax="true" icon="ui-icon-check"
+				validateClient="true" update=":form:matchGrid,:form:messages,:form:growl" process="@this"
+				actionListener="#{atividadeMB.salvar()}" />
 			<p:commandButton value="Limpar" icon="ui-icon-close"
 				update=":form:matchGrid,:form:messages,:form:growl" process="@this"
 				style="margin-right:20px;">
