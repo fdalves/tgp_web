@@ -153,6 +153,10 @@ public class AtividadeMB  implements Serializable {
 	}
 	
 	
+	public void carregaCargo(UsuarioAtividade usuarioAtividade){
+			this.usuarioAtividadeSelect = usuarioAtividade;
+	}
+	
 	
 	public void calculaData(){
 		
