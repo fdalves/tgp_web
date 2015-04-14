@@ -1,8 +1,8 @@
 package managedbean;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -194,6 +194,13 @@ public class AtividadeMB  implements Serializable {
 	        }         
 	        
 	        if (this.popUpSalve){
+	        	
+	        	if (this.getConfigAtividade().getQuantDiasFolgaFeriado() >= diasT ){
+	        		String info = "Verifique a configuração de Dias Úteis";
+	    			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, null));
+	        		return;
+	        	}
+	        	
 	        	this.diasTrabalhados = diasT - this.getConfigAtividade().getQuantDiasFolgaFeriado();
 	        	this.horasTrabalho = this.diasTrabalhados * this.getConfigAtividade().getQuantHorasDias();
 	        } else {
@@ -232,7 +239,7 @@ public class AtividadeMB  implements Serializable {
 			this.configAtividade.setQuantHorasDias(QUANTIDADE_HORAS_DIA);
 			this.configAtividade.setTrabDom(false);
 			this.configAtividade.setTrabSab(false);
-			this.maxFeriados = this.diasTrabalhados;
+			this.maxFeriados = this.diasTrabalhados - 1;
 			
 		}
 		
@@ -282,8 +289,6 @@ public class AtividadeMB  implements Serializable {
 		
 		String id = event.getTab().getId();
 		
-		System.out.println(id);
-		
 		if (id.equals("t1")){
 				if (this.getAtividade().getDtIni() != null &&  this.getAtividade().getDtFim() != null ){
 				this.disableTab = false;
@@ -305,16 +310,15 @@ public class AtividadeMB  implements Serializable {
 		this.horaAtvUser = this.horasTrabalho;
 		
 		if (this.selectType.equals("D") && this.usuariosSelect.size() >= 1){
-			
-			NumberFormat formatarFloat= new DecimalFormat("0.0");    
-			
 			float dias = this.diaAtvUser / this.usuariosSelect.size();
-			this.diaAtvUser = new Float(formatarFloat.format(dias));
-			
+			BigDecimal bd = new BigDecimal(dias);
+			bd= bd.setScale(1, RoundingMode.CEILING);
+			this.diaAtvUser = bd.floatValue();
 			float horas = this.horaAtvUser / this.usuariosSelect.size();
-			this.horaAtvUser = new Float(formatarFloat.format(horas));
+			bd = new BigDecimal(horas);
+			bd = bd.setScale(1, RoundingMode.CEILING);
+			this.horaAtvUser = bd.floatValue();
 		} 
-	
 	}
 
 	

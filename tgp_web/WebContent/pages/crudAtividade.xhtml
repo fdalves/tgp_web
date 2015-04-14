@@ -298,7 +298,7 @@
         		 
             </h:panelGrid>
             <center>
-            <p:commandButton ajax="false" icon="ui-icon-check" immediate="true" update=":form:grid3" process="@this,:form:grid3" value="Salvar" actionListener="#{atividadeMB.salvaCargo()}"/>
+            <p:commandButton ajax="true" icon="ui-icon-check"  oncomplete="PF('userDialog').hide()" update=":form:grid3"  process="@this,:form:grid3" value="Salvar" actionListener="#{atividadeMB.salvaCargo()}"/>
             </center>
         </p:outputPanel>
     </p:dialog>
