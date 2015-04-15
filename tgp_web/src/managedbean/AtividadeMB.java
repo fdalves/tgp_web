@@ -126,9 +126,17 @@ public class AtividadeMB  implements Serializable {
 	public void salvar(){
 		
 		if (atividade.getAitividadeId() == 0){
-			
-			atividadeFacade.saveTeste();
-			
+			if (this.usuariosSelect != null && !this.usuariosSelect.isEmpty()){
+				this.atividade.setConfigAtividade(this.configAtividade);
+				this.atividade.setUsuarioAtividades(this.usuariosSelect);
+				String msg = this.atividadeFacade.savarAtividade(this.atividade);
+				if (msg != null){
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,"", msg));
+				}
+			} else {
+				String info = "Selecione um Usuário !";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,"", info));
+			}
 		}
 			/***
 			this.configAtividadeFacade.save(this.configAtividade);
@@ -162,8 +170,9 @@ public class AtividadeMB  implements Serializable {
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Atividade " + atividade.getAtividadeNome()+ info, null));
 		}
 		
-		this.ini();
 		*/
+		this.ini();
+		
 	}
 	
 	
