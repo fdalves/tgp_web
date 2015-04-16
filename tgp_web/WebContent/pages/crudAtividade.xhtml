@@ -18,15 +18,13 @@
 }
 </style>
 
-		<script type="text/javascript">
+<script type="text/javascript">
     function handleDrop(event, ui) {
         var droppedCar = ui.draggable;
  
         droppedCar.fadeOut('fast');
     }
 
-
-    
 </script>
 
 	</h:head>
@@ -41,14 +39,14 @@
 	<p:messages id="messages"  closable="true" />
 	<p:panel id="cadUsuer" header="Cadastro Atividades">
 
-		<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
+		<h:panelGrid columns="4" id="matchGrid" cellpadding="5" style="width: 800px;">
 			
 			
 			<h:outputLabel for="NomeAtividade" value="Atividade:*" />
 			
 			<p:inputText id="NomeAtividade"
 				value="#{atividadeMB.atividade.atividadeNome}" required="true"
-				maxlength="100" style="width: 500px;" />
+				maxlength="100" style="width:350px;" />
 			
 			
 			<h:outputLabel value="Prioridade:" />
@@ -60,21 +58,11 @@
         	</p:selectOneButton>
 				
 			
-
-			<h:outputLabel value="Desc. Atividade:" />
-			<p:inputTextarea rows="8" cols="30" counter="display"
-				style="width: 500px;" maxlength="500"
-				counterTemplate="{0} characters remaining." autoResize="false"
-				value="#{atividadeMB.atividade.descAtividade}" />
-			<h:inputHidden id="hidden3" />
-			<h:outputText id="display" />
-			
-			
 			<h:outputText value="Projetos da Ati.:*" />
 
 				<p:selectOneMenu id="projSelect" required="true"
 					value="#{atividadeMB.idProjetoSelect}" filter="true"
-					filterMatchMode="startsWith" effect="fade" style="width:400px">
+					filterMatchMode="startsWith" effect="fade" style="width:350px">
 
 					<f:selectItem itemLabel="Select One" itemValue="" />
 					<f:selectItems value="#{atividadeMB.projetoSelectItems}" />
@@ -93,6 +81,20 @@
 		
 				</p:selectOneMenu>
 			
+
+			<h:outputLabel value="Desc. Atividade:" />
+			<h:panelGroup>
+			<p:inputTextarea rows="8" cols="30" counter="display"
+				style="width: 350px;" maxlength="500"
+				counterTemplate="{0} characters remaining." autoResize="false"
+				value="#{atividadeMB.atividade.descAtividade}" />
+			<h:inputHidden id="hidden3" />
+			<br/>
+			<h:outputText id="display" />
+			</h:panelGroup>
+			
+			
+			
 			
 			
 			<h:outputLabel value="Duração:" />
@@ -107,8 +109,7 @@
 							update=":form:duracao,:form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
 							event="dateSelect" listener="#{atividadeMB.calculaData()}" />
 					</p:calendar>
-					<p:outputLabel style="padding-left: 20px;" for="dt_fim"
-						value="Data Final:" />
+					<p:outputLabel style="padding-left: 20px;" for="dt_fim" 	value="Data Final:" />
 					<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}" required="true" 
 						pattern="dd/MM/yyyy" mask="true">
 						<p:ajax process="@this" 
@@ -144,13 +145,19 @@
 			<h:inputHidden />
 
 
-			<p:accordionPanel id="tab1" activeIndex="-1">
+			
+		</h:panelGrid>
+		
+		</p:panel>
+
+	<p:spacer height="10" />
+		
+		
+		<p:accordionPanel id="tab1" activeIndex="-1" style="width:600px" >
 				<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}" process="@this" update=":form:tab1:availableUser,:form:tab1,:form:tab1:t1,:form:messages,:form:growl" />
 				
-				
-				
-				
 				<p:tab id="t1" title="Usuários vinculados a Atividade" >
+					<p:panel>
 					<h:panelGrid columns="1" cellpadding="10" width="500px">
 
 						<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
@@ -171,10 +178,12 @@
 
 								<p:panel id="pnl" header="#{userDispo.usuario.nome}" 
 									style="text-align:center">
-									<h:panelGrid columns="1" style="width:100%">
+									<center>
+									<h:panelGrid columns="1" >
 										<p:graphicImage url="../temp/#{userDispo.usuario.usuarioId}.jpg"
 											width="60px" height="60px" />
 									</h:panelGrid>
+									</center>
 								</p:panel>
 
 								<p:draggable   for="pnl" revert="true" handle=".ui-panel-titlebar"
@@ -219,9 +228,8 @@
                 							<h:outputText value="Excluir" />
             							</f:facet>
             
-           						 	<p:commandButton  ajax="true" immediate="true" 
-										 icon="ui-icon-trash" update="form:tab1:selectedUser,form:tab1:availableUser" actionListener="#{atividadeMB.deleteUsu(user)}"
-										title="Excluir">
+           						 	<p:commandButton  ajax="true"  
+										 icon="ui-icon-trash" update="form:tab1" process="@this,form:tab1" actionListener="#{atividadeMB.deleteUsu(user)}" title="Excluir">
 									</p:commandButton>
         							
         							</p:column>
@@ -237,8 +245,8 @@
 								update=":form:tab1:dropArea,:form:tab1:availableUser" />
 						</p:droppable>
 
-
 					</h:panelGrid>
+					</p:panel>
 				</p:tab>
 				<p:tab title="Documentos vinculados a Atividade">
 					<h:panelGrid columns="2" cellpadding="10">
@@ -247,8 +255,7 @@
 				</p:tab>
 
 			</p:accordionPanel>
-		</h:panelGrid>
-
+		
 
 		<p:separator></p:separator>
 
@@ -265,9 +272,7 @@
 		</center>
 
 
-	</p:panel>
-
-	<p:spacer height="50" />
+	
 
 
 
