@@ -1,5 +1,9 @@
 package managedbean;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -15,18 +19,23 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletResponse;
 
 import model.Atividade;
 import model.Cargo;
 import model.ConfigAtividade;
+import model.DocAtividade;
 import model.Projeto;
 import model.Usuario;
 import model.UsuarioAtividade;
 
 import org.primefaces.component.accordionpanel.AccordionPanel;
 import org.primefaces.event.DragDropEvent;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.event.TabChangeEvent;
 
 import ejb.AtividadeFacade;
@@ -76,6 +85,8 @@ public class AtividadeMB  implements Serializable {
 	private int idUsuSelect =0 ;
 	private List<Usuario> usuariosList =  new  ArrayList<Usuario>();
 	private List<SelectItem> usuariosSelectItems = new ArrayList<SelectItem>();
+	private DocAtividade docAtividade = new DocAtividade();
+	private List<DocAtividade> docAtividades = new ArrayList<DocAtividade>();
 	
 	
 	public AtividadeMB() {
@@ -104,8 +115,9 @@ public class AtividadeMB  implements Serializable {
 			usuariosSelectItems.add(item);
 		}
 		
-		
+		this.docAtividade = new DocAtividade();
 		this.prioridade = "normal";
+		this.docAtividades = new ArrayList<DocAtividade>();
 		this.iniPopUpConfig();
 		this.iniUsu();
 		
@@ -161,6 +173,7 @@ public class AtividadeMB  implements Serializable {
 				this.atividade.setUsuarioAtividades(this.usuariosSelect);
 				this.atividade.setProjeto(projetoFacade.find(this.idProjetoSelect));
 				this.atividade.setGerente(usuarioFacade.find(this.idUsuSelect));
+				this.atividade.setDocAtividades(this.docAtividades);
 				String msg = this.atividadeFacade.savarAtividade(this.atividade);
 				if (msg != null){
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,msg,""));
@@ -380,6 +393,93 @@ public class AtividadeMB  implements Serializable {
 		Cargo cargo = new Cargo();
 		this.usuarioAtividadeSelect.setCargo(cargo);
 	}
+	
+	
+	public void handleFileUpload(FileUploadEvent event) {
+        FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+        this.docAtividade.setDoc(event.getFile().getContents());
+        this.docAtividade.setTypeName(event.getFile().getContentType());
+        String extensao = event.getFile().getFileName().substring(event.getFile().getFileName().lastIndexOf('.') + 1); 
+        this.docAtividade.setExtensao("."+extensao);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+	
+	
+	public void salvarDoc(){
+		
+		if (docAtividade.getDoc() != null){
+			DocAtividade docAtividade = this.docAtividade;
+			
+			if (docAtividade.getNomeDoc() == null || docAtividade.getNomeDoc().equals("")){
+				String info = "Informe nome do documento.";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));
+			}
+			
+			this.docAtividades.add(docAtividade);
+			this.docAtividade = new DocAtividade();
+			String info = "Doc. carregado com sucesso.";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info, ""));
+		} else {
+			String info = "Carregue pelo menos um documento.";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));
+		}
+		
+	}
+	
+	
+	public void downloadDoc(DocAtividade docAtividade) {
+
+		ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
+		String arquivo = sContext.getRealPath("/temp") + File.separator	+ docAtividade.getNomeDoc() + docAtividade.getExtensao();
+
+		File file = new File(arquivo);
+
+		try {
+			FileOutputStream fileOuputStream = new FileOutputStream(file);
+			fileOuputStream.write(docAtividade.getDoc());
+			fileOuputStream.close();
+
+			System.out.println("Done");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String fileName = (docAtividade.getNomeDoc() + docAtividade.getExtensao());
+		
+		this.downloadFile(fileName, file, docAtividade.getTypeName(), FacesContext.getCurrentInstance());
+		
+	}
+
+	public  void downloadFile(String filename, File file,String mimeType, FacesContext facesContext) {
+		FileInputStream in = null;
+		try {
+			ExternalContext context = facesContext.getExternalContext();
+			System.out.println("Aqui para baixar o " + filename);
+			HttpServletResponse response = (HttpServletResponse) context
+					.getResponse();
+			response.setHeader("Content-Disposition", "attachment;filename=\""
+					+ filename + "\"");
+			response.setContentLength((int) file.length());
+			response.setContentType(mimeType);
+			in = new FileInputStream(file);
+			OutputStream out = response.getOutputStream();
+			byte[] buf = new byte[(int) file.length()];
+			int count;
+			while ((count = in.read(buf)) >= 0) {
+				out.write(buf, 0, count);
+			}
+			facesContext.responseComplete();
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+	
+	 public void excluirDoc(DocAtividade docAtividade){
+	    	this.docAtividades.remove(docAtividade);
+			String info = "Doc Atividade Excluido com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info,null));
+		}
 	
 	
 	public AtividadeFacade getAtividadeFacade() {
@@ -651,6 +751,26 @@ public class AtividadeMB  implements Serializable {
 
 	public void setUsuariosSelectItems(List<SelectItem> usuariosSelectItems) {
 		this.usuariosSelectItems = usuariosSelectItems;
+	}
+
+
+	public DocAtividade getDocAtividade() {
+		return docAtividade;
+	}
+
+
+	public void setDocAtividade(DocAtividade docAtividade) {
+		this.docAtividade = docAtividade;
+	}
+
+
+	public List<DocAtividade> getDocAtividades() {
+		return docAtividades;
+	}
+
+
+	public void setDocAtividades(List<DocAtividade> docAtividades) {
+		this.docAtividades = docAtividades;
 	}
 
 
