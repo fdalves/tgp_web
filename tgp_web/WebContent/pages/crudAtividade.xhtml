@@ -37,15 +37,29 @@
 
 <h:form id="form">
 
-	<p:growl id="growl" showDetail="true" sticky="true" closable="true" />
-	<p:messages id="messages" showDetail="true" closable="true" />
+	<p:growl id="growl"  sticky="true" closable="true" />
+	<p:messages id="messages"  closable="true" />
 	<p:panel id="cadUsuer" header="Cadastro Atividades">
 
 		<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
-			<h:outputLabel for="NomeAtividade" value="Atividade: *" />
+			
+			
+			<h:outputLabel for="NomeAtividade" value="Atividade:*" />
+			
 			<p:inputText id="NomeAtividade"
 				value="#{atividadeMB.atividade.atividadeNome}" required="true"
 				maxlength="100" style="width: 500px;" />
+			
+			
+			<h:outputLabel value="Prioridade:" />
+			
+			<p:selectOneButton value="#{atividadeMB.prioridade}" required="true">
+            	<f:selectItem itemLabel="Alta" itemValue="alta"/>
+            	<f:selectItem itemLabel="Normal" itemValue="normal" />
+            	<f:selectItem itemLabel="Baixa" itemValue="baixa" />
+        	</p:selectOneButton>
+				
+			
 
 			<h:outputLabel value="Desc. Atividade:" />
 			<p:inputTextarea rows="8" cols="30" counter="display"
@@ -54,25 +68,50 @@
 				value="#{atividadeMB.atividade.descAtividade}" />
 			<h:inputHidden id="hidden3" />
 			<h:outputText id="display" />
+			
+			
+			<h:outputText value="Projetos da Ati.:*" />
 
+				<p:selectOneMenu id="projSelect" required="true"
+					value="#{atividadeMB.idProjetoSelect}" filter="true"
+					filterMatchMode="startsWith" effect="fade" style="width:400px">
 
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItems value="#{atividadeMB.projetoSelectItems}" />
+		
+				</p:selectOneMenu>
+			
+			
+			<h:outputText value="Gerente Proj./Ati.:*" />
+
+				<p:selectOneMenu id="usuSelect" required="true"
+					value="#{atividadeMB.idUsuSelect}" filter="true"
+					filterMatchMode="startsWith" effect="fade" style="width:400px">
+
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItems value="#{atividadeMB.usuariosSelectItems}" />
+		
+				</p:selectOneMenu>
+			
+			
+			
 			<h:outputLabel value="Duração:" />
 			<p:panel style="width: 500px;">
 				<h:panelGrid id="duracao" columns="4" cellpadding="4">
 
 					<p:outputLabel for="dt_ini" value="Data Inicio:" />
 
-					<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}"
+					<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}" required="true"
 						pattern="dd/MM/yyyy" mask="true">
-						<p:ajax process="@this,:form:dt_fim"
+						<p:ajax process="@this"
 							update=":form:duracao,:form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
 							event="dateSelect" listener="#{atividadeMB.calculaData()}" />
 					</p:calendar>
 					<p:outputLabel style="padding-left: 20px;" for="dt_fim"
 						value="Data Final:" />
-					<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}"
+					<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}" required="true" 
 						pattern="dd/MM/yyyy" mask="true">
-						<p:ajax process="@this,:form:dt_ini"
+						<p:ajax process="@this" 
 							update=":form:duracao,:form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
 							event="dateSelect" listener="#{atividadeMB.calculaData()}" />
 					</p:calendar>
@@ -106,7 +145,7 @@
 
 
 			<p:accordionPanel id="tab1" activeIndex="-1">
-				<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}" process="@this,:form:dt_fim,:form:dt_ini" update=":form:tab1:availableUser,:form:tab1,:form:tab1:t1,:form:messages,:form:growl" />
+				<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}" process="@this" update=":form:tab1:availableUser,:form:tab1,:form:tab1:t1,:form:messages,:form:growl" />
 				
 				
 				
@@ -180,7 +219,7 @@
                 							<h:outputText value="Excluir" />
             							</f:facet>
             
-           						 	<p:commandButton  ajax="false" immediate="true" 
+           						 	<p:commandButton  ajax="true" immediate="true" 
 										 icon="ui-icon-trash" update="form:tab1:selectedUser,form:tab1:availableUser" actionListener="#{atividadeMB.deleteUsu(user)}"
 										title="Excluir">
 									</p:commandButton>
@@ -214,8 +253,9 @@
 		<p:separator></p:separator>
 
 		<center>
-			<p:commandButton value="Savar" ajax="true" icon="ui-icon-check"
-				validateClient="true" update=":form:matchGrid,:form:messages,:form:growl" process="@this"
+			<p:commandButton value="Savar" type="Submit" ajax="false" icon="ui-icon-check"
+				update=":form:matchGrid,:form:messages,:form:growl" process="@this"
+				validateClient="true"
 				actionListener="#{atividadeMB.salvar()}" />
 			<p:commandButton value="Limpar" icon="ui-icon-close"
 				update=":form:matchGrid,:form:messages,:form:growl" process="@this"

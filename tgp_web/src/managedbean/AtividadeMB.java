@@ -16,10 +16,12 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 
 import model.Atividade;
 import model.Cargo;
 import model.ConfigAtividade;
+import model.Projeto;
 import model.Usuario;
 import model.UsuarioAtividade;
 
@@ -29,6 +31,7 @@ import org.primefaces.event.TabChangeEvent;
 
 import ejb.AtividadeFacade;
 import ejb.ConfigAtividadeFacade;
+import ejb.ProjetoFacade;
 import ejb.UsuarioFacade;
 
 @ManagedBean(name="atividadeMB")
@@ -46,6 +49,8 @@ public class AtividadeMB  implements Serializable {
 	private ConfigAtividadeFacade configAtividadeFacade;
 	@EJB
 	private UsuarioFacade usuarioFacade;
+	@EJB
+	private ProjetoFacade projetoFacade;
 	
 	
 	private Atividade atividade =  new  Atividade();
@@ -64,6 +69,14 @@ public class AtividadeMB  implements Serializable {
 	private float horaAtvUser = 0;
 	private float diaAtvUser = 0;
 	private UsuarioAtividade usuarioAtividadeSelect =new UsuarioAtividade();
+	private List<SelectItem> projetoSelectItems = new ArrayList<SelectItem>();
+	private int idProjetoSelect =0 ;
+	private List<Projeto> projetosList =  new  ArrayList<Projeto>();
+	private String prioridade = new String();
+	private int idUsuSelect =0 ;
+	private List<Usuario> usuariosList =  new  ArrayList<Usuario>();
+	private List<SelectItem> usuariosSelectItems = new ArrayList<SelectItem>();
+	
 	
 	public AtividadeMB() {
 
@@ -77,6 +90,22 @@ public class AtividadeMB  implements Serializable {
 		this.atividade =  new  Atividade();
 		this.diasTrabalhados = 0;
 		this.horasTrabalho = 0;
+		this.projetoSelectItems = new ArrayList<SelectItem>();
+		this.projetosList = this.projetoFacade.findAll();
+		for (Projeto projeto : projetosList) {
+			SelectItem item = new SelectItem(projeto.getProjetoId(), projeto.getSiglaProjeto() + " - " + projeto.getNomeProjeto());
+			projetoSelectItems.add(item);
+		}
+		
+		this.idUsuSelect =0 ;
+		this.usuariosList =  this.usuarioFacade.findAll();
+		for (Usuario usu : usuariosList) {
+			SelectItem item = new SelectItem(usu.getUsuarioId(), usu.getNome());
+			usuariosSelectItems.add(item);
+		}
+		
+		
+		this.prioridade = "normal";
 		this.iniPopUpConfig();
 		this.iniUsu();
 		
@@ -105,6 +134,7 @@ public class AtividadeMB  implements Serializable {
 		this.horaAtvUser = 0;
 		this.diaAtvUser = 0;
 		this.usuarioAtividadeSelect =new UsuarioAtividade();
+		this.usuarioAtividadeSelect.setCargo(new Cargo());
 	}
 	
 	public void iniPopUpConfig(){
@@ -129,14 +159,21 @@ public class AtividadeMB  implements Serializable {
 			if (this.usuariosSelect != null && !this.usuariosSelect.isEmpty()){
 				this.atividade.setConfigAtividade(this.configAtividade);
 				this.atividade.setUsuarioAtividades(this.usuariosSelect);
+				this.atividade.setProjeto(projetoFacade.find(this.idProjetoSelect));
+				this.atividade.setGerente(usuarioFacade.find(this.idUsuSelect));
 				String msg = this.atividadeFacade.savarAtividade(this.atividade);
 				if (msg != null){
-					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,"", msg));
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,msg,""));
+					return;
 				}
 			} else {
-				String info = "Selecione um Usuário !";
-				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,"", info));
+				String info = "Selecione pelo menos um usuário respossável pela atividade !";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,info, ""));
+				return;
 			}
+			String info = "Atividade cadastrada com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info, ""));
+			this.ini();
 		}
 			/***
 			this.configAtividadeFacade.save(this.configAtividade);
@@ -171,7 +208,8 @@ public class AtividadeMB  implements Serializable {
 		}
 		
 		*/
-		this.ini();
+		
+		
 		
 	}
 	
@@ -193,7 +231,7 @@ public class AtividadeMB  implements Serializable {
 		
 		if (initialDate.getTime() > finalDate.getTime()){
 			String info = "Data Inicial deve ser menor que a data final";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, null));
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));
 			this.atividade.setDtIni(null);
 			
 		}
@@ -220,7 +258,7 @@ public class AtividadeMB  implements Serializable {
 	        	
 	        	if (this.getConfigAtividade().getQuantDiasFolgaFeriado() >= diasT ){
 	        		String info = "Verifique a configuração de Dias Úteis";
-	    			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, null));
+	    			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	        		return;
 	        	}
 	        	
@@ -253,7 +291,7 @@ public class AtividadeMB  implements Serializable {
 			this.mostraPopUpConfig = true;
 		} else {
 			String info = "Data Inicio e Fim devem ser informadas";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_WARN,"", info));
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_WARN,info,"" ));
 			return ;
 		}
 		if (!this.popUpSalve){
@@ -288,7 +326,7 @@ public class AtividadeMB  implements Serializable {
 	public void excluir(Atividade atividade){
 		this.atividadeFacade.delete(atividade);
 		String info = "Atividade Excluido com Sucesso";
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info,"" ));
 		this.ini();
 	}
 
@@ -321,7 +359,7 @@ public class AtividadeMB  implements Serializable {
 				accordionPanel.setActiveIndex("-1");
 				System.out.println(components.getId());
 				String info = "Selecione Data Ini e Data final da atividade";
-				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_WARN,"", info));
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_WARN,info, ""));
 			}
 		}
 	}
@@ -356,6 +394,8 @@ public class AtividadeMB  implements Serializable {
 		}
 		
 		this.usuarioAtividadeSelect = new UsuarioAtividade();
+		Cargo cargo = new Cargo();
+		this.usuarioAtividadeSelect.setCargo(cargo);
 	}
 	
 	
@@ -554,6 +594,88 @@ public class AtividadeMB  implements Serializable {
 		this.usuarioAtividadeSelect = usuarioAtividadeSelect;
 	}
 
+
+	public List<SelectItem> getProjetoSelectItems() {
+		return projetoSelectItems;
+	}
+
+
+	public void setProjetoSelectItems(List<SelectItem> projetoSelectItems) {
+		this.projetoSelectItems = projetoSelectItems;
+	}
+
+
+	public int getIdProjetoSelect() {
+		return idProjetoSelect;
+	}
+
+
+	public void setIdProjetoSelect(int idProjetoSelect) {
+		this.idProjetoSelect = idProjetoSelect;
+	}
+
+
+	public List<Projeto> getProjetosList() {
+		return projetosList;
+	}
+
+
+	public void setProjetosList(List<Projeto> projetosList) {
+		this.projetosList = projetosList;
+	}
+
+
+	public String getPrioridade() {
+		return prioridade;
+	}
+
+
+	public void setPrioridade(String prioridade) {
+		this.prioridade = prioridade;
+	}
+
+
+	public ProjetoFacade getProjetoFacade() {
+		return projetoFacade;
+	}
+
+
+	public void setProjetoFacade(ProjetoFacade projetoFacade) {
+		this.projetoFacade = projetoFacade;
+	}
+
+
+	public int getIdUsuSelect() {
+		return idUsuSelect;
+	}
+
+
+	public void setIdUsuSelect(int idUsuSelect) {
+		this.idUsuSelect = idUsuSelect;
+	}
+
+
+	public List<Usuario> getUsuariosList() {
+		return usuariosList;
+	}
+
+
+	public void setUsuariosList(List<Usuario> usuariosList) {
+		this.usuariosList = usuariosList;
+	}
+
+
+	public List<SelectItem> getUsuariosSelectItems() {
+		return usuariosSelectItems;
+	}
+
+
+	public void setUsuariosSelectItems(List<SelectItem> usuariosSelectItems) {
+		this.usuariosSelectItems = usuariosSelectItems;
+	}
+
+
+	
 
 
 	
