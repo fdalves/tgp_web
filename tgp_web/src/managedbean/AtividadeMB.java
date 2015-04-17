@@ -63,7 +63,6 @@ public class AtividadeMB  implements Serializable {
 	
 	
 	private Atividade atividade =  new  Atividade();
-	private List<Atividade> atividadeList = new ArrayList<Atividade>();
 	private int diasTrabalhados = 0;
 	private float horasTrabalho = 0;
 	private ConfigAtividade configAtividade = new ConfigAtividade(); 
@@ -74,19 +73,17 @@ public class AtividadeMB  implements Serializable {
 	private List<UsuarioAtividade> usuarioDispo = new ArrayList<UsuarioAtividade>();
 	private List<UsuarioAtividade> usuariosSelect = new ArrayList<UsuarioAtividade>();
 	private boolean disableTab = false;
-	private String selectType = "";
 	private float horaAtvUser = 0;
 	private float diaAtvUser = 0;
 	private UsuarioAtividade usuarioAtividadeSelect =new UsuarioAtividade();
 	private List<SelectItem> projetoSelectItems = new ArrayList<SelectItem>();
 	private int idProjetoSelect =0 ;
 	private List<Projeto> projetosList =  new  ArrayList<Projeto>();
-	private String prioridade = new String();
 	private int idUsuSelect =0 ;
 	private List<Usuario> usuariosList =  new  ArrayList<Usuario>();
 	private List<SelectItem> usuariosSelectItems = new ArrayList<SelectItem>();
 	private DocAtividade docAtividade = new DocAtividade();
-	private List<DocAtividade> docAtividades = new ArrayList<DocAtividade>();
+	private List<Atividade> atividadesList = new ArrayList<Atividade>();
 	
 	
 	public AtividadeMB() {
@@ -97,11 +94,11 @@ public class AtividadeMB  implements Serializable {
 	@PostConstruct
 	public void ini(){
 		
-		this.atividadeList = atividadeFacade.findAll();
 		this.atividade =  new  Atividade();
 		this.diasTrabalhados = 0;
 		this.horasTrabalho = 0;
 		this.projetoSelectItems = new ArrayList<SelectItem>();
+		this.projetosList = new ArrayList<Projeto>();
 		this.projetosList = this.projetoFacade.findAll();
 		for (Projeto projeto : projetosList) {
 			SelectItem item = new SelectItem(projeto.getProjetoId(), projeto.getSiglaProjeto() + " - " + projeto.getNomeProjeto());
@@ -109,15 +106,21 @@ public class AtividadeMB  implements Serializable {
 		}
 		
 		this.idUsuSelect =0 ;
+		this.usuariosList = new ArrayList<Usuario>();
 		this.usuariosList =  this.usuarioFacade.findAll();
+		this.usuariosSelectItems = new ArrayList<SelectItem>();
 		for (Usuario usu : usuariosList) {
 			SelectItem item = new SelectItem(usu.getUsuarioId(), usu.getNome());
 			usuariosSelectItems.add(item);
 		}
 		
 		this.docAtividade = new DocAtividade();
-		this.prioridade = "normal";
-		this.docAtividades = new ArrayList<DocAtividade>();
+		this.atividade.setPrioridade("normal");
+		List<DocAtividade> docAtividades = new ArrayList<DocAtividade>();
+		this.atividade.setDocAtividades(docAtividades);
+		this.atividadesList = new ArrayList<Atividade>();
+		this.atividadesList = this.atividadeFacade.findAll();
+		
 		this.iniPopUpConfig();
 		this.iniUsu();
 		
@@ -142,7 +145,7 @@ public class AtividadeMB  implements Serializable {
 			this.usuarioDispo.add(usuarioAtividade);
 		}
 		this.disableTab = true;
-		this.selectType = "R";
+		this.atividade.setDivideReplicaTempo("R");
 		this.horaAtvUser = 0;
 		this.diaAtvUser = 0;
 		this.usuarioAtividadeSelect =new UsuarioAtividade();
@@ -167,13 +170,13 @@ public class AtividadeMB  implements Serializable {
 	
 	public void salvar(){
 		
-		if (atividade.getAitividadeId() == 0){
+		if (atividade.getAtividadeId() == 0){
 			if (this.usuariosSelect != null && !this.usuariosSelect.isEmpty()){
 				this.atividade.setConfigAtividade(this.configAtividade);
 				this.atividade.setUsuarioAtividades(this.usuariosSelect);
 				this.atividade.setProjeto(projetoFacade.find(this.idProjetoSelect));
 				this.atividade.setGerente(usuarioFacade.find(this.idUsuSelect));
-				this.atividade.setDocAtividades(this.docAtividades);
+				
 				String msg = this.atividadeFacade.savarAtividade(this.atividade);
 				if (msg != null){
 					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,msg,""));
@@ -187,6 +190,13 @@ public class AtividadeMB  implements Serializable {
 			String info = "Atividade cadastrada com Sucesso";
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info, ""));
 			this.ini();
+		} else {
+			Atividade atividadeNew = this.atividade;
+			atividadeNew.setGerente(usuarioFacade.find(this.idUsuSelect));
+			atividadeNew.setProjeto(projetoFacade.find(this.idProjetoSelect));
+			Atividade oldAtv = this.carregaAtividade(this.atividade.getAtividadeId());
+			String msg = this.atividadeFacade.atualizaAtividade(oldAtv, atividadeNew);
+			
 		}
 			/***
 			
@@ -210,6 +220,9 @@ public class AtividadeMB  implements Serializable {
 	}
 	
 	
+	
+
+
 	public void carregaCargo(UsuarioAtividade usuarioAtividade){
 			this.usuarioAtividadeSelect = usuarioAtividade;
 	}
@@ -221,52 +234,41 @@ public class AtividadeMB  implements Serializable {
 		Date finalDate = this.atividade.getDtFim();
 	    
 		if(initialDate == null || finalDate == null){
-			
 			return;
 		}
-		
 		if (initialDate.getTime() > finalDate.getTime()){
 			String info = "Data Inicial deve ser menor que a data final";
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));
 			this.atividade.setDtIni(null);
 			
 		}
-		
 	        int diasT = 0;  
 	        int totD = somaDias( initialDate, finalDate );        
 	        Calendar calendar = new GregorianCalendar();  
 	        calendar.setTime(initialDate);  
 	          
 	        for( int i = 0; i <= totD; i++ ) {  
-	              
 	            if( !( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ) && !( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ) ) {  
 	                diasT++;  
 	            }  
-	            
 	            if (this.popUpSalve && this.getConfigAtividade().isTrabSab() && ( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY )) diasT++;
 	            if (this.popUpSalve && this.getConfigAtividade().isTrabDom() && ( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY )) diasT++;
-	            
 	            calendar.add( Calendar.DATE, 1 );  
-	              
 	        }         
 	        
 	        if (this.popUpSalve){
-	        	
 	        	if (this.getConfigAtividade().getQuantDiasFolgaFeriado() >= diasT ){
 	        		String info = "Verifique a configuração de Dias Úteis";
 	    			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	        		return;
 	        	}
-	        	
 	        	this.diasTrabalhados = diasT - this.getConfigAtividade().getQuantDiasFolgaFeriado();
 	        	this.horasTrabalho = this.diasTrabalhados * this.getConfigAtividade().getQuantHorasDias();
 	        } else {
 	        	this.diasTrabalhados = diasT;
 	        	this.horasTrabalho = new Float(this.diasTrabalhados).floatValue() * QUANTIDADE_HORAS_DIA;
 	        }
-	        
 	        this.divideReplicaTempo();
-	        
 	    }  
 	
 
@@ -366,7 +368,7 @@ public class AtividadeMB  implements Serializable {
 		this.diaAtvUser = this.diasTrabalhados;
 		this.horaAtvUser = this.horasTrabalho;
 		
-		if (this.selectType.equals("D") && this.usuariosSelect.size() >= 1){
+		if (this.atividade.getDivideReplicaTempo().equals("D") && this.usuariosSelect.size() >= 1){
 			float dias = this.diaAtvUser / this.usuariosSelect.size();
 			BigDecimal bd = new BigDecimal(dias);
 			bd= bd.setScale(1, RoundingMode.CEILING);
@@ -415,7 +417,7 @@ public class AtividadeMB  implements Serializable {
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));
 			}
 			
-			this.docAtividades.add(docAtividade);
+			this.atividade.getDocAtividades().add(docAtividade);
 			this.docAtividade = new DocAtividade();
 			String info = "Doc. carregado com sucesso.";
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info, ""));
@@ -476,11 +478,50 @@ public class AtividadeMB  implements Serializable {
 	
 	
 	 public void excluirDoc(DocAtividade docAtividade){
-	    	this.docAtividades.remove(docAtividade);
+	    	this.atividade.getDocAtividades().remove(docAtividade);
 			String info = "Doc Atividade Excluido com Sucesso";
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info,null));
+	}
+	 
+	 
+	public void edtarAtiv(Atividade atividade){
+		
+		this.ini();
+		
+		this.atividade = atividade;
+		this.idProjetoSelect = atividade.getProjeto().getProjetoId();
+		this.idUsuSelect = atividade.getGerente().getUsuarioId();
+		this.atividade.setDocAtividades(this.atividadeFacade.findDocAtividade(this.atividade.getAtividadeId()));
+		List<UsuarioAtividade> usuarioAtividades = this.atividadeFacade.findUsuarioAtividade(this.atividade.getAtividadeId());
+		List<UsuarioAtividade> usuDelete = new ArrayList<UsuarioAtividade>();
+		for (UsuarioAtividade usuarioAtividade : usuarioAtividades) {
+			this.usuariosSelect.add(usuarioAtividade);
+			
+			for (UsuarioAtividade usuarioDispo : this.usuarioDispo) {
+				
+				if(usuarioDispo.getUsuario().getUsuarioId() == usuarioAtividade.getUsuario().getUsuarioId()){
+					usuDelete.add(usuarioDispo);
+				}
+			}
 		}
+		for (UsuarioAtividade usuarioAtividade : usuDelete) {
+			this.usuarioDispo.remove(usuarioAtividade);
+		}
+		
+		this.configAtividade = this.configAtividadeFacade.find(this.atividade.getConfigAtividade().getConfigAtividadeId());
+		this.calculaData();
+	} 
 	
+	
+	private Atividade carregaAtividade(int atividadeId) {
+		
+		Atividade atividade = atividadeFacade.find(atividadeId);
+		atividade.setDocAtividades(this.atividadeFacade.findDocAtividade(this.atividade.getAtividadeId()));
+		atividade.setUsuarioAtividades(this.atividadeFacade.findUsuarioAtividade(this.atividade.getAtividadeId()));
+		this.configAtividade = this.configAtividadeFacade.find(this.atividade.getConfigAtividade().getConfigAtividadeId());
+				
+		return atividade;
+	}
 	
 	public AtividadeFacade getAtividadeFacade() {
 		return atividadeFacade;
@@ -499,16 +540,6 @@ public class AtividadeMB  implements Serializable {
 
 	public void setAtividade(Atividade atividade) {
 		this.atividade = atividade;
-	}
-
-
-	public List<Atividade> getAtividadeList() {
-		return atividadeList;
-	}
-
-
-	public void setAtividadeList(List<Atividade> atividadeList) {
-		this.atividadeList = atividadeList;
 	}
 
 
@@ -634,14 +665,7 @@ public class AtividadeMB  implements Serializable {
 	}
 
 
-	public String getSelectType() {
-		return selectType;
-	}
-
-
-	public void setSelectType(String selectType) {
-		this.selectType = selectType;
-	}
+	
 
 
 	public float getHoraAtvUser() {
@@ -704,15 +728,7 @@ public class AtividadeMB  implements Serializable {
 	}
 
 
-	public String getPrioridade() {
-		return prioridade;
-	}
-
-
-	public void setPrioridade(String prioridade) {
-		this.prioridade = prioridade;
-	}
-
+	
 
 	public ProjetoFacade getProjetoFacade() {
 		return projetoFacade;
@@ -764,13 +780,15 @@ public class AtividadeMB  implements Serializable {
 	}
 
 
-	public List<DocAtividade> getDocAtividades() {
-		return docAtividades;
+	
+
+	public List<Atividade> getAtividadesList() {
+		return atividadesList;
 	}
 
 
-	public void setDocAtividades(List<DocAtividade> docAtividades) {
-		this.docAtividades = docAtividades;
+	public void setAtividadesList(List<Atividade> atividadesList) {
+		this.atividadesList = atividadesList;
 	}
 
 
