@@ -65,7 +65,6 @@ public class AtividadeMB  implements Serializable {
 	private Atividade atividade =  new  Atividade();
 	private int diasTrabalhados = 0;
 	private float horasTrabalho = 0;
-	private ConfigAtividade configAtividade = new ConfigAtividade(); 
 	private boolean mostraPopUpConfig = false;
 	private boolean popUpSalve = false;
 	private int maxFeriados = 0;
@@ -154,15 +153,15 @@ public class AtividadeMB  implements Serializable {
 	
 	public void iniPopUpConfig(){
 		
-		this.configAtividade = new ConfigAtividade();
+		ConfigAtividade configAtividade  = new ConfigAtividade();
 		
-		this.configAtividade.setQuantDiasFolgaFeriado(0);
-		this.configAtividade.setQuantHorasDias(QUANTIDADE_HORAS_DIA);
-		this.configAtividade.setTrabDom(false);
-		this.configAtividade.setTrabSab(false);
-		this.mostraPopUpConfig = false;
-		this.popUpSalve = false;
-		this.maxFeriados = 0;
+		configAtividade.setQuantDiasFolgaFeriado(0);
+		configAtividade.setQuantHorasDias(QUANTIDADE_HORAS_DIA);
+		configAtividade.setTrabDom(false);
+		configAtividade.setTrabSab(false);
+		mostraPopUpConfig = false;
+		popUpSalve = false;
+		maxFeriados = 0;
 		
 		this.atividade.setConfigAtividade(configAtividade);
 	}
@@ -172,7 +171,6 @@ public class AtividadeMB  implements Serializable {
 		
 		if (atividade.getAtividadeId() == 0){
 			if (this.usuariosSelect != null && !this.usuariosSelect.isEmpty()){
-				this.atividade.setConfigAtividade(this.configAtividade);
 				this.atividade.setUsuarioAtividades(this.usuariosSelect);
 				this.atividade.setProjeto(projetoFacade.find(this.idProjetoSelect));
 				this.atividade.setGerente(usuarioFacade.find(this.idUsuSelect));
@@ -251,23 +249,31 @@ public class AtividadeMB  implements Serializable {
 	            if( !( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY ) && !( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY ) ) {  
 	                diasT++;  
 	            }  
-	            if (this.popUpSalve && this.getConfigAtividade().isTrabSab() && ( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY )) diasT++;
-	            if (this.popUpSalve && this.getConfigAtividade().isTrabDom() && ( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY )) diasT++;
+	            if (this.popUpSalve && this.atividade.getConfigAtividade().isTrabSab() && ( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY )) diasT++;
+	            if (this.popUpSalve && this.atividade.getConfigAtividade().isTrabDom() && ( calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY )) diasT++;
 	            calendar.add( Calendar.DATE, 1 );  
 	        }         
 	        
 	        if (this.popUpSalve){
-	        	if (this.getConfigAtividade().getQuantDiasFolgaFeriado() >= diasT ){
+	        	if (this.atividade.getConfigAtividade().getQuantDiasFolgaFeriado() >= diasT ){
 	        		String info = "Verifique a configuração de Dias Úteis";
 	    			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	        		return;
 	        	}
-	        	this.diasTrabalhados = diasT - this.getConfigAtividade().getQuantDiasFolgaFeriado();
-	        	this.horasTrabalho = this.diasTrabalhados * this.getConfigAtividade().getQuantHorasDias();
+	        	this.diasTrabalhados = diasT - this.atividade.getConfigAtividade().getQuantDiasFolgaFeriado();
+	        	this.horasTrabalho = this.diasTrabalhados * this.atividade.getConfigAtividade().getQuantHorasDias();
 	        } else {
 	        	this.diasTrabalhados = diasT;
 	        	this.horasTrabalho = new Float(this.diasTrabalhados).floatValue() * QUANTIDADE_HORAS_DIA;
 	        }
+	        
+	        if (this.diasTrabalhados > 0){
+	        	this.maxFeriados = this.diasTrabalhados - 1;
+	        } else {
+	        	this.maxFeriados = 0;
+	        }
+	        
+	        
 	        this.divideReplicaTempo();
 	    }  
 	
@@ -294,11 +300,13 @@ public class AtividadeMB  implements Serializable {
 		}
 		if (!this.popUpSalve){
 			this.calculaData();
-			this.configAtividade.setQuantDiasFolgaFeriado(0);
-			this.configAtividade.setQuantHorasDias(QUANTIDADE_HORAS_DIA);
-			this.configAtividade.setTrabDom(false);
-			this.configAtividade.setTrabSab(false);
+			ConfigAtividade configAtividade = new ConfigAtividade();
+			configAtividade.setQuantDiasFolgaFeriado(0);
+			configAtividade.setQuantHorasDias(QUANTIDADE_HORAS_DIA);
+			configAtividade.setTrabDom(false);
+			configAtividade.setTrabSab(false);
 			this.maxFeriados = this.diasTrabalhados - 1;
+			this.atividade.setConfigAtividade(configAtividade);
 			
 		}
 		
@@ -508,8 +516,13 @@ public class AtividadeMB  implements Serializable {
 			this.usuarioDispo.remove(usuarioAtividade);
 		}
 		
-		this.configAtividade = this.configAtividadeFacade.find(this.atividade.getConfigAtividade().getConfigAtividadeId());
+		if (this.atividade.getConfigAtividade() != null){
+			this.atividade.setConfigAtividade(this.configAtividadeFacade.find(atividade.getConfigAtividade().getConfigAtividadeId()));
+			this.popUpSalve = true;
+		}
 		this.calculaData();
+		
+		
 	} 
 	
 	
@@ -518,7 +531,6 @@ public class AtividadeMB  implements Serializable {
 		Atividade atividade = atividadeFacade.find(atividadeId);
 		atividade.setDocAtividades(this.atividadeFacade.findDocAtividade(this.atividade.getAtividadeId()));
 		atividade.setUsuarioAtividades(this.atividadeFacade.findUsuarioAtividade(this.atividade.getAtividadeId()));
-		this.configAtividade = this.configAtividadeFacade.find(this.atividade.getConfigAtividade().getConfigAtividadeId());
 				
 		return atividade;
 	}
@@ -553,18 +565,7 @@ public class AtividadeMB  implements Serializable {
 	}
 
 
-	public ConfigAtividade getConfigAtividade() {
-		return configAtividade;
-	}
-
-
-	public void setConfigAtividade(ConfigAtividade configAtividade) {
-		this.configAtividade = configAtividade;
-	}
-
-
 	
-
 
 	public float getHorasTrabalho() {
 		return horasTrabalho;
