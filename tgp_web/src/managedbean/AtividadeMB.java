@@ -190,12 +190,18 @@ public class AtividadeMB  implements Serializable {
 			this.ini();
 		} else {
 			Atividade atividadeNew = this.atividade;
+			
+			List<DocAtividade> docAtividadesOld = atividadeFacade.findDocAtividade(atividadeNew.getAtividadeId());
+			List<DocAtividade> docAtividadesNew = this.atividade.getDocAtividades();
+			
 			List<UsuarioAtividade> usuarioAtividadesOld = atividadeFacade.findUsuarioAtividade(atividadeNew.getAtividadeId());
 			List<UsuarioAtividade> usuarioAtividadesNew = this.getUsuariosSelect();
 			atividadeNew.setGerente(usuarioFacade.find(this.idUsuSelect));
 			atividadeNew.setProjeto(projetoFacade.find(this.idProjetoSelect));
 			Atividade oldAtv = this.carregaAtividade(this.atividade.getAtividadeId());
-			String msg = this.atividadeFacade.atualizaAtividade(oldAtv, atividadeNew,usuarioAtividadesOld,usuarioAtividadesNew);
+			String msg = this.atividadeFacade.atualizaAtividade(oldAtv, atividadeNew,
+																usuarioAtividadesOld,usuarioAtividadesNew,
+																docAtividadesOld,docAtividadesNew);
 			
 		}
 			/***
