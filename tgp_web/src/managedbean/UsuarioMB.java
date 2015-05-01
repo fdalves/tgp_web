@@ -103,7 +103,7 @@ public class UsuarioMB  implements Serializable {
 					return;
 				}
 			}
-			
+			usuarioPersist.setLogin(this.usuario.getLogin());
 			usuarioPersist.setNome(this.usuario.getNome());
 			usuarioPersist.setSenha(this.usuario.getSenha());
 			usuarioPersist.setSuperUser(this.usuario.getSuperUser());
