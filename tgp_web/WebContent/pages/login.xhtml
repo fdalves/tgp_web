@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:p="http://primefaces.org/ui">
+
+	
+	<f:view contentType="text/html">
+	<h:head>
+	<style type="text/css" media="screen">
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+</style>
+	</h:head>
+	</f:view>
+
+
+
+
+	<h:form id="form">
+	
+
+
+	<p:layout fullPage="true">
+ 	
+ 	
+ 	
+    <p:layoutUnit position="north" size="100" header="TGP" resizable="false" closable="false" collapsible="true">
+        <p:graphicImage url="../imagens/images.jpg" width="100%" height="100%" />
+    </p:layoutUnit>
+ 
+    
+    <p:layoutUnit position="center" id="panel">
+     	<center>
+        <p:panel id="pnl" header="Login" style="margin-bottom:10px;width:500px;">
+       	<p:growl id="growl"  sticky="true" closable="true" life="2000" />
+		<p:messages id="messages"  closable="true" />
+        
+        <h:panelGrid columns="3" id="gridId"  cellpadding="5">
+            <h:outputLabel for="login" value="Login: *" />
+            <p:inputText id="login" value="#{loginMB.login}" required="true"  label="Login">
+                <f:validateLength minimum="2" />
+            </p:inputText>
+            <p:message for="login" />
+ 
+            <h:outputLabel for="senha" value="Senha: *" />
+            <p:password id="senha" value="#{loginMB.senha}" required="true" label="Senha"/>
+            <p:message for="senha" />
+        </h:panelGrid>
+ 		
+ 		<p:separator></p:separator>
+
+		<center>
+			<p:commandButton value="Login" type="Submit" ajax="false" icon="ui-icon-check"
+				update=":form:gridId,:form:growl,:form:messages" process="@this"
+				validateClient="true"
+				actionListener="#{loginMB.login()}" />
+			<p:commandButton value="Limpar" icon="ui-icon-close"
+				update=":form:gridId,:form:growl,:form:messages"  process="@this"
+				style="margin-right:20px;">
+				<p:resetInput target=":form:gridId,:form:growl,:form:messages" />
+			</p:commandButton>
+		</center>
+        
+    </p:panel>
+    </center>
+    </p:layoutUnit>
+ 
+</p:layout>
+
+</h:form>
+
+</html>
