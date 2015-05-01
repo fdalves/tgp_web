@@ -17,6 +17,10 @@
   <referenced-bean-name>atividadeMB</referenced-bean-name>
   <referenced-bean-class>managedbean.AtividadeMB</referenced-bean-class>
  </referenced-bean>
+ <referenced-bean>
+  <referenced-bean-name>loginMB</referenced-bean-name>
+  <referenced-bean-class>managedbean.LoginMB</referenced-bean-class>
+ </referenced-bean>
  <validator>
   <validator-id>custom.emailValidator</validator-id>
   <validator-class>util.EmailValidator</validator-class>
