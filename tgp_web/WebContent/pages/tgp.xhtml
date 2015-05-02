@@ -1,0 +1,89 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:p="http://primefaces.org/ui">
+
+	
+	<f:view contentType="text/html">
+	<h:head>
+	<style type="text/css" media="screen">
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+</style>
+	</h:head>
+	</f:view>
+
+
+
+
+	<h:form id="form">
+	
+
+
+	<p:layout fullPage="true">
+ 	
+ 	
+ 	
+    <p:layoutUnit position="north" size="100" header="TGP" resizable="false" closable="false" collapsible="true">
+       
+    </p:layoutUnit>
+ 
+    
+  
+ 
+    
+ 
+    <p:layoutUnit position="west" size="200" header="Left" resizable="true" closable="true" collapsible="true">
+        <h:outputText value="West unit content." />
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="east" size="200" header="Right" resizable="true" closable="true" collapsible="true" effect="drop">
+        
+        <p:selectOneListbox id="advanced" value="#{tgpMB.usuarioSelectChat}"  var="userVar" filter="true" filterMatchMode="contains">
+            
+             <p:ajax event="change"  oncomplete="PF('dlg').show();"  />
+            
+            <f:selectItems value="#{tgpMB.usarioList}" var="user" itemLabel="#{user.nome}" itemValue="#{user}" />
+ 
+            <p:column>
+                <p:graphicImage url="../temp/#{userVar.usuarioId}.jpg"
+							width="60px" height="60px" />
+            </p:column>
+ 
+            <p:column>
+                <h:outputText value="#{userVar.nome}" />
+            </p:column>
+        </p:selectOneListbox>
+        
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="center">
+        //page code
+    </p:layoutUnit>
+ 
+</p:layout>
+ 
+
+
+ 
+<p:dialog header="Dialog" widgetVar="dlg" minimizable="true" maximizable="true">
+   <h:outputText value="This Dialog can be Maximized an Minimized!" />
+   <h:panelGrid columns="1">
+   <p:inputTextarea rows="8" cols="60"   autoResize="false" />
+   <p:separator></p:separator>
+   <h:panelGroup>
+   <p:inputTextarea rows="3" cols="60"   autoResize="false" />
+   <p:commandButton value="Send"></p:commandButton>
+   </h:panelGroup>
+   </h:panelGrid>
+</p:dialog>
+
+
+</h:form>
+
+</html>
