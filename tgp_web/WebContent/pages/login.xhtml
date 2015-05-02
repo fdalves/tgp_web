@@ -37,7 +37,7 @@
     <p:layoutUnit position="center" id="panel">
      	<center>
         <p:panel id="pnl" header="Login" style="margin-bottom:10px;width:500px;">
-       	<p:growl id="growl"  sticky="true" closable="true" life="2000" />
+       	<p:growl id="growl"  sticky="true" closable="true" life="2" />
 		<p:messages id="messages"  closable="true" />
         
         <h:panelGrid columns="3" id="gridId"  cellpadding="5">
@@ -58,7 +58,7 @@
 			<p:commandButton value="Login" type="Submit" ajax="false" icon="ui-icon-check"
 				update=":form:gridId,:form:growl,:form:messages" process="@this"
 				validateClient="true"
-				actionListener="#{loginMB.login()}" />
+				action="#{loginMB.login()}" />
 			<p:commandButton value="Limpar" icon="ui-icon-close"
 				update=":form:gridId,:form:growl,:form:messages"  process="@this"
 				style="margin-right:20px;">
