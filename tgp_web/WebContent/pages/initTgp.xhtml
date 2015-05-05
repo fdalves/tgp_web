@@ -1,0 +1,109 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+	
+	<f:view contentType="text/html">
+	<h:head>
+	<style type="text/css" media="screen">
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+</style>
+	</h:head>
+	</f:view>
+
+
+
+
+
+	
+
+
+<h:form>  
+    <pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me" togglerTipOpen="Close Me">  
+        <pe:layoutPane position="north" size="80" closable="false">  
+            <p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%" height="100%" />  
+        </pe:layoutPane>  
+        <pe:layoutPane position="center">  
+            <pe:layoutPane position="north" size="50%">  
+                <f:facet name="header">  
+                    <h:outputText value="Center-North"/>  
+                </f:facet>  
+            </pe:layoutPane>  
+            <pe:layoutPane position="center" minHeight="60">  
+                <f:facet name="header">  
+                    <h:outputText value="Center-Center"/>  
+                </f:facet>  
+            </pe:layoutPane>  
+        </pe:layoutPane>  
+        <pe:layoutPane position="west" size="200">  
+           
+            <pe:layoutPane position="center" minHeight="60">  
+                 
+		    <p:accordionPanel multiple="true">
+		        <p:tab title="Admin Menu">
+		            <h:panelGrid columns="2" cellpadding="10">
+		                <h:outputText
+		                    value="The story begins as Don Vito Corleone..." />
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="User Menu">
+		            <h:panelGrid columns="2" cellpadding="10">
+		                <h:outputText value="Francis Ford Coppola's legendary..." />
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Relatórios Menu">
+		            <h:panelGrid columns="2" cellpadding="10">
+		                <h:outputText value="After a break of more than 15 years...." />
+		            </h:panelGrid>
+		        </p:tab>
+		    </p:accordionPanel>
+ 
+            </pe:layoutPane>  
+           
+        </pe:layoutPane>  
+        <pe:layoutPane position="east" size="200" resizeWhileDragging="true">  
+            <p:accordionPanel multiple="true">
+		        <p:tab title="Web Chat">
+		            <h:panelGrid columns="2" cellpadding="10">
+		                <h:outputText
+		                    value="The story begins as Don Vito Corleone..." />
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Web Chat Recording Data">
+		            <h:panelGrid columns="2" cellpadding="10">
+		                <h:outputText value="Francis Ford Coppola's legendary..." />
+		            </h:panelGrid>
+		        </p:tab>
+		        <p:tab title="Meeting">
+		            <h:panelGrid columns="2" cellpadding="10">
+		                <h:outputText value="After a break of more than 15 years...." />
+		            </h:panelGrid>
+		        </p:tab>
+		    </p:accordionPanel>  
+        </pe:layoutPane>  
+        <pe:layoutPane position="south" size="80">  
+            South  
+        </pe:layoutPane>  
+    </pe:layout>  
+</h:form>  
+  
+<h:outputStylesheet library="css" name="global.css"/>  
+     
+<h:outputStylesheet id="layoutCSS">  
+    body {  
+        margin: 4px !important;  
+    }  
+</h:outputStylesheet>  
+
+
+
+
+</html>

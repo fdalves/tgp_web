@@ -11,15 +11,18 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import model.Usuario;
 import ejb.UsuarioFacade;
 
 @ManagedBean(name="tgpMB")
-@SessionScoped
+@RequestScoped
 public class TgpMB  implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -30,7 +33,7 @@ public class TgpMB  implements Serializable {
 	private Usuario usuarioSelectChat = new Usuario(); 
 	private List<Usuario> usarioList = new ArrayList<Usuario>();
 	
-	
+	private String room = "teste";
 	
 	
 	public TgpMB() {
@@ -43,7 +46,12 @@ public class TgpMB  implements Serializable {
 		
 		this.usarioList = usuarioFacade.findAll();
 		this.listaFotosUser();
-		this.usuario =  new  Usuario();
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+		Usuario usuario = (Usuario) session.getAttribute("user");
+		
+		this.usuario =  usuario;
 		
 	}
 	
@@ -131,6 +139,16 @@ public class TgpMB  implements Serializable {
 
 	public void setUsuarioSelectChat(Usuario usuarioSelectChat) {
 		this.usuarioSelectChat = usuarioSelectChat;
+	}
+
+
+	public String getRoom() {
+		return room;
+	}
+
+
+	public void setRoom(String room) {
+		this.room = room;
 	}
 
 	

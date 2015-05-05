@@ -53,7 +53,7 @@ public class LoginMB  implements Serializable {
 				FacesContext fc = FacesContext.getCurrentInstance();
 				HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
 				session.setAttribute("user", usuario);
-				return "go_tgp";
+				return "go_initTgp";
 			} else {
 				String info = "Senha Inválida !";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));

@@ -4,11 +4,12 @@
   SHAPE="73,115,0,0" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#login.xhtml:0" NAME="item"
    PATH="/pages/login.xhtml" model-entity="JSFProcessItem">
-   <PROCESS-ITEM-OUTPUT ID="go_tgp::#pages#tgp.xhtml" NAME="output"
-    PATH="/pages/tgp.xhtml" TARGET="rules:#pages#tgp.xhtml"
-    TITLE="go_tgp" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_initTgp::#pages#initTgp.xhtml"
+    NAME="output" PATH="/pages/initTgp.xhtml"
+    TARGET="rules:#pages#initTgp.xhtml" TITLE="go_initTgp" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
- <PROCESS-ITEM NAME="rules:#pages#tgp.xhtml" PATH="/pages/tgp.xhtml"
-  SHAPE="216,85,0,0" model-entity="JSFProcessGroup" persistent="true"/>
+ <PROCESS-ITEM NAME="rules:#pages#initTgp.xhtml"
+  PATH="/pages/initTgp.xhtml" SHAPE="278,100,0,0"
+  model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>
