@@ -8,8 +8,8 @@
  <navigation-rule>
   <from-view-id>/pages/login.xhtml</from-view-id>
   <navigation-case>
-   <from-outcome>go_tgp</from-outcome>
-   <to-view-id>/pages/tgp.xhtml</to-view-id>
+   <from-outcome>go_initTgp</from-outcome>
+   <to-view-id>/pages/initTgp.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  <referenced-bean>
@@ -31,6 +31,10 @@
  <referenced-bean>
   <referenced-bean-name>tgpMB</referenced-bean-name>
   <referenced-bean-class>managedbean.TgpMB</referenced-bean-class>
+ </referenced-bean>
+ <referenced-bean>
+  <referenced-bean-name>initTgpMB</referenced-bean-name>
+  <referenced-bean-class>managedbean.InitTgpMB</referenced-bean-class>
  </referenced-bean>
  <validator>
   <validator-id>custom.emailValidator</validator-id>
