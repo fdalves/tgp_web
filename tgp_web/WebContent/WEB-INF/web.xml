@@ -30,6 +30,7 @@
     <servlet-name>Faces Servlet</servlet-name>
     <url-pattern>*.xhtml</url-pattern>
     <url-pattern>*.jsf</url-pattern>
+    <url-pattern>*.html</url-pattern>
   </servlet-mapping>
   
   <context-param>  
