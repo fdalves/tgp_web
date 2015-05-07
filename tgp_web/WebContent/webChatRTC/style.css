@@ -93,7 +93,7 @@ body {
     border-bottom: 0;
     padding-bottom: 1px;
     text-align: right;
-    margin-left: 193px;
+    margin-left: 0px;
     margin-right: 125px;
     padding-right: 21px;
 }
@@ -219,16 +219,16 @@ h1 img {
 }
 
 .users-list {
-    position: absolute;
-    right: 63px;
-    padding: 0;
-    color: white;
-    margin-top: 0px;
-    width: 118px;
-    height: 110px;
-    cursor: default;
-    border-radius: 0;
-    border-top-right-radius: 20px;
+  position: absolute;
+  right: 7px;
+  padding: 0;
+  color: white;
+  margin-top: 0px;
+  width: 118px;
+  height: 80px;
+  cursor: default;
+  border-radius: 0;
+  border-top-right-radius: 20px;
 }
 
 .users-list.selected {
@@ -240,11 +240,13 @@ h1 img {
     height: 104px;
 }
 
+
+
 .numbers-of-users {
-    position: absolute;
-    font-size: 3em;
-    left: 38%;
-    top: 60px;
+  position: absolute;
+  font-size: 1em;
+  left: 38%;
+  top: 50px;
 }
 
 .users-container, .settings-panel {
@@ -273,6 +275,7 @@ h1 img {
     position: absolute;
     top: 33px;
     right: 210px;
+    visibility: hidden;
 }
 
 #settings {

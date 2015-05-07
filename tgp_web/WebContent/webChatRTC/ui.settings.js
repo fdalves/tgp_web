@@ -75,3 +75,5 @@ function appendDevice(device) {
         audioDeviecs.appendChild(option);
     } else videoDeviecs.appendChild(option);
 }
+
+
