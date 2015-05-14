@@ -47,24 +47,22 @@
            
             <pe:layoutPane position="center" minHeight="60">  
                  
-		    <p:accordionPanel multiple="true">
-		        <p:tab title="Admin Menu">
-		            <h:panelGrid columns="2" cellpadding="10">
-		                <h:outputText
-		                    value="The story begins as Don Vito Corleone..." />
-		            </h:panelGrid>
-		        </p:tab>
-		        <p:tab title="User Menu">
-		            <h:panelGrid columns="2" cellpadding="10">
-		                <h:outputText value="Francis Ford Coppola's legendary..." />
-		            </h:panelGrid>
-		        </p:tab>
-		        <p:tab title="Relatórios Menu">
-		            <h:panelGrid columns="2" cellpadding="10">
-		                <h:outputText value="After a break of more than 15 years...." />
-		            </h:panelGrid>
-		        </p:tab>
-		    </p:accordionPanel>
+		   <p:panelMenu style="width:300px">
+	        <p:submenu label="Admin Menu">
+	            <p:menuitem value="Save" icon="ui-icon-disk" onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+	            <p:menuitem value="Update"   icon="ui-icon-arrowrefresh-1-w" />
+	        </p:submenu>
+	        <p:submenu label="User Menu">
+	            <p:menuitem value="Delete"   ajax="false" icon="ui-icon-close"/>
+	        </p:submenu>
+	        <p:separator />
+	        <p:submenu label="Comunication Menu" >
+	            
+	                <p:menuitem value="Save" icon="ui-icon-disk" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+	            
+	            
+	        </p:submenu>
+    </p:panelMenu>
  
             </pe:layoutPane>  
            
@@ -75,7 +73,7 @@
 		            <h:panelGrid columns="1" cellpadding="10">
 		                <h:outputText
 		                    value="Web Chat disponível a todos usuários do Sistema" />
-		                <p:commandButton ajax="true" value="Entrar" onclick="PF('dlg').show();" />
+		                <p:commandButton ajax="true" value="Entrar" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
 		            </h:panelGrid>
 		        </p:tab>
 		        <p:tab title="Web Chat Recording Data">
@@ -96,7 +94,7 @@
     </pe:layout> 
     
     <p:dialog header="Dialog" widgetVar="dlg" minimizable="true" maximizable="true">
-	<ui:include src="/webChatRTC/index.html" />
+	
 	</p:dialog>  
     
 </h:form>

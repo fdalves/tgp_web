@@ -29,10 +29,6 @@
   <referenced-bean-class>managedbean.LoginMB</referenced-bean-class>
  </referenced-bean>
  <referenced-bean>
-  <referenced-bean-name>tgpMB</referenced-bean-name>
-  <referenced-bean-class>managedbean.TgpMB</referenced-bean-class>
- </referenced-bean>
- <referenced-bean>
   <referenced-bean-name>initTgpMB</referenced-bean-name>
   <referenced-bean-class>managedbean.InitTgpMB</referenced-bean-class>
  </referenced-bean>
