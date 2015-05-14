@@ -24,8 +24,7 @@
 
 <h:form id="form">
 
-	<p:growl id="growl" showDetail="false" sticky="true" closable="true" />
-	<p:messages id="messages" showDetail="false" closable="true" />
+	
 
 	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
 		togglerTipOpen="Close Me">
@@ -41,7 +40,10 @@
 
 
 					<center>
-					<p:panel style="width: 80%;">
+					<p:growl id="growl" showDetail="false" sticky="true" closable="true" />
+					<p:messages id="messages" showDetail="false" closable="true" />
+					
+					<p:panel style="width: 80%;" >
 					<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
 
 
@@ -94,7 +96,7 @@
 						</p:commandButton>
 					</center>
 
-
+				<p:separator></p:separator>
 				
 				
 				
@@ -104,7 +106,7 @@
 				
 
 					<p:dataTable id="dataTable" var="usu"
-						value="#{usuarioMB.usarioList}" paginator="true" rows="5">
+						value="#{usuarioMB.usarioList}" paginator="true" rows="3">
 						<f:facet name="header">
             				Usuarios
         				</f:facet>
