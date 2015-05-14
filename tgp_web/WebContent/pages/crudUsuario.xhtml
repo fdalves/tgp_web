@@ -1,0 +1,225 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		</f:facet>
+		<style type="text/css" media="screen">
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+</style>
+	</h:head>
+</f:view>
+
+
+<h:form id="form">
+
+	<p:growl id="growl" showDetail="false" sticky="true" closable="true" />
+	<p:messages id="messages" showDetail="false" closable="true" />
+
+	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
+		togglerTipOpen="Close Me">
+		<pe:layoutPane position="north" size="80" closable="false">
+			<p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%"
+				height="100%" />
+		</pe:layoutPane>
+		<pe:layoutPane position="center">
+			<pe:layoutPane position="center"  >
+				<f:facet name="header">
+					<h:outputText value="Cadastro Usuário" />
+				</f:facet>
+
+
+					<center>
+					<p:panel style="width: 80%;">
+					<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
+
+
+
+						<h:outputLabel for="loginiD" value="Login: *" />
+						<p:inputText id="loginiD" value="#{usuarioMB.usuario.login}"
+							required="true" maxlength="100" style="width: 500px;" />
+						<h:outputLabel for="pwd" value="Senha: *" />
+						<p:password id="pwd" value="#{usuarioMB.usuario.senha}"
+							label="Password" maxlength="8" feedback="true" match="pwd2"
+							required="true" style="width: 500px;" />
+						<h:outputLabel for="pwd2" value="Repita Senha: *" />
+						<p:password id="pwd2" label="Password2 " maxlength="8"
+							required="true" feedback="true" style="width: 500px;" />
+						<h:outputLabel for="nomeId" value="Nome: *" maxlength="100" />
+						<p:inputText id="nomeId" value="#{usuarioMB.usuario.nome}"
+							maxlength="100" required="true" style="width: 500px;" />
+
+
+						<h:outputLabel for="email1" value="Email*:" />
+						<p:inputText id="email1" value="#{usuarioMB.usuario.email}"
+							maxlength="100" required="true" style="width: 500px;">
+							<f:validator validatorId="custom.emailValidator" />
+						</p:inputText>
+
+						<h:outputLabel value="Foto: " />
+						<p:fileUpload fileUploadListener="#{usuarioMB.handleFileUpload}"
+							mode="advanced" dragDropSupport="true" update="messages"
+							sizeLimit="1000000000" allowTypes="/(\.|\/)(jpg|gif|jpeg|png)$/" />
+
+
+						<p:outputLabel for="superUserId" value="Super User:" />
+						<p:selectOneRadio id="superUserId"
+							value="#{usuarioMB.usuario.superUser}">
+							<f:selectItem itemLabel="Sim" itemValue="S" />
+							<f:selectItem itemLabel="Não" itemValue="N" />
+						</p:selectOneRadio>
+
+					</h:panelGrid>
+					<p:separator></p:separator>
+
+					<center>
+						<p:commandButton value="Savar" ajax="false" icon="ui-icon-check"
+							validateClient="true" update=":form:matchGrid" process="@all"
+							type="submit" actionListener="#{usuarioMB.salvar}" />
+						<p:commandButton value="Limpar" icon="ui-icon-close"
+							update=":form:matchGrid,:form:messages,:form:growl"
+							process="@this" style="margin-right:20px;">
+							<p:resetInput target=":form:matchGrid,:form:messages,:form:growl" />
+						</p:commandButton>
+					</center>
+
+
+				
+				
+				
+				
+				<p:spacer height="50" />
+
+				
+
+					<p:dataTable id="dataTable" var="usu"
+						value="#{usuarioMB.usarioList}" paginator="true" rows="5">
+						<f:facet name="header">
+            				Usuarios
+        				</f:facet>
+
+
+						<p:column filterBy="#{usu.login}" headerText="Login"
+							footerText="contains" filterMatchMode="contains">
+							<h:outputText value="#{usu.login}" />
+						</p:column>
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="Nome" />
+							</f:facet>
+							<h:outputText value="#{usu.nome}" />
+						</p:column>
+
+
+						<p:column>
+							<f:facet name="header">
+								<h:outputText value="E-mail" />
+							</f:facet>
+							<h:outputText value="#{usu.email}" />
+						</p:column>
+
+
+						<p:column style="width:80px;text-align: center">
+							<f:facet name="header">
+								<h:outputText value="Super User" />
+							</f:facet>
+							<center>
+								<p:graphicImage url="../imagens/green-fa-check-circle.png"
+									width="20px" height="20px" rendered="#{usu.superUser == 'S'}" />
+								<p:graphicImage url="../imagens/red-fa-times-circle.png"
+									width="20px" height="20px" rendered="#{usu.superUser == 'N'}" />
+							</center>
+						</p:column>
+
+						<p:column style="width:80px;text-align: center">
+							<f:facet name="header">
+								<h:outputText value="Foto" />
+							</f:facet>
+							<center>
+								<p:graphicImage url="../temp/#{usu.usuarioId}.jpg" width="60px"
+									height="60px" />
+							</center>
+						</p:column>
+
+						<p:column style="width:55px;text-align: center">
+							<f:facet name="header">
+								<h:outputText value="Editar" />
+							</f:facet>
+							<p:commandButton process="@this" ajax="true"
+								update=":form:matchGrid" icon="ui-icon-pencil" title="Editar">
+								<f:setPropertyActionListener value="#{usu}"
+									target="#{usuarioMB.usuario}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column style="width:55px;text-align: center">
+							<f:facet name="header">
+								<h:outputText value="Excluir" />
+							</f:facet>
+
+							<p:commandButton icon="ui-icon-trash" title="Excluir"
+								update=":form:dataTable,:form:messages,:form:growl"
+								process="@this" ajax="true" action="#{usuarioMB.excluir(usu)}"
+								immediate="true">
+								<p:confirm header="Confirmação Exclusão"
+									message="Você tem certeza?" icon="ui-icon-alert" />
+							</p:commandButton>
+						</p:column>
+
+					</p:dataTable>
+				
+
+				<p:confirmDialog global="true" showEffect="fade"
+					hideEffect="explode">
+					<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+						icon="ui-icon-check" />
+					<p:commandButton value="No" type="button"
+						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+				</p:confirmDialog>
+				</p:panel>
+				</center>
+
+			</pe:layoutPane>
+
+		</pe:layoutPane>
+		<pe:layoutPane position="west" size="320">
+			<pe:layoutPane position="center" minHeight="60">
+				<p:panelMenu style="width:300px">
+					<p:submenu label="Admin Menu">
+						<p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false"
+							action="go_user" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-sitemap"
+							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-newspaper-o"
+							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+					</p:submenu>
+					<p:submenu label="User Menu">
+						<p:menuitem value="Delete" ajax="false" icon="ui-icon-close" />
+					</p:submenu>
+					<p:separator />
+					<p:submenu label="Comunication Menu">
+						<p:menuitem value="Web Chat RTC" icon="fa fa-comments"
+							onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+					</p:submenu>
+				</p:panelMenu>
+			</pe:layoutPane>
+
+		</pe:layoutPane>
+
+	</pe:layout>
+
+</h:form>
+
+</html>

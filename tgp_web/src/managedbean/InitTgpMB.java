@@ -63,7 +63,9 @@ public class InitTgpMB  implements Serializable {
 	
 	
 	
-	 
+	public String goUser(){
+		return "go_user";
+	}
 	 
 	
 	private void listaFotosUser() {
