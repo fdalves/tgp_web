@@ -5,7 +5,8 @@
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:o="http://omnifaces.org/ui"
 	xmlns:of="http://omnifaces.org/functions"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 
 
@@ -46,12 +47,22 @@
 
 
 <h:form id="form">
-
+	
+	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
+		togglerTipOpen="Close Me">
+		<pe:layoutPane position="north" size="80" closable="false">
+			<p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%"
+				height="100%" />
+		</pe:layoutPane>
+		<pe:layoutPane position="center">
+			<pe:layoutPane position="center"  >
+					
+	
 	<p:messages id="msgs" showDetail="false" closable="true"/>
 	<p:growl id="growl" showDetail="false" sticky="false" closable="true" life="3000" />
-
-	<h3>Crud Projeto</h3>
-	<p:tabView id="tab1" dynamic="true" cache="true">
+	<center>
+	
+	<p:tabView id="tab1" dynamic="true" cache="true" style="width: 80%;">
 		<p:ajax event="tabChange" listener="#{projetoMB.onTabChange}"
 			update=":form:msgs" />
 
@@ -395,6 +406,37 @@
       		</p:panel>
 		</p:tab>
 	</p:tabView>
+	</center>
+	
+	</pe:layoutPane>
+
+		</pe:layoutPane>
+		<pe:layoutPane position="west" size="320">
+			<pe:layoutPane position="center" minHeight="60">
+				<p:panelMenu style="width:300px">
+					<p:submenu label="Admin Menu">
+						<p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false"
+							action="go_user" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-sitemap"
+							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-newspaper-o"
+							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+					</p:submenu>
+					<p:submenu label="User Menu">
+						<p:menuitem value="Delete" ajax="false" icon="ui-icon-close" />
+					</p:submenu>
+					<p:separator />
+					<p:submenu label="Comunication Menu">
+						<p:menuitem value="Web Chat RTC" icon="fa fa-comments"
+							onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+					</p:submenu>
+				</p:panelMenu>
+			</pe:layoutPane>
+
+		</pe:layoutPane>
+
+	</pe:layout>
+	
 </h:form>
 
 </html>

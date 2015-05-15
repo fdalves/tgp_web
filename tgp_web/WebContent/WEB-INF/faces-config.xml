@@ -18,6 +18,14 @@
    <from-outcome>go_user</from-outcome>
    <to-view-id>/pages/crudUsuario.xhtml</to-view-id>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>go_proj</from-outcome>
+   <to-view-id>/pages/crudProjeto.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativ</from-outcome>
+   <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
+  </navigation-case>
  </navigation-rule>
  <referenced-bean>
   <referenced-bean-name>usuarioMB</referenced-bean-name>

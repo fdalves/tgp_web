@@ -49,18 +49,29 @@
                  
 		   <p:panelMenu style="width:300px">
 	        <p:submenu label="Admin Menu">
-	            <p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false" action="go_user" />
-	            <p:menuitem value="CRUD Projeto" icon="fa fa-sitemap" onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-	             <p:menuitem value="CRUD Projeto" icon="fa fa-newspaper-o" onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+	            <p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false" action="go_user" immediate="true" />
+	            <p:menuitem value="CRUD Projeto" icon="fa fa-sitemap" ajax="false" action="go_proj" immediate="true" />
+	             <p:menuitem value="CRUD Atividade" icon="fa fa-newspaper-o" ajax="false" action="go_ativ" immediate="true" />
 	        </p:submenu>
 	        <p:submenu label="User Menu">
-	            <p:menuitem value="Delete"   ajax="false" icon="ui-icon-close"/>
+	            <p:menuitem value="Home"   ajax="false" icon="fa fa-home"/>
+	            <p:menuitem value="Agendar Meeting"   ajax="false" icon="fa fa-gears"/>
+	            <p:menuitem value="Minhas Atividades"   ajax="false" icon="fa fa-list-alt"/>
+	            <p:menuitem value="Calendário"   ajax="false" icon="fa fa-calendar"/>
 	        </p:submenu>
 	        <p:separator />
 	        <p:submenu label="Comunication Menu" >
 	                <p:menuitem value="Web Chat RTC" icon="fa fa-comments" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
 	            	<p:menuitem value="Meeting RTC" icon="fa fa-video-camera" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/pages/RTCMultiConnection.xhtml', 'myWindow', 'width=1200, height=600');" />
 	        </p:submenu>
+	        
+	         <p:submenu label="Relatórios">
+	            <p:menuitem value="Report 1"   ajax="false" icon="fa fa-file-pdf-o"/>
+	            <p:menuitem value="Report 2"   ajax="false" icon="fa fa-file-pdf-o"/>
+	            <p:menuitem value="Report 3"   ajax="false" icon="fa fa-file-pdf-o"/>
+	            
+	        </p:submenu>
+	        
     </p:panelMenu>
  
             </pe:layoutPane>  

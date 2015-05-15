@@ -3,7 +3,8 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
 
 <f:view contentType="text/html">
@@ -34,6 +35,19 @@
 
 
 <h:form id="form">
+
+	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
+		togglerTipOpen="Close Me">
+		<pe:layoutPane position="north" size="80" closable="false">
+			<p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%"
+				height="100%" />
+		</pe:layoutPane>
+		<pe:layoutPane position="center">
+			<pe:layoutPane position="center"  >
+					
+	
+	
+	<center>
 
 	<p:growl id="growl"  sticky="true" closable="true"  life="2000"/>
 	<p:messages id="messages"  closable="true" />
@@ -148,7 +162,7 @@
 	<p:spacer height="10" />
 		
 		
-		<p:accordionPanel id="tab1" activeIndex="-1" style="width:800px" multiple="false" >
+		<p:accordionPanel id="tab1" activeIndex="-1" style="width: 80%;" multiple="false" >
 				<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}" process="@this" update=":form:tab1:availableUser,:form:tab1,:form:tab1:t1,:form:messages,:form:growl" />
 				
 				<p:tab id="t1" title="Usuários vinculados a Atividade" >
@@ -273,7 +287,7 @@
 					
 					
 					
-			<p:separator></p:separator>
+			
 			<p:spacer height="20"/>
 			<p:panel>
 
@@ -345,6 +359,79 @@
 
 
 
+	
+
+	<h:inputHidden id="h1" value="#{atividadeMB.popUpSalve}" />
+	
+	
+	
+	
+	<p:separator></p:separator>
+	
+	<p:panel header="Atividade Cadastrados" style="width:800px">
+		
+		<p:dataTable id="dataTable"  var="ativ" value="#{atividadeMB.atividadesList}"
+			paginator="true" rows="5">
+			
+
+
+			<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
+				footerText="contains" filterMatchMode="contains">
+				<h:outputText value="#{ativ.atividadeNome}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Projeto" />
+				</f:facet>
+				<h:outputText value="#{ativ.projeto.nomeProjeto}" />
+			</p:column>
+
+				
+
+			<p:column style="width:55px;text-align: center">
+				<f:facet name="header">
+					<h:outputText value="Editar" />
+				</f:facet>
+				<p:commandButton process="@this" ajax="true"
+					update=":form:matchGrid,:form:tab1,:form:popUp,:form:h1" icon="ui-icon-pencil" title="Editar" actionListener="#{atividadeMB.edtarAtiv(ativ)}"/>
+			</p:column>
+		</p:dataTable>
+		
+	</p:panel>
+	
+	
+	</center>
+	
+	</pe:layoutPane>
+
+		</pe:layoutPane>
+		<pe:layoutPane position="west" size="320">
+			<pe:layoutPane position="center" minHeight="60">
+				<p:panelMenu style="width:300px">
+					<p:submenu label="Admin Menu">
+						<p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false"
+							action="go_user" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-sitemap"
+							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-newspaper-o"
+							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+					</p:submenu>
+					<p:submenu label="User Menu">
+						<p:menuitem value="Delete" ajax="false" icon="ui-icon-close" />
+					</p:submenu>
+					<p:separator />
+					<p:submenu label="Comunication Menu">
+						<p:menuitem value="Web Chat RTC" icon="fa fa-comments"
+							onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+					</p:submenu>
+				</p:panelMenu>
+			</pe:layoutPane>
+
+		</pe:layoutPane>
+
+	</pe:layout>
+	
 	<p:dialog id="popUp" header="Configuração Horas" widgetVar="dlg2"
 		modal="true" height="200" visible="#{atividadeMB.mostraPopUpConfig}">
 		<p:panel>
@@ -423,46 +510,7 @@
 		<p:commandButton value="No" type="button"
 			styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 	</p:confirmDialog>
-
-	<h:inputHidden id="h1" value="#{atividadeMB.popUpSalve}" />
 	
-	
-	
-	<p:spacer height="50" />
-	<p:separator></p:separator>
-	<center>
-	<p:panel header="Atividade Cadastrados" style="width:800px">
-		
-		<p:dataTable id="dataTable"  var="ativ" value="#{atividadeMB.atividadesList}"
-			paginator="true" rows="5">
-			
-
-
-			<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
-				footerText="contains" filterMatchMode="contains">
-				<h:outputText value="#{ativ.atividadeNome}" />
-			</p:column>
-
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Projeto" />
-				</f:facet>
-				<h:outputText value="#{ativ.projeto.nomeProjeto}" />
-			</p:column>
-
-				
-
-			<p:column style="width:55px;text-align: center">
-				<f:facet name="header">
-					<h:outputText value="Editar" />
-				</f:facet>
-				<p:commandButton process="@this" ajax="true"
-					update=":form:matchGrid,:form:tab1,:form:popUp,:form:h1" icon="ui-icon-pencil" title="Editar" actionListener="#{atividadeMB.edtarAtiv(ativ)}"/>
-			</p:column>
-		</p:dataTable>
-		
-	</p:panel>
-	</center>
 </h:form>
 
 </html>
