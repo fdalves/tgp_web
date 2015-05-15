@@ -27,49 +27,10 @@
 
 
 <h:form id="form">  
-
-	<p:growl id="messages" showDetail="true" />
-	
-    <pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me" togglerTipOpen="Close Me">  
-        <pe:layoutPane position="north" size="80" closable="false">  
-            <p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%" height="100%" />  
-        </pe:layoutPane>  
-        <pe:layoutPane position="center">  
-            <pe:layoutPane position="north" size="50%" style="width: 80%;" >    
-                
-                
-                
-           <p:panel header="Atividade Cadastrados" >
-		
-		<p:dataTable id="dataTable"  var="ativ" value="#{atividadeMB.atividadesList}"
-			paginator="true" rows="10">
-			
-
-
-			<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
-				footerText="contains" filterMatchMode="contains">
-				<h:outputText value="#{ativ.atividadeNome}" />
-			</p:column>
-
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Projeto" />
-				</f:facet>
-				<h:outputText value="#{ativ.projeto.nomeProjeto}" />
-			</p:column>
-			
-		</p:dataTable>
-           </p:panel>     
-                
-                
-            </pe:layoutPane>  
-            <pe:layoutPane position="center" minHeight="60">  
-               
-              <center>  
-          
- 			 <h:panelGrid columnClasses="value" >
-        	
-        <p:schedule id="schedule" value="#{scheduleView.eventModel}"  widgetVar="myschedule"  locale="pt" >
+   <p:growl id="messages" showDetail="true" />
+   <h:panelGrid columnClasses="value">
+        <h3 style="margin-top: 0">Editable Schedule</h3>
+        <p:schedule id="schedule" value="#{scheduleView.eventModel}" widgetVar="myschedule"  locale="pt" >
  
             <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update=":form:eventDetails" oncomplete="PF('eventDialog').show();" />
             <p:ajax event="eventSelect" listener="#{scheduleView.onEventSelect}" update=":form:eventDetails" oncomplete="PF('eventDialog').show();" />
@@ -77,55 +38,12 @@
             <p:ajax event="eventResize" listener="#{scheduleView.onEventResize}" update=":form:messages" />
  
         </p:schedule>
- 	
-    
-    	</h:panelGrid>
-            </center>     
-            </pe:layoutPane>  
-        </pe:layoutPane>  
-        <pe:layoutPane position="west" size="320">  
-           
-            <pe:layoutPane position="center" minHeight="60">  
-                 
-		   <p:panelMenu style="width:300px">
-	        <p:submenu label="Admin Menu">
-	            <p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false" action="go_user" immediate="true" />
-	            <p:menuitem value="CRUD Projeto" icon="fa fa-sitemap" ajax="false" action="go_proj" immediate="true" />
-	             <p:menuitem value="CRUD Atividade" icon="fa fa-newspaper-o" ajax="false" action="go_ativ" immediate="true" />
-	        </p:submenu>
-	        <p:submenu label="User Menu">
-	            <p:menuitem value="Home"   ajax="false" icon="fa fa-home"/>
-	            <p:menuitem value="Agendar Meeting"   ajax="false" icon="fa fa-gears"/>
-	            <p:menuitem value="Minhas Atividades"   ajax="false" icon="fa fa-list-alt"/>
-	            <p:menuitem value="Calendário"   ajax="false" icon="fa fa-calendar"/>
-	        </p:submenu>
-	        <p:separator />
-	        <p:submenu label="Comunication Menu" >
-	                <p:menuitem value="Web Chat RTC" icon="fa fa-comments" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-	            	<p:menuitem value="Meeting RTC" icon="fa fa-video-camera" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/pages/RTCMultiConnection.xhtml', 'myWindow', 'width=1200, height=600');" />
-	        </p:submenu>
-	        
-	         <p:submenu label="Relatórios">
-	            <p:menuitem value="Report 1"   ajax="false" icon="fa fa-file-pdf-o"/>
-	            <p:menuitem value="Report 2"   ajax="false" icon="fa fa-file-pdf-o"/>
-	            <p:menuitem value="Report 3"   ajax="false" icon="fa fa-file-pdf-o"/>
-	            
-	        </p:submenu>
-	        
-    </p:panelMenu>
  
-            </pe:layoutPane>  
-           
-        </pe:layoutPane>  
-      
-    </pe:layout> 
     
-    <p:dialog header="Dialog" widgetVar="dlg" minimizable="true" maximizable="true">
-	
-	</p:dialog>  
-	
-	
-	<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
+    </h:panelGrid>
+    
+    
+     <p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
         <h:panelGrid id="eventDetails" columns="2">
             <h:outputLabel for="title" value="Title:" />
             <p:inputText id="title" value="#{scheduleView.event.title}" required="true" />
@@ -195,6 +113,7 @@
         width: 1000px;
     }
 </style>
+
 
 
 </html>
