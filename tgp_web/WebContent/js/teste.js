@@ -39,13 +39,20 @@
                     var stream = connection.streams[this.id];
                     stream.stopRecording(function(blob) {
                         var h2;
-
-                     
+                       
+                        var userDialog = "'userDialog'";
 
                         if (blob.video) {
                             h2 = document.createElement('h2');
-                            h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>';
+                            h3 = document.createElement('h3');
+                            h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>'+ 
+                            '<br><button type="button" onclick="PF('+userDialog+').show()" >Add</button><br>';
+                            
                             div.appendChild(h2);
+                           
+                            document.getElementById("hiden").value = blob.video;
+                            alert (document.getElementById("hiden").value);
+                            
                         }
                     });
                 }

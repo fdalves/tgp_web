@@ -1,19 +1,43 @@
-<!--
-> Muaz Khan     - github.com/muaz-khan 
-> MIT License   - www.webrtc-experiment.com/licence
-> Documentation - www.RTCMultiConnection.org
--->
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
 
-<head>
+
+
+
+<f:view contentType="text/html">
+	<h:head>
+		<f:facet name="first">
+			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
+			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
+		</f:facet>
+		<style type="text/css" media="screen">
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+</style>
+
+<script type="text/javascript">
+    function handleDrop(event, ui) {
+        var droppedCar = ui.draggable;
+ 
+        droppedCar.fadeOut('fast');
+    }
+
+</script>
+
+	
+
+
+	
+
     <title>Meeting RecordRTC</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta charset="utf-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
-    <link rel="author" type="text/html" href="https://plus.google.com/+MuazKhan"/>
-    <meta name="author" content="Muaz Khan"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <link rel="stylesheet" href="//cdn.webrtc-experiment.com/style.css"/>
     <style>
     audio,
@@ -83,8 +107,11 @@
     </script>
     <script src="//www.webrtc-experiment.com/RecordRTC.js">
     </script>
-</head>
 
+</h:head>
+</f:view>
+
+<h:form>
 <body>
     <article>
         
@@ -105,6 +132,10 @@
                 <input type="text" id="conference-name"/>
                 <button id="setup-new-conference" class="setup">Setup New Conference</button>
                 <button id="leave-conference" class="setup" style="margin-left: 13em;" disabled="disabled">Leave</button>
+                <center>
+                <br/>
+                
+                </center>
             </section>
 
             <!-- list of all available broadcasting rooms -->
@@ -115,17 +146,16 @@
         </section>
 
 
-
-      
+	<input type="hidden"  name="hiden" id="hiden"  />
        
-        
-      
+           
         
 
         
     </article>
 
    
+
 	
 	 <script src="../js/teste.js"> </script>
 	
@@ -134,5 +164,22 @@
     </script>
 </body>
 
+
+		<p:dialog header="Cargo Atividade" widgetVar="userDialog" resizable="false" draggable="false"
+              showEffect="fade" hideEffect="fade" modal="true">
+ 
+        <p:outputPanel id="display2">
+            <h:panelGrid id="grid3" columns="2" cellpadding="5">
+                <f:facet name="Cargo do Usuário na Atividade"/>
+                    <h:outputText value="Testador: " />
+        		    <p:commandButton value="Salvar" ajax="true" action="#{initTgpMB.carregaGravacao()}" />
+            </h:panelGrid>
+            <center>
+            <p:commandButton ajax="true" icon="ui-icon-check"   oncomplete="PF('userDialog').hide()"  actionListener="#{atividadeMB.salvaCargo()}"/>
+            </center>
+        </p:outputPanel>
+    </p:dialog>
+	
+</h:form>
 </html>
 
