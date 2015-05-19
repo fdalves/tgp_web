@@ -353,7 +353,7 @@
             <f:facet name="filter">
                 <p:selectOneMenu onchange="PF('docTable').filter()"  >
                     <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
-                    <f:selectItems value="#{projetoMB.nomesProjetos}" />
+                    <f:selectItems value="#{projetoMB.nomesProjetos}"  />
                 </p:selectOneMenu>
             </f:facet>
             <h:outputText value="#{doc.projeto.nomeProjeto}" />

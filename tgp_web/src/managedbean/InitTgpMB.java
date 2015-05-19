@@ -16,10 +16,14 @@ import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
+import model.Atividade;
 import model.DocAtividade;
+import model.Projeto;
 import model.Usuario;
+import model.UsuarioAtividade;
 import ejb.AtividadeFacade;
 import ejb.DocAtividadeFacade;
+import ejb.ProjetoFacade;
 import ejb.UsuarioFacade;
 
 @ManagedBean(name="initTgpMB")
@@ -31,6 +35,8 @@ public class InitTgpMB  implements Serializable {
 	@EJB
 	private AtividadeFacade atividadeFacade;
 	@EJB
+	private ProjetoFacade projetoFacade;
+	@EJB
 	private DocAtividadeFacade docAtividadeFacade;
 	@EJB
 	private UsuarioFacade usuarioFacade;
@@ -39,7 +45,13 @@ public class InitTgpMB  implements Serializable {
 	private Usuario usuario =  new  Usuario();
 	private Usuario usuarioSelectChat = new Usuario(); 
 	private List<Usuario> usarioList = new ArrayList<Usuario>();
-	 
+	private List<Atividade> atividadesList = new ArrayList<Atividade>();
+	private String[] nomesProjetos = null;  
+	private List<Projeto> listProjetos = null; 
+	private String[] prioridades = null;
+	private Atividade atividadeAtucal = new Atividade();
+	private List<UsuarioAtividade> usuarioAtividades = new ArrayList<UsuarioAtividade>();
+	
 	
 	public InitTgpMB() {
 
@@ -56,12 +68,39 @@ public class InitTgpMB  implements Serializable {
 		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
 		Usuario usuario = (Usuario) session.getAttribute("user");
 		
-		this.usuario =  usuario;
+		List<UsuarioAtividade> list = atividadeFacade.findAtividadeByUsuario(usuario.getUsuarioId());
+		
+		for (UsuarioAtividade atividade : list) {
+			this.atividadesList.add(atividade.getAtividade());
+		}
+		
+		
+		
+		List<Projeto> listProjetos = projetoFacade.findAll();
+		
+		
+		nomesProjetos = new String[listProjetos.size()];
+		int count = 0;
+		for (Projeto projeto : listProjetos) {
+			
+			nomesProjetos[count] = projeto.getNomeProjeto();
+			count++;
+		}
+		
+		 this.prioridades = new String [3];
+		 prioridades[0] = "baixa";
+		 prioridades[1] = "normal";
+		 prioridades[2] = "alta";
+		 
+		this.atividadeAtucal = new Atividade();
+		 
 		
 	}
 	
 	
 	
+	
+
 	public String goUser(){
 		return "go_user";
 	}
@@ -110,7 +149,7 @@ public class InitTgpMB  implements Serializable {
 	public void carregaGravacao(){
 	
 			DocAtividade docAtividade = new DocAtividade();
-			System.out.println("cuzinhoo..");	
+			
 			  byte[] value =  FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hiden").getBytes();
 				
 			  docAtividade.setDoc(value);
@@ -126,6 +165,21 @@ public class InitTgpMB  implements Serializable {
 			
 		
 	}
+	
+	
+	
+	
+	public void initUsuariosAtividade(Atividade atividade){
+		
+		this.atividadeAtucal = atividade;
+		List<UsuarioAtividade> usuarioAtividades =  this.atividadeFacade.findUsuarioAtividade(this.atividadeAtucal.getAtividadeId());
+		
+		for (UsuarioAtividade usuarioAtividade : usuarioAtividades) {
+			System.out.println(usuarioAtividade.getUsuario().getNome());
+		}
+	}
+	
+	
 	
 	public UsuarioFacade getUsuarioFacade() {
 		return usuarioFacade;
@@ -169,6 +223,96 @@ public class InitTgpMB  implements Serializable {
 	}
 
 
+	public AtividadeFacade getAtividadeFacade() {
+		return atividadeFacade;
+	}
+
+
+	public void setAtividadeFacade(AtividadeFacade atividadeFacade) {
+		this.atividadeFacade = atividadeFacade;
+	}
+
+
+	public DocAtividadeFacade getDocAtividadeFacade() {
+		return docAtividadeFacade;
+	}
+
+
+	public void setDocAtividadeFacade(DocAtividadeFacade docAtividadeFacade) {
+		this.docAtividadeFacade = docAtividadeFacade;
+	}
+
+
+	public List<Atividade> getAtividadesList() {
+		return atividadesList;
+	}
+
+
+	public void setAtividadesList(List<Atividade> atividadesList) {
+		this.atividadesList = atividadesList;
+	}
+
+
+	public String[] getNomesProjetos() {
+		return nomesProjetos;
+	}
+
+
+	public void setNomesProjetos(String[] nomesProjetos) {
+		this.nomesProjetos = nomesProjetos;
+	}
+
+
+	public ProjetoFacade getProjetoFacade() {
+		return projetoFacade;
+	}
+
+
+	public void setProjetoFacade(ProjetoFacade projetoFacade) {
+		this.projetoFacade = projetoFacade;
+	}
+
+
+	public List<Projeto> getListProjetos() {
+		return listProjetos;
+	}
+
+
+	public void setListProjetos(List<Projeto> listProjetos) {
+		this.listProjetos = listProjetos;
+	}
+
+
+	public String[] getPrioridades() {
+		return prioridades;
+	}
+
+
+	public void setPrioridades(String[] prioridades) {
+		this.prioridades = prioridades;
+	}
+
+
+	public Atividade getAtividadeAtucal() {
+		return atividadeAtucal;
+	}
+
+
+	public void setAtividadeAtucal(Atividade atividadeAtucal) {
+		this.atividadeAtucal = atividadeAtucal;
+	}
+
+
+	public List<UsuarioAtividade> getUsuarioAtividades() {
+		return usuarioAtividades;
+	}
+
+
+	public void setUsuarioAtividades(List<UsuarioAtividade> usuarioAtividades) {
+		this.usuarioAtividades = usuarioAtividades;
+	}
+
+	
 
 	
 }
