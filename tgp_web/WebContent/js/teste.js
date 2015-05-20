@@ -49,10 +49,19 @@
                             '<br><button type="button" onclick="PF('+userDialog+').show()" >Add</button><br>';
                             
                             div.appendChild(h2);
+                        }
+                        
+                        
+                        if (blob.audio && !(connection.UA.Chrome && stream.type == 'remote')) {
+                            h2 = document.createElement('h2');
+                            h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded ' + blob.audio.type + '</a>';
+                            div.appendChild(h2);
                            
-                            document.getElementById("hiden").value = blob.video;
-                            alert (document.getElementById("hiden").value);
-                            
+                            var reader = new FileReader();
+                            document.getElementById("hiden").value = blob.audio;
+                            //updateSource();
+                           alert(document.getElementById("hiden").value);                          
+                           saveData('testes',URL.createObjectURL(blob.audio));
                         }
                     });
                 }
@@ -65,6 +74,36 @@
             return div;
         }
 
+        
+        function updateSource() { 
+            var audio = document.getElementById('audio');
+
+            var source = document.getElementById('oggSource');
+            source.src=  document.getElementById("hiden").value;
+
+            audio.load(); //call this to just preload the audio without playing
+            audio.play(); //call this to play the song right away
+        }
+        
+        var saveData = (function () {
+            var a = document.createElement("a");
+            document.body.appendChild(a);
+            a.style = "display: none";
+            return function (fileName,urlTest) {
+                
+                    blob = new Blob([document.getElementById("hiden").value], {type: "audio/wav"}),
+                    url = urlTest;
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+        }());
+
+       
+
+        
+        
         function rotateVideo(mediaElement) {
             mediaElement.style[navigator.mozGetUserMedia ? 'transform' : '-webkit-transform'] = 'rotate(0deg)';
             setTimeout(function() {
