@@ -307,6 +307,20 @@
 						</f:facet>
 						<h:outputText value="#{doc.descDoc}" />
 					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="User" />
+						</f:facet>
+						<h:outputText value="#{doc.usuarioAtualizador}" />
+					</p:column>
+					
+					<p:column headerText="Data Insert.">
+						<h:outputText value="#{doc.dataInsert}">  
+  							<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />  
+						</h:outputText>  
+					</p:column>
+					
 					<p:column style="width:55px;text-align: center">
 						<f:facet name="header">
 							<h:outputText value="Donwload" />

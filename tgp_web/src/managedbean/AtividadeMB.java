@@ -24,6 +24,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import model.Atividade;
 import model.Cargo;
@@ -432,6 +433,18 @@ public class AtividadeMB  implements Serializable {
 				String info = "Informe nome do documento.";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));
 			}
+			
+			FacesContext fc = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+			Usuario usuario = (Usuario) session.getAttribute("user");
+			
+			if (usuario != null){
+				
+				docAtividade.setUsuarioAtualizador(usuario.getNome());
+			}
+			
+			this.docAtividade.setDataInsert(new Date());
+			
 			
 			this.atividade.getDocAtividades().add(docAtividade);
 			this.docAtividade = new DocAtividade();

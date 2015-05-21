@@ -109,14 +109,16 @@
        
         
         <p:column  headerText="Users. Ativ" style="text-align: center;width: 70px;"  >
-            <p:commandButton icon="fa fa-users" value="Users." ajax="true" actionListener="#{initTgpMB.usuariosAtividade(ativ)}" process="@this,:form:userActiv,:form:userActivGrid" update=":form:userActiv,:form:userActivGrid" oncomplete="PF('dlgUser').show()" >
+            <p:commandButton icon="fa fa-users" value="Users." ajax="true" actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}" process="@this,:form:userActiv" update=":form:userActiv" oncomplete="PF('dlgUser').show()" >
              	<f:setPropertyActionListener value="#{ativ}" target="#{initTgpMB.atividadeAtucal}" />
             </p:commandButton>
         </p:column>
         
         
         <p:column  headerText="Doc. Ativ" style="text-align: center;width: 70px;" >
-            <p:commandButton icon="fa fa-file" value="Docs." />
+            <p:commandButton icon="fa fa-file" value="Docs." ajax="true"  process="@this,:form:docsActiv" actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}" update=":form:docsActiv" oncomplete="PF('docsActiv').show()" >
+             	<f:setPropertyActionListener value="#{ativ}" target="#{initTgpMB.atividadeAtucal}" />
+            </p:commandButton>
         </p:column>
         
 		
@@ -198,7 +200,7 @@
 	<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
         <h:panelGrid id="eventDetails" columns="2">
             <h:outputLabel for="title" value="Title:" />
-            <p:inputText id="title" value="#{scheduleView.event.title}" required="true" />
+            <p:inputText id="title" value="#{scheduleView.event.title}"  />
  
             <h:outputLabel for="from" value="From:" />
             <p:inputMask id="from" value="#{scheduleView.event.startDate}" mask="99/99/9999">
@@ -226,21 +228,87 @@
 <p:dialog id="desc" header="Desc. Atividade" widgetVar="dlgDesc" width="300px"  minimizable="true" maximizable="true">
     <h:panelGrid id="descGrid" columns="2"  >
     	<h:outputLabel value="Desc. Atividade"/>
-    	<p:inputTextarea rows="8"  value="#{initTgpMB.atividadeAtucal.descAtividade}"/>
+    	<p:inputTextarea rows="8"  value="#{initTgpMB.atividadeAtucal.descAtividade}" readonly="true"/>
     	
     </h:panelGrid>
    
 </p:dialog>
       
       
-<p:dialog id="userActiv" header="UsuáriosAtividade" widgetVar="dlgUser" width="300px"  minimizable="true" maximizable="true">
-    <h:panelGrid id="userActivGrid" columns="2"  >
-    	<h:outputLabel value="Desc. Atividade"/>
-    	<p:inputTextarea rows="8"  value="#{initTgpMB.atividadeAtucal.descAtividade}"/>
-    	
-    </h:panelGrid>
+<p:dialog id="userActiv" header="Usuários Atividade" widgetVar="dlgUser" width="600px" height="300px"  minimizable="true" maximizable="true">
+   
+   <h:panelGrid columns="2">
+   	<h:outputLabel value="G.P. Resposável" />
+   	<p:outputLabel value="#{initTgpMB.atividadeAtucal.gerente.nome}" ></p:outputLabel>
+   </h:panelGrid>
+   
+   <p:dataTable id="dataTableUserAtiv"  var="usuativ" value="#{initTgpMB.usuarioAtividades}"
+			paginator="true" rows="5">
+			
+
+
+			<p:column  headerText="Usuário">
+						<h:outputText value="#{usuativ.usuario.nome}" />
+			</p:column>
+
+			<p:column  headerText="Horas Previstas">
+						<h:outputText value="#{usuativ.horasTrabalho}" />
+			</p:column>
+			
+			<p:column  headerText="Horas Alocadas">
+						<h:outputText value="#{usuativ.horasApropriadas}" />
+			</p:column>
+			
+		</p:dataTable>
    
 </p:dialog>      
+      
+      
+      
+<p:dialog id="docsActiv" header="Documentos Atividade" widgetVar="docsActiv" width="800px" height="300px"  minimizable="true" maximizable="true">
+   
+   					<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
+					value="#{initTgpMB.atividadeAtucal.docAtividades}" paginator="true" rows="5">
+					<f:facet name="header">
+            			Documentos
+        			</f:facet>
+        			
+        			<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
+						<h:outputText value="#{doc.nomeDoc}" />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="Desc. Doc" />
+						</f:facet>
+						<h:outputText value="#{doc.descDoc}" />
+					</p:column>
+					
+					<p:column>
+						<f:facet name="header">
+							<h:outputText value="User" />
+						</f:facet>
+						<h:outputText value="#{doc.usuarioAtualizador}" />
+					</p:column>
+					
+					<p:column headerText="Data Insert.">
+						<h:outputText value="#{doc.dataInsert}">  
+  							<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />  
+						</h:outputText>  
+					</p:column>
+					
+					<p:column style="width:55px;text-align: center">
+						<f:facet name="header">
+							<h:outputText value="Donwload" />
+						</f:facet>
+						<p:commandButton icon="fa fa-download" actionListener="#{initTgpMB.downloadDoc(doc)}"  />
+					</p:column>
+					
+					
+       			</p:dataTable>
+   
+</p:dialog>      
+      
       
     
 </h:form>
