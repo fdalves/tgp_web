@@ -8,320 +8,368 @@
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
-	
-	<f:view contentType="text/html">
+
+<f:view contentType="text/html">
 	<h:head>
-	<style type="text/css" media="screen">
+		<style type="text/css" media="screen">
 .ui-widget,.ui-widget .ui-widget {
 	font-size: 11px !important;
 }
 </style>
 	</h:head>
-	</f:view>
+</f:view>
 
 
 
 
 
-	
 
 
-<h:form id="form">  
+
+<h:form id="form">
 
 	<p:growl id="messages" showDetail="true" />
-	
-    <pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me" togglerTipOpen="Close Me">  
-        <pe:layoutPane position="north" size="80" closable="false">  
-            <p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%" height="100%" />  
-        </pe:layoutPane>  
-        <pe:layoutPane position="center">  
-            <pe:layoutPane position="north" size="50%" style="width: 80%;" >    
-                
-                
-                
-           <p:panel header="Atividade Cadastrados" >
-		
-		<p:dataTable id="dataTable"  var="ativ" value="#{initTgpMB.atividadesList}" widgetVar="dataTable"	paginator="true" rows="10" resizableColumns="true" liveResize="true" >
-			
+
+	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
+		togglerTipOpen="Close Me">
+		<pe:layoutPane position="north" size="80" closable="false">
+			<p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%"
+				height="100%" />
+		</pe:layoutPane>
+		<pe:layoutPane position="center">
+			<pe:layoutPane position="north" size="50%" style="width: 80%;">
 
 
-			<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade" filterMatchMode="contains">
-				<h:outputText value="#{ativ.atividadeNome}" />
-			</p:column>
+				<p:dataTable id="dataTable" var="ativ"
+					value="#{initTgpMB.atividadesList}" widgetVar="dataTable"
+					paginator="true" rows="5" resizableColumns="true" liveResize="true">
 
-			
-			
-			
-			
-			<p:column filterBy="#{ativ.projeto.nomeProjeto}" headerText="Projetos"  filterMatchMode="exact">
-            <f:facet name="filter">
-                <p:selectOneMenu onchange="PF('dataTable').filter()"  >
-                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
-                    <f:selectItems value="#{initTgpMB.nomesProjetos}" />
-                </p:selectOneMenu>
-            </f:facet>
-            <h:outputText value="#{ativ.projeto.nomeProjeto}" />
-        	
-        	</p:column>
-        	
-			<p:column headerText="Data Ini."
-			style="text-align: center;width: 70px;">
-			<h:outputText value="#{ativ.dtIni}">  
-  				<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />  
-			</h:outputText>  
-			</p:column>
-			
-			
-			
-        	
-        	<p:column headerText="Data Fim."
-			style="text-align: center;width: 70px;">
-			<h:outputText value="#{ativ.dtFim}">  
-  				<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />  
-			</h:outputText>  
-			</p:column>
-			
-			
-			<p:column headerText="G.P. Resp/"
-			style="text-align: center">
-			<p:outputLabel value="#{ativ.gerente.nome}" />
-			</p:column>
-			
-			     	
-        	
-        	<p:column filterBy="#{ativ.prioridade}"  style="text-align: center;width: 85px;" filterMatchMode="in">
-            <f:facet name="filter">
-                <p:selectCheckboxMenu label="Prioridade" onchange="PF('dataTable').filter()" panelStyle="width:80px">
-                    <f:selectItems value="#{initTgpMB.prioridades}" />
-                </p:selectCheckboxMenu>
-            </f:facet>
-            <h:outputText value="#{ativ.prioridade}" />
-        </p:column>
-        
-        
-        <p:column  headerText="Desc. Ativ" style="text-align: center;width: 75px;"  >
-            <p:commandButton icon="fa fa-list-alt" value="Desc." process="@this,:form:desc,:form:descGrid" update=":form:desc,:form:descGrid" oncomplete="PF('dlgDesc').show()" >
-             	<f:setPropertyActionListener value="#{ativ}" target="#{initTgpMB.atividadeAtucal}" />
-            </p:commandButton>
-        </p:column>
-        
-        
-       
-        
-        <p:column  headerText="Users. Ativ" style="text-align: center;width: 70px;"  >
-            <p:commandButton icon="fa fa-users" value="Users." ajax="true" actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}" process="@this,:form:userActiv" update=":form:userActiv" oncomplete="PF('dlgUser').show()" >
-             	<f:setPropertyActionListener value="#{ativ}" target="#{initTgpMB.atividadeAtucal}" />
-            </p:commandButton>
-        </p:column>
-        
-        
-        <p:column  headerText="Doc. Ativ" style="text-align: center;width: 70px;" >
-            <p:commandButton icon="fa fa-file" value="Docs." ajax="true"  process="@this,:form:docsActiv" actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}" update=":form:docsActiv" oncomplete="PF('docsActiv').show()" >
-             	<f:setPropertyActionListener value="#{ativ}" target="#{initTgpMB.atividadeAtucal}" />
-            </p:commandButton>
-        </p:column>
-        
-		
-		<p:column  headerText="Situação Atv." style="text-align: center;width: 75px;">
-            <p:commandButton icon="fa fa-file" value="Docs." />
-        </p:column>
-		
-		
-		<p:column  headerText="Apropriação Horas" style="text-align: center;width: 150px;"  >
-            <p:commandButton icon="fa fa-pencil-square-o" value="Apropiação de Horas." />
-        </p:column>	
-			
-			
-		</p:dataTable>
-           </p:panel>     
-                
-                
-            </pe:layoutPane>  
-            <pe:layoutPane position="center" minHeight="60">  
-               
-              <center>  
-          
- 			 <h:panelGrid columnClasses="value" >
-        	
-        <p:schedule id="schedule" value="#{scheduleView.eventModel}"  widgetVar="myschedule"  locale="pt" >
- 
-            <p:ajax event="dateSelect" listener="#{scheduleView.onDateSelect}" update=":form:eventDetails" oncomplete="PF('eventDialog').show();" />
-            <p:ajax event="eventSelect" listener="#{scheduleView.onEventSelect}" update=":form:eventDetails" oncomplete="PF('eventDialog').show();" />
-            <p:ajax event="eventMove" listener="#{scheduleView.onEventMove}" update=":form:messages" />
-            <p:ajax event="eventResize" listener="#{scheduleView.onEventResize}" update=":form:messages" />
- 
-        </p:schedule>
- 	
-    
-    	</h:panelGrid>
-            </center>     
-            </pe:layoutPane>  
-        </pe:layoutPane>  
-        <pe:layoutPane position="west" size="320">  
-           
-            <pe:layoutPane position="center" minHeight="60">  
-                 
-		   <p:panelMenu style="width:300px">
-	        <p:submenu label="Admin Menu">
-	            <p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false" action="go_user" immediate="true" />
-	            <p:menuitem value="CRUD Projeto" icon="fa fa-sitemap" ajax="false" action="go_proj" immediate="true" />
-	             <p:menuitem value="CRUD Atividade" icon="fa fa-newspaper-o" ajax="false" action="go_ativ" immediate="true" />
-	        </p:submenu>
-	        <p:submenu label="User Menu">
-	            <p:menuitem value="Home"   ajax="false" icon="fa fa-home"/>
-	            <p:menuitem value="Agendar Meeting"   ajax="false" icon="fa fa-gears"/>
-	            <p:menuitem value="Minhas Atividades"   ajax="false" icon="fa fa-list-alt"/>
-	            <p:menuitem value="Calendário"   ajax="false" icon="fa fa-calendar"/>
-	        </p:submenu>
-	        <p:separator />
-	        <p:submenu label="Comunication Menu" >
-	                <p:menuitem value="Web Chat RTC" icon="fa fa-comments" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-	            	<p:menuitem value="Meeting RTC" icon="fa fa-video-camera" onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/pages/RTCMultiConnection.xhtml', 'myWindow', 'width=1200, height=600');" />
-	        </p:submenu>
-	        
-	         <p:submenu label="Relatórios">
-	            <p:menuitem value="Report 1"   ajax="false" icon="fa fa-file-pdf-o"/>
-	            <p:menuitem value="Report 2"   ajax="false" icon="fa fa-file-pdf-o"/>
-	            <p:menuitem value="Report 3"   ajax="false" icon="fa fa-file-pdf-o"/>
-	            
-	        </p:submenu>
-	        
-    </p:panelMenu>
- 
-            </pe:layoutPane>  
-           
-        </pe:layoutPane>  
-      
-    </pe:layout> 
-    
-  
-	
-	
-	<p:dialog widgetVar="eventDialog" header="Event Details" showEffect="clip" hideEffect="clip">
-        <h:panelGrid id="eventDetails" columns="2">
-            <h:outputLabel for="title" value="Title:" />
-            <p:inputText id="title" value="#{scheduleView.event.title}"  />
- 
-            <h:outputLabel for="from" value="From:" />
-            <p:inputMask id="from" value="#{scheduleView.event.startDate}" mask="99/99/9999">
-                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2"/>
-            </p:inputMask>
- 
-            <h:outputLabel for="to" value="To:" />
-            <p:inputMask id="to" value="#{scheduleView.event.endDate}" mask="99/99/9999">
-                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2"/>
-            </p:inputMask>
- 
-            <h:outputLabel for="allDay" value="All Day:" />
-            <h:selectBooleanCheckbox id="allDay" value="#{scheduleView.event.allDay}" />
- 
-            <p:commandButton type="reset" value="Reset" />
-            <p:commandButton id="addButton" value="Save" actionListener="#{scheduleView.addEvent}" oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
-        </h:panelGrid>
-    </p:dialog>  
-    
-    
-    
-    
- 
- 
-<p:dialog id="desc" header="Desc. Atividade" widgetVar="dlgDesc" width="300px"  minimizable="true" maximizable="true">
-    <h:panelGrid id="descGrid" columns="2"  >
-    	<h:outputLabel value="Desc. Atividade"/>
-    	<p:inputTextarea rows="8"  value="#{initTgpMB.atividadeAtucal.descAtividade}" readonly="true"/>
-    	
-    </h:panelGrid>
-   
-</p:dialog>
-      
-      
-<p:dialog id="userActiv" header="Usuários Atividade" widgetVar="dlgUser" width="600px" height="300px"  minimizable="true" maximizable="true">
-   
-   <h:panelGrid columns="2">
-   	<h:outputLabel value="G.P. Resposável" />
-   	<p:outputLabel value="#{initTgpMB.atividadeAtucal.gerente.nome}" ></p:outputLabel>
-   </h:panelGrid>
-   
-   <p:dataTable id="dataTableUserAtiv"  var="usuativ" value="#{initTgpMB.usuarioAtividades}"
-			paginator="true" rows="5">
-			
-
-
-			<p:column  headerText="Usuário">
-						<h:outputText value="#{usuativ.usuario.nome}" />
-			</p:column>
-
-			<p:column  headerText="Horas Previstas">
-						<h:outputText value="#{usuativ.horasTrabalho}" />
-			</p:column>
-			
-			<p:column  headerText="Horas Alocadas">
-						<h:outputText value="#{usuativ.horasApropriadas}" />
-			</p:column>
-			
-		</p:dataTable>
-   
-</p:dialog>      
-      
-      
-      
-<p:dialog id="docsActiv" header="Documentos Atividade" widgetVar="docsActiv" width="800px" height="300px"  minimizable="true" maximizable="true">
-   
-   					<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
-					value="#{initTgpMB.atividadeAtucal.docAtividades}" paginator="true" rows="5">
 					<f:facet name="header">
+            			Atividades
+  					</f:facet>
+
+					<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
+						filterMatchMode="contains" width="15%">
+						<h:outputText value="#{ativ.atividadeNome}" />
+					</p:column>
+
+
+
+					<p:column filterBy="#{ativ.projeto.nomeProjeto}"
+						headerText="Projetos" filterMatchMode="exact" width="15%">
+						<f:facet name="filter">
+							<p:selectOneMenu onchange="PF('dataTable').filter()">
+								<f:selectItem itemLabel="Select One" itemValue="#{null}"
+									noSelectionOption="true" />
+								<f:selectItems value="#{initTgpMB.nomesProjetos}" />
+							</p:selectOneMenu>
+						</f:facet>
+						<h:outputText value="#{ativ.projeto.nomeProjeto}" />
+
+					</p:column>
+
+					<p:column headerText="Data Ini." width="8%"
+						style="text-align: center; ">
+						<h:outputText value="#{ativ.dtIni}">
+							<f:convertDateTime locale="pt,BR" dateStyle="default"
+								pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+
+
+
+					<p:column headerText="Data Fim." width="8%"
+						style="text-align: center;">
+						<h:outputText value="#{ativ.dtFim}">
+							<f:convertDateTime locale="pt,BR" dateStyle="default"
+								pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+
+
+					<p:column filterBy="#{ativ.prioridade}" style="text-align: center;"
+						filterMatchMode="in">
+						<f:facet name="filter">
+							<p:selectCheckboxMenu label="Prioridade"
+								onchange="PF('dataTable').filter()" panelStyle="width:80px">
+								<f:selectItems value="#{initTgpMB.prioridades}" />
+							</p:selectCheckboxMenu>
+						</f:facet>
+						<h:outputText value="#{ativ.prioridade}" />
+					</p:column>
+
+
+					<p:column headerText="Desc." style="text-align: center;" width="8%">
+						<p:commandButton icon="fa fa-list-alt" value="Desc."
+							process="@this,:form:desc,:form:descGrid"
+							update=":form:desc,:form:descGrid"
+							oncomplete="PF('dlgDesc').show()">
+							<f:setPropertyActionListener value="#{ativ}"
+								target="#{initTgpMB.atividadeAtucal}" />
+						</p:commandButton>
+					</p:column>
+
+
+
+
+					<p:column headerText="Users." style="text-align: center;">
+						<p:commandButton icon="fa fa-users" value="Users." ajax="true"
+							actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}"
+							process="@this,:form:userActiv" update=":form:userActiv"
+							oncomplete="PF('dlgUser').show()">
+							<f:setPropertyActionListener value="#{ativ}"
+								target="#{initTgpMB.atividadeAtucal}" />
+						</p:commandButton>
+					</p:column>
+
+
+					<p:column headerText="Docs." style="text-align: center;">
+						<p:commandButton icon="fa fa-file" value="Docs." ajax="true"
+							process="@this,:form:docsActiv"
+							actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}"
+							update=":form:docsActiv" oncomplete="PF('docsActiv').show()">
+							<f:setPropertyActionListener value="#{ativ}"
+								target="#{initTgpMB.atividadeAtucal}" />
+						</p:commandButton>
+					</p:column>
+
+
+					<p:column headerText="Situação" style="text-align: center;">
+						<p:commandButton icon="fa fa-file" value="Docs." />
+					</p:column>
+
+
+					<p:column headerText="Apropriação H." style="text-align: center;">
+						<p:commandButton icon="fa fa-pencil-square-o" value="Aprop." />
+					</p:column>
+
+
+				</p:dataTable>
+
+
+
+			</pe:layoutPane>
+			<pe:layoutPane position="center" minHeight="60">
+				<f:facet name="header">
+            			Calendario Atividades
+  			</f:facet>
+				<center>
+
+					<h:panelGrid columnClasses="value">
+
+						<p:schedule id="schedule" value="#{scheduleView.eventModel}"
+							widgetVar="myschedule" locale="pt">
+
+							<p:ajax event="dateSelect"
+								listener="#{scheduleView.onDateSelect}"
+								update=":form:eventDetails"
+								oncomplete="PF('eventDialog').show();" />
+							<p:ajax event="eventSelect"
+								listener="#{scheduleView.onEventSelect}"
+								update=":form:eventDetails"
+								oncomplete="PF('eventDialog').show();" />
+							<p:ajax event="eventMove" listener="#{scheduleView.onEventMove}"
+								update=":form:messages" />
+							<p:ajax event="eventResize"
+								listener="#{scheduleView.onEventResize}" update=":form:messages" />
+
+						</p:schedule>
+
+
+					</h:panelGrid>
+				</center>
+			</pe:layoutPane>
+		</pe:layoutPane>
+		<pe:layoutPane position="west" size="180">
+
+			<pe:layoutPane position="center" minHeight="60">
+
+				<p:panelMenu style="width:165px">
+					<p:submenu label="Admin Menu">
+						<p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false"
+							action="go_user" immediate="true" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-sitemap" ajax="false"
+							action="go_proj" immediate="true" />
+						<p:menuitem value="CRUD Atividade" icon="fa fa-newspaper-o"
+							ajax="false" action="go_ativ" immediate="true" />
+					</p:submenu>
+					<p:submenu label="User Menu">
+						<p:menuitem value="Home" ajax="false" icon="fa fa-home" />
+						<p:menuitem value="Agendar Meeting" ajax="false"
+							icon="fa fa-gears" />
+						<p:menuitem value="Minhas Atividades" ajax="false"
+							icon="fa fa-list-alt" />
+						<p:menuitem value="Calendário" ajax="false" icon="fa fa-calendar" />
+					</p:submenu>
+					<p:separator />
+					<p:submenu label="Comunication Menu">
+						<p:menuitem value="Web Chat RTC" icon="fa fa-comments"
+							onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+						<p:menuitem value="Meeting RTC" icon="fa fa-video-camera"
+							onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/pages/RTCMultiConnection.xhtml', 'myWindow', 'width=1200, height=600');" />
+					</p:submenu>
+
+					<p:submenu label="Relatórios">
+						<p:menuitem value="Report 1" ajax="false" icon="fa fa-file-pdf-o" />
+						<p:menuitem value="Report 2" ajax="false" icon="fa fa-file-pdf-o" />
+						<p:menuitem value="Report 3" ajax="false" icon="fa fa-file-pdf-o" />
+
+					</p:submenu>
+
+				</p:panelMenu>
+
+			</pe:layoutPane>
+
+		</pe:layoutPane>
+
+	</pe:layout>
+
+
+
+
+	<p:dialog widgetVar="eventDialog" header="Event Details"
+		showEffect="clip" hideEffect="clip">
+		<h:panelGrid id="eventDetails" columns="2">
+			<h:outputLabel for="title" value="Title:" />
+			<p:inputText id="title" value="#{scheduleView.event.title}" />
+
+			<h:outputLabel for="from" value="From:" />
+			<p:inputMask id="from" value="#{scheduleView.event.startDate}"
+				mask="99/99/9999">
+				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+			</p:inputMask>
+
+			<h:outputLabel for="to" value="To:" />
+			<p:inputMask id="to" value="#{scheduleView.event.endDate}"
+				mask="99/99/9999">
+				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+			</p:inputMask>
+
+			<h:outputLabel for="allDay" value="All Day:" />
+			<h:selectBooleanCheckbox id="allDay"
+				value="#{scheduleView.event.allDay}" />
+
+			<p:commandButton type="reset" value="Reset" />
+			<p:commandButton id="addButton" value="Save"
+				actionListener="#{scheduleView.addEvent}"
+				oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+		</h:panelGrid>
+	</p:dialog>
+
+
+
+
+
+
+	<p:dialog id="desc" header="Desc. Atividade" widgetVar="dlgDesc"
+		width="300px" minimizable="true" maximizable="true">
+		<h:panelGrid id="descGrid" columns="2">
+			<h:outputLabel value="Desc. Atividade" />
+			<p:inputTextarea rows="8"
+				value="#{initTgpMB.atividadeAtucal.descAtividade}" readonly="true" />
+
+		</h:panelGrid>
+
+	</p:dialog>
+
+
+	<p:dialog id="userActiv" header="Usuários Atividade"
+		widgetVar="dlgUser" width="600px" height="300px" minimizable="true"
+		maximizable="true">
+
+		<h:panelGrid columns="2">
+			<h:outputLabel value="G.P. Resposável" />
+			<p:outputLabel value="#{initTgpMB.atividadeAtucal.gerente.nome}"></p:outputLabel>
+		</h:panelGrid>
+
+		<p:dataTable id="dataTableUserAtiv" var="usuativ"
+			value="#{initTgpMB.usuarioAtividades}" paginator="true" rows="5">
+
+
+
+			<p:column headerText="Usuário">
+				<h:outputText value="#{usuativ.usuario.nome}" />
+			</p:column>
+
+			<p:column headerText="Horas Previstas">
+				<h:outputText value="#{usuativ.horasTrabalho}" />
+			</p:column>
+
+			<p:column headerText="Horas Alocadas">
+				<h:outputText value="#{usuativ.horasApropriadas}" />
+			</p:column>
+
+		</p:dataTable>
+
+	</p:dialog>
+
+
+
+	<p:dialog id="docsActiv" header="Documentos Atividade"
+		widgetVar="docsActiv" width="800px" height="300px" minimizable="true"
+		maximizable="true">
+
+		<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable"
+			value="#{initTgpMB.atividadeAtucal.docAtividades}" paginator="true"
+			rows="5">
+			<f:facet name="header">
             			Documentos
         			</f:facet>
-        			
-        			<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
-						<h:outputText value="#{doc.nomeDoc}" />
-					</p:column>
-					
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Desc. Doc" />
-						</f:facet>
-						<h:outputText value="#{doc.descDoc}" />
-					</p:column>
-					
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="User" />
-						</f:facet>
-						<h:outputText value="#{doc.usuarioAtualizador}" />
-					</p:column>
-					
-					<p:column headerText="Data Insert.">
-						<h:outputText value="#{doc.dataInsert}">  
-  							<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />  
-						</h:outputText>  
-					</p:column>
-					
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Donwload" />
-						</f:facet>
-						<p:commandButton icon="fa fa-download" actionListener="#{initTgpMB.downloadDoc(doc)}"  />
-					</p:column>
-					
-					
-       			</p:dataTable>
-   
-</p:dialog>      
-      
-      
-    
+
+			<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc."
+				filterMatchMode="contains">
+				<h:outputText value="#{doc.nomeDoc}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="Desc. Doc" />
+				</f:facet>
+				<h:outputText value="#{doc.descDoc}" />
+			</p:column>
+
+			<p:column>
+				<f:facet name="header">
+					<h:outputText value="User" />
+				</f:facet>
+				<h:outputText value="#{doc.usuarioAtualizador}" />
+			</p:column>
+
+			<p:column headerText="Data Insert.">
+				<h:outputText value="#{doc.dataInsert}">
+					<f:convertDateTime locale="pt,BR" dateStyle="default"
+						pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column style="width:55px;text-align: center">
+				<f:facet name="header">
+					<h:outputText value="Donwload" />
+				</f:facet>
+				<p:commandButton icon="fa fa-download"
+					actionListener="#{initTgpMB.downloadDoc(doc)}" />
+			</p:column>
+
+
+		</p:dataTable>
+
+	</p:dialog>
+
+
+
 </h:form>
 
 
-  
-<h:outputStylesheet library="css" name="global.css"/>  
-     
+
+<h:outputStylesheet library="css" name="global.css" />
+
 <h:outputStylesheet id="layoutCSS">  
     body {  
         margin: 4px !important;  
     }  
-</h:outputStylesheet>  
+</h:outputStylesheet>
 
 
 <script type="text/javascript">
@@ -354,9 +402,9 @@
     };
 </script>
 <style type="text/css">
-    .value {
-        width: 1000px;
-    }
+.value {
+	width: 1000px;
+}
 </style>
 
 
