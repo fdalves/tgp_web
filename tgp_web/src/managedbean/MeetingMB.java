@@ -1,7 +1,9 @@
 package managedbean;
 
 import java.io.Serializable;
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -11,13 +13,16 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
+import javax.servlet.http.HttpSession;
 
 import org.primefaces.event.FileUploadEvent;
 
 import model.Atividade;
 import model.DocAtividade;
 import model.Projeto;
+import model.Usuario;
 import ejb.AtividadeFacade;
+import ejb.DocAtividadeFacade;
 import ejb.ProjetoFacade;
 
 @ManagedBean(name="meetingMB")
@@ -31,6 +36,8 @@ public class MeetingMB  implements Serializable {
 	private ProjetoFacade projetoFacade;
 	@EJB
 	private AtividadeFacade atividadeFacade;
+	@EJB
+	private DocAtividadeFacade docAtividadeFacade;
 	
 	
 	private int idProjetoSelect =0 ;
@@ -39,18 +46,13 @@ public class MeetingMB  implements Serializable {
 	private List<SelectItem> atividadesSelectItems = new ArrayList<SelectItem>();
 	private List<Projeto> projetosList =  new  ArrayList<Projeto>();
 	private boolean carregaAtividade = false;
+	private boolean carregaSave = false;
 	private DocAtividade docAtividade = new DocAtividade();
 	
 	
-	public MeetingMB() {
-		
+	public MeetingMB() {	
 	}
 
-	
-	public void onTabChange(){
-		this.ini();
-	}
-	
 	
 		
 	@PostConstruct
@@ -88,6 +90,14 @@ public class MeetingMB  implements Serializable {
 		}
 	}
 	
+	public void selectAiv(){
+		Atividade atividade = atividadeFacade.find(this.idAtiviSelect);
+		if (atividade != null && carregaAtividade){
+			
+			this.carregaSave = true;
+		}
+	}
+	
 	
 	public void handleFileUpload(FileUploadEvent event) {
         FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
@@ -95,8 +105,47 @@ public class MeetingMB  implements Serializable {
         this.docAtividade.setTypeName(event.getFile().getContentType());
         String extensao = event.getFile().getFileName().substring(event.getFile().getFileName().lastIndexOf('.') + 1); 
         this.docAtividade.setExtensao("."+extensao);
+        this.docAtividade.setDataInsert(new Date());
+        DateFormat df = DateFormat.getDateInstance();
+        this.docAtividade.setNomeDoc("record_"+df.format(new Date()).replaceAll("/", "_"));
+        
+        FacesContext fc = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+		Usuario usuario = (Usuario) session.getAttribute("user");
+		
+		if (usuario != null){
+			
+			this.docAtividade.setUsuarioAtualizador(usuario.getNome());
+		}
+        
+        
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+	
+	
+	public void saveDoc(){
+		
+		Atividade atividade = atividadeFacade.find(this.idAtiviSelect);
+		
+		if (atividade != null){
+			this.docAtividade.setAtividade(atividade);
+			docAtividadeFacade.save(this.docAtividade);
+			
+			if (docAtividade.getDoc() != null){
+			
+			FacesMessage message = new FacesMessage("Documento adicionado com sucesso!");
+			FacesContext.getCurrentInstance().addMessage(null,message );
+			} else {
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,"Docimento Não encontrado", ""));
+			}
+		} else {
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,"Atividade Não encontrada", ""));
+		}
+		
+		this.ini();
+		
+		
+	}
 	
 
 	public ProjetoFacade getProjetoFacade() {
@@ -186,6 +235,16 @@ public class MeetingMB  implements Serializable {
 
 	public void setDocAtividade(DocAtividade docAtividade) {
 		this.docAtividade = docAtividade;
+	}
+
+
+	public boolean isCarregaSave() {
+		return carregaSave;
+	}
+
+
+	public void setCarregaSave(boolean carregaSave) {
+		this.carregaSave = carregaSave;
 	}
 	
 	

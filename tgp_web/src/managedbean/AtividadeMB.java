@@ -203,26 +203,9 @@ public class AtividadeMB  implements Serializable {
 			String msg = this.atividadeFacade.atualizaAtividade(oldAtv, atividadeNew,
 																usuarioAtividadesOld,usuarioAtividadesNew,
 																docAtividadesOld,docAtividadesNew);
-			
+			System.out.println(msg);
 		}
-			/***
 			
-			
-		} else {
-			Atividade atividadePersist = this.atividadeFacade.find(atividade.getAitividadeId());
-			atividadePersist.setAtividadeNome(this.atividade.getAtividadeNome());
-			atividadePersist.setDescAtividade(atividade.getDescAtividade());
-			atividadePersist.setDtIni(atividade.getDtIni());
-			atividadePersist.setDtFim(atividade.getDtFim());
-			atividadePersist.setProjeto(this.atividade.getProjeto());
-			this.atividadeFacade.update(atividadePersist);
-			String info = "Atividae Alterada com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Atividade " + atividade.getAtividadeNome()+ info, null));
-		}
-		
-		*/
-		
-		
 		
 	}
 	

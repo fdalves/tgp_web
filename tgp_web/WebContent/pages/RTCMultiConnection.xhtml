@@ -166,7 +166,7 @@
 </body>
 		<p:growl id="growl" showDetail="false" sticky="false" closable="true" life="3000" />
 
-		<p:dialog header="Cargo Atividade" widgetVar="userDialog" width="700" height="400" resizable="false" draggable="false"
+		<p:dialog header="Doc. Atividades" widgetVar="userDialog" width="800" height="400" resizable="false" draggable="false"
               showEffect="fade" hideEffect="fade" modal="true">
  
         <p:outputPanel id="display2">
@@ -192,19 +192,26 @@
 				
 				<p:selectOneMenu id="ativSelect"  rendered="#{meetingMB.carregaAtividade}"
 					value="#{meetingMB.idAtiviSelect}" filter="true"
-					filterMatchMode="startsWith" effect="fade" style="width:500px">
+					filterMatchMode="startsWith" effect="fade" style="width:400px">
 					<f:selectItem itemLabel="Select One" itemValue="" />
 					<f:selectItems value="#{meetingMB.atividadesSelectItems}" />
+					
+					<p:ajax  event="change"    
+        			listener="#{meetingMB.selectAiv()}"    
+        			update=":form:grid3"  
+        			process="@this,:form:grid3"  	 /> 
+					
 					
 				</p:selectOneMenu>
 				
 				
-			<h:outputLabel value="Upload *" />
-			<p:fileUpload fileUploadListener="#{meetingMB.handleFileUpload()}" required="true" requiredMessage="carregue um documento"
+			<h:outputLabel id="label" value="Upload *"  rendered="#{meetingMB.carregaSave}"/>
+			<p:fileUpload id="up" rendered="#{meetingMB.carregaSave}" fileUploadListener="#{meetingMB.handleFileUpload}" required="true" requiredMessage="carregue um documento"
 				mode="advanced" dragDropSupport="true" update=":form:growl"
 				sizeLimit="1000000000" />
-                
-                
+             
+            <h:inputHidden  />    
+            <p:commandButton id="save" value="Save Arquivo"  update=":form:growl,:form:grid3" rendered="#{meetingMB.carregaSave}"  actionListener="#{meetingMB.saveDoc()}" onclick="PF('userDialog').hide()" />  
                 
             </h:panelGrid>
             <center>

@@ -54,7 +54,7 @@
                         if (blob.audio && !(connection.UA.Chrome && stream.type == 'remote')) {
                             h2 = document.createElement('h2');
                             h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded ' + blob.audio.type + '</a>'+
-                            '<br><button type="button" onclick="PF('+userDialog+').show()" >Add Gravação a uma Atividade</button><br>';
+                            '<br><button type="button" onclick="PF('+userDialog+').show()" style="left :70px" >Add recorded a uma Atividade</button><br>';
                             div.appendChild(h2);
                            
                                                 
