@@ -111,7 +111,7 @@
 </h:head>
 </f:view>
 
-<h:form>
+<h:form id="form">
 <body>
     <article>
         
@@ -145,14 +145,7 @@
             <div id="videos-container"></div>
         </section>
 
-		<section>
-		<audio id="audio" controls="controls">
-    	<source id="oggSource" src="" type="audio/ogg"></source>
-    	<source id="mp3Source" type="audio/wav"></source>
-    	Your browser does not support the audio format.
-		</audio>
 		
-        </section>
         
 	<input type="hidden"  name="hiden" id="hiden"  />
        
@@ -171,19 +164,51 @@
     <script src="//cdn.webrtc-experiment.com/commits.js" >
     </script>
 </body>
+		<p:growl id="growl" showDetail="false" sticky="false" closable="true" life="3000" />
 
-
-		<p:dialog header="Cargo Atividade" widgetVar="userDialog" resizable="false" draggable="false"
+		<p:dialog header="Cargo Atividade" widgetVar="userDialog" width="700" height="400" resizable="false" draggable="false"
               showEffect="fade" hideEffect="fade" modal="true">
  
         <p:outputPanel id="display2">
             <h:panelGrid id="grid3" columns="2" cellpadding="5">
-                <f:facet name="Cargo do Usuário na Atividade"/>
-                    <h:outputText value="Testador: " />
-        		    <p:commandButton value="Salvar" ajax="true" action="#{initTgpMB.carregaGravacao()}" />
+                
+               <h:outputText value="Proj.:*" />
+
+				<p:selectOneMenu id="projSelect" 
+					value="#{meetingMB.idProjetoSelect}" filter="true"
+					filterMatchMode="startsWith" effect="fade" style="width:400px">
+
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItems value="#{meetingMB.projetoSelectItems}" />
+					
+					<p:ajax  event="change"    
+        			listener="#{meetingMB.selectProjeto()}"    
+        			update=":form:ativSelect,:form:grid3"  
+        			process="@this,:form:ativSelect,:form:grid3"  	 /> 
+        			
+				</p:selectOneMenu>
+				
+				 <h:outputText value="Atividades.:*"   rendered="#{meetingMB.carregaAtividade}" />
+				
+				<p:selectOneMenu id="ativSelect"  rendered="#{meetingMB.carregaAtividade}"
+					value="#{meetingMB.idAtiviSelect}" filter="true"
+					filterMatchMode="startsWith" effect="fade" style="width:500px">
+					<f:selectItem itemLabel="Select One" itemValue="" />
+					<f:selectItems value="#{meetingMB.atividadesSelectItems}" />
+					
+				</p:selectOneMenu>
+				
+				
+			<h:outputLabel value="Upload *" />
+			<p:fileUpload fileUploadListener="#{meetingMB.handleFileUpload()}" required="true" requiredMessage="carregue um documento"
+				mode="advanced" dragDropSupport="true" update=":form:growl"
+				sizeLimit="1000000000" />
+                
+                
+                
             </h:panelGrid>
             <center>
-            <p:commandButton ajax="true" icon="ui-icon-check"   oncomplete="PF('userDialog').hide()"  actionListener="#{atividadeMB.salvaCargo()}"/>
+           
             </center>
         </p:outputPanel>
     </p:dialog>

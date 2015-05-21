@@ -45,8 +45,7 @@
                         if (blob.video) {
                             h2 = document.createElement('h2');
                             h3 = document.createElement('h3');
-                            h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>'+ 
-                            '<br><button type="button" onclick="PF('+userDialog+').show()" >Add</button><br>';
+                            h2.innerHTML = '<a href="' + URL.createObjectURL(blob.video) + '" target="_blank">Open recorded ' + blob.video.type + '</a>';
                             
                             div.appendChild(h2);
                         }
@@ -54,14 +53,16 @@
                         
                         if (blob.audio && !(connection.UA.Chrome && stream.type == 'remote')) {
                             h2 = document.createElement('h2');
-                            h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded ' + blob.audio.type + '</a>';
+                            h2.innerHTML = '<a href="' + URL.createObjectURL(blob.audio) + '" target="_blank">Open recorded ' + blob.audio.type + '</a>'+
+                            '<br><button type="button" onclick="PF('+userDialog+').show()" >Add Gravação a uma Atividade</button><br>';
                             div.appendChild(h2);
                            
-                            var reader = new FileReader();
-                            document.getElementById("hiden").value = blob.audio;
-                            //updateSource();
-                           alert(document.getElementById("hiden").value);                          
-                           saveData('testes',URL.createObjectURL(blob.audio));
+                                                
+                           saveData('recAudioProjeto',URL.createObjectURL(blob.audio));
+                           
+
+                           
+
                         }
                     });
                 }
@@ -75,15 +76,7 @@
         }
 
         
-        function updateSource() { 
-            var audio = document.getElementById('audio');
-
-            var source = document.getElementById('oggSource');
-            source.src=  document.getElementById("hiden").value;
-
-            audio.load(); //call this to just preload the audio without playing
-            audio.play(); //call this to play the song right away
-        }
+        
         
         var saveData = (function () {
             var a = document.createElement("a");
