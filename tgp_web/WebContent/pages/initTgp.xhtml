@@ -51,14 +51,14 @@
   					</f:facet>
 
 					<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
-						filterMatchMode="contains" width="15%">
+						filterMatchMode="contains" width="20%">
 						<h:outputText value="#{ativ.atividadeNome}" />
 					</p:column>
 
 
 
 					<p:column filterBy="#{ativ.projeto.nomeProjeto}"
-						headerText="Projetos" filterMatchMode="exact" width="15%">
+						headerText="Projetos" filterMatchMode="exact" width="20%">
 						<f:facet name="filter">
 							<p:selectOneMenu onchange="PF('dataTable').filter()">
 								<f:selectItem itemLabel="Select One" itemValue="#{null}"
@@ -102,38 +102,25 @@
 						<h:outputText value="#{ativ.prioridade}" />
 					</p:column>
 
-
+			        
 					<p:column headerText="Desc." style="text-align: center;" width="8%">
 						<p:commandButton icon="fa fa-list-alt" value="Desc."
 							process="@this,:form:desc,:form:descGrid"
 							update=":form:desc,:form:descGrid"
 							oncomplete="PF('dlgDesc').show()">
 							<f:setPropertyActionListener value="#{ativ}"
-								target="#{initTgpMB.atividadeAtucal}" />
-						</p:commandButton>
-					</p:column>
-
-
-
-
-					<p:column headerText="Users." style="text-align: center;">
-						<p:commandButton icon="fa fa-users" value="Users." ajax="true"
-							actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}"
-							process="@this,:form:userActiv" update=":form:userActiv"
-							oncomplete="PF('dlgUser').show()">
-							<f:setPropertyActionListener value="#{ativ}"
-								target="#{initTgpMB.atividadeAtucal}" />
+								target="#{initTgpMB.atividadeAtual}" />
 						</p:commandButton>
 					</p:column>
 
 
 					<p:column headerText="Docs." style="text-align: center;">
 						<p:commandButton icon="fa fa-file" value="Docs." ajax="true"
-							process="@this" update="docsActiv"
+							process="@this" 
 							actionListener="#{initTgpMB.initDoc(ativ)}"
 							 oncomplete="javascript:centro('http://#{loginMB.hostName}:8080/tgp_web/pages/docAtividade.xhtml','_blank','800','700','no','no','no','no','no','no','no','yes','no')">
 							<f:setPropertyActionListener value="#{ativ}"
-								target="#{initTgpMB.atividadeAtucal}" />
+								target="#{initTgpMB.atividadeAtual}" />
 						</p:commandButton>
 					</p:column>
 
@@ -144,7 +131,12 @@
 
 
 					<p:column headerText="Apropriação H." style="text-align: center;">
-						<p:commandButton icon="fa fa-pencil-square-o" value="Aprop." />
+						<p:commandButton icon="fa fa-pencil-square-o" value="Aprop." actionListener="#{initTgpMB.initApropHoras(ativ)}"
+							process="@this" update=":form:apropAtiv,:form:output,:form:txt2" 
+							oncomplete="PF('dlApropAtiv').show()">
+							<f:setPropertyActionListener value="#{ativ}"
+								target="#{initTgpMB.atividadeAtual}" />
+						</p:commandButton>
 					</p:column>
 
 
@@ -270,24 +262,59 @@
 		<h:panelGrid id="descGrid" columns="2">
 			<h:outputLabel value="Desc. Atividade" />
 			<p:inputTextarea rows="8"
-				value="#{initTgpMB.atividadeAtucal.descAtividade}" readonly="true" />
+				value="#{initTgpMB.atividadeAtual.descAtividade}" readonly="true" />
 
 		</h:panelGrid>
 
 	</p:dialog>
 
 
-	<p:dialog id="userActiv" header="Usuários Atividade"
-		widgetVar="dlgUser" width="600px" height="300px" minimizable="true"
+	
+
+   <p:dialog id="apropAtiv" header="Apropriação de Horas"   
+		widgetVar="dlApropAtiv" width="800px" height="700px" minimizable="true"
 		maximizable="true">
+		<p:panel>
+			<f:facet name="header">
+            			Tempo Estimado da Atividade
+  			</f:facet>
+			
+			<h:panelGrid columns="2" id="pgPop" cellpadding="5">
+				
+				<h:outputLabel value="G.P. Resposável" />
+				<p:outputLabel value="#{initTgpMB.atividadeAtual.gerente.nome}"></p:outputLabel>
+				<p:outputLabel value="Data Ini." />
+				<h:outputText value="#{initTgpMB.atividadeAtual.dtIni}">
+					<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />
+				</h:outputText>
+				
+				<p:outputLabel value="Data Fim." />
+				<h:outputText value="#{initTgpMB.atividadeAtual.dtFim}">
+					<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />
+				</h:outputText>
 
-		<h:panelGrid columns="2">
-			<h:outputLabel value="G.P. Resposável" />
-			<p:outputLabel value="#{initTgpMB.atividadeAtucal.gerente.nome}"></p:outputLabel>
-		</h:panelGrid>
 
-		<p:dataTable id="dataTableUserAtiv" var="usuativ"
-			value="#{initTgpMB.usuarioAtividades}" paginator="true" rows="5">
+				
+				<h:outputLabel value="Horas p/ Dia:" />
+				<p:outputLabel value="#{initTgpMB.configAtividadeAtual.quantHorasDias}" />
+					
+				
+				<h:outputLabel value="Feriados/Folgas no Periodo" />
+				<h:outputLabel value="#{atividadeMB.maxFeriados}" />
+				
+							
+				
+				<h:outputLabel	style="font-weight:bold;font-size:13px;cellpadding=5;" id="diasId"
+						value="Dias Trabalho Estimados: #{initTgpMB.usuarioAtividadeAtual.diasTrabalhados}" />
+				
+				<h:outputLabel	style="font-weight:bold;font-size:13px;padding-left: 50‒;cellpadding=5;padding-left: 10px;padding-right: 10;"
+						id="horasId"
+						value="Horas de Trabalho Estimadas: #{initTgpMB.usuarioAtividadeAtual.horasTrabalho}" />
+				
+				</h:panelGrid>
+				
+				<p:dataTable id="dataTableUserAtivaaa" var="usuativ"
+				value="#{initTgpMB.usuarioAtividades}" paginator="true" rows="5">
 
 
 
@@ -304,67 +331,41 @@
 			</p:column>
 
 		</p:dataTable>
-
+			
+		</p:panel>
+		
+		<p:spacer height="10px" ></p:spacer>
+		
+		<p:panel>
+			<f:facet name="header">
+            			Apropriação de Horas na Atividade
+  			</f:facet>
+			
+			<h:panelGrid columns="2" id="pgas" cellpadding="5">
+				
+				<h:outputLabel for="step" value="Horas Trabalhadas: " />
+        		<p:spinner id="step"  stepFactor="0.5" value="#{initTgpMB.usuarioAtividadeAtual.horasApropriadas}" />
+				
+				<h:outputLabel value="Percentual de Conclusão:" />
+				
+			    <h:panelGrid columns="1" id="sliderId"  style="margin-bottom: 10px">
+			        <h:outputText id="output" value="Aproximadamente %#{initTgpMB.percentApro}" />
+			        <h:inputHidden id="txt2" value="#{initTgpMB.percentApro}" />
+			        <p:slider for="txt2" display="output" style="width: 200px" displayTemplate="Aproximadamente %{value}" />
+			    </h:panelGrid>
+				
+			</h:panelGrid>
+			
+			<center>
+				<p:commandButton value="Save" ajax="true" process="@this" actionListener="#{initTgpMB.saveApro()}"  />
+				<p:commandButton value="Reset" />
+			</center>
+		</p:panel>	
 	</p:dialog>
 
-
-
-	
 
 </h:form>
 
-<p:dialog id="docsActiv" header="Documentos Atividade"   modal="true"
-		widgetVar="docsActiv" width="800px" height="300px" minimizable="true"
-		maximizable="true">
-		<h:form>
-		
-		<p:panel>
-	
-		
-		<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
-			value="#{initTgpMB.atividadeAtucal.docAtividades}" paginator="true"
-			rows="5">
-			<f:facet name="header">
-            			Documentos
-        			</f:facet>
-
-			<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc."
-				filterMatchMode="contains">
-				<h:outputText value="#{doc.nomeDoc}" />
-			</p:column>
-
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Desc. Doc" />
-				</f:facet>
-				<h:outputText value="#{doc.descDoc}" />
-			</p:column>
-
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="User" />
-				</f:facet>
-				<h:outputText value="#{doc.usuarioAtualizador}" />
-			</p:column>
-
-			<p:column headerText="Data Insert.">
-				<h:outputText value="#{doc.dataInsert}">
-					<f:convertDateTime locale="pt,BR" dateStyle="default"
-						pattern="dd/MM/yyyy" />
-				</h:outputText>
-			</p:column>
-				
-			<p:column headerText="Data Insert.">
-				<p:commandButton id="teste2ss" value="teste" ajax="false" process="@this" immediate="true" type="submit" actionListener="#{initTgpMB.teste()}" />
-			</p:column>
-			
-		</p:dataTable>
-		</p:panel>
-		<p:commandButton id="teste2" value="teste2" ajax="false" process="@this" immediate="true" type="submit" actionListener="#{initTgpMB.teste()}"/>
-		</h:form>
-		
-		
-	</p:dialog>
 
 
 

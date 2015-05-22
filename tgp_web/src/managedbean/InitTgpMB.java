@@ -1,11 +1,9 @@
 package managedbean;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -19,11 +17,9 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import model.Atividade;
@@ -36,10 +32,11 @@ import ejb.AtividadeFacade;
 import ejb.ConfigAtividadeFacade;
 import ejb.DocAtividadeFacade;
 import ejb.ProjetoFacade;
+import ejb.UsuarioAtividadeFacade;
 import ejb.UsuarioFacade;
 
 @ManagedBean(name="initTgpMB")
-@RequestScoped
+@ViewScoped
 public class InitTgpMB  implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
@@ -54,8 +51,10 @@ public class InitTgpMB  implements Serializable {
 	private UsuarioFacade usuarioFacade;
 	@EJB
 	private ConfigAtividadeFacade configAtividadeFacade;
-
-
+	@EJB
+	private UsuarioAtividadeFacade usuarioAtividadeFacade;
+	
+	
 	private Usuario usuario =  new  Usuario();
 	private Usuario usuarioSelectChat = new Usuario(); 
 	private List<Usuario> usarioList = new ArrayList<Usuario>();
@@ -63,8 +62,11 @@ public class InitTgpMB  implements Serializable {
 	private String[] nomesProjetos = null;  
 	private List<Projeto> listProjetos = null; 
 	private String[] prioridades = null;
-	private Atividade atividadeAtucal = new Atividade();
+	private Atividade atividadeAtual = new Atividade();
 	private List<UsuarioAtividade> usuarioAtividades = new ArrayList<UsuarioAtividade>();
+	private UsuarioAtividade usuarioAtividadeAtual = new UsuarioAtividade();
+	private ConfigAtividade configAtividadeAtual = new ConfigAtividade();
+	private int percentApro = 0;
 	
 	
 	public InitTgpMB() {
@@ -106,8 +108,11 @@ public class InitTgpMB  implements Serializable {
 		 prioridades[1] = "normal";
 		 prioridades[2] = "alta";
 		 
-		this.atividadeAtucal = new Atividade();
-		 
+		this.atividadeAtual = new Atividade();
+		this.usuarioAtividadeAtual = new UsuarioAtividade();
+		this.configAtividadeAtual = new ConfigAtividade();
+		this.percentApro = 80;
+		System.out.println("entro init");
 		
 	}
 	
@@ -182,23 +187,48 @@ public class InitTgpMB  implements Serializable {
 	
 	
 	
-	
+	@Deprecated
 	public void initUsuariosAtividade(Atividade atividade){
-		this.atividadeAtucal = atividade;
-		this.usuarioAtividades =  this.atividadeFacade.findUsuarioAtividade(this.atividadeAtucal.getAtividadeId());
+		this.atividadeAtual = atividade;
+		this.usuarioAtividades =  this.atividadeFacade.findUsuarioAtividade(this.atividadeAtual.getAtividadeId());
 		ConfigAtividade configAtividade = configAtividadeFacade.find(atividade.getConfigAtividade().getConfigAtividadeId());
 		
 		for (UsuarioAtividade usuarioAtividade : this.usuarioAtividades) {
 			this.calculaData(atividade.getDtIni(), atividade.getDtFim(), configAtividade, usuarioAtividade, usuarioAtividades.size());
 		}
-		
-		List<DocAtividade> docAtividades = atividadeFacade.findDocAtividade(this.atividadeAtucal.getAtividadeId());
-		
-		this.atividadeAtucal.setDocAtividades(docAtividades);
-		
+			
 	}
 	
 	
+	
+	public void initApropHoras(Atividade atividade){
+		this.atividadeAtual = atividade;
+		this.usuarioAtividades =  this.atividadeFacade.findUsuarioAtividade(this.atividadeAtual.getAtividadeId());
+		ConfigAtividade configAtividade = configAtividadeFacade.find(atividade.getConfigAtividade().getConfigAtividadeId());
+		this.configAtividadeAtual = configAtividade;
+		this.atividadeAtual.setConfigAtividade(configAtividade);
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+		Usuario usuario = (Usuario) session.getAttribute("user");
+		
+		if (usuario != null){
+			for (UsuarioAtividade usuarioAtividade : this.usuarioAtividades) {
+				this.calculaData(atividade.getDtIni(), atividade.getDtFim(), configAtividade, usuarioAtividade, usuarioAtividades.size());
+				if (usuarioAtividade.getUsuario().getUsuarioId() == usuario.getUsuarioId())	{
+					this.usuarioAtividadeAtual = usuarioAtividadeFacade.find(usuarioAtividade.getUsuarioAtividadeId());
+				}
+			}
+		}
+		
+		if (this.usuarioAtividadeAtual.getPercentConclusao() != null){
+			this.percentApro = this.usuarioAtividadeAtual.getPercentConclusao();
+		} else {
+			this.percentApro = 0;
+		}
+		
+		  
+	}
 	
 	
 	
@@ -266,66 +296,25 @@ public class InitTgpMB  implements Serializable {
 	}
 	
 	
-	public void downloadDoc(DocAtividade docAtividade) {
-
-		ServletContext sContext = (ServletContext) FacesContext.getCurrentInstance().getExternalContext().getContext();
-		String arquivo = sContext.getRealPath("/temp") + File.separator	+ docAtividade.getNomeDoc() + docAtividade.getExtensao();
-
-		File file = new File(arquivo);
-
-		try {
-			FileOutputStream fileOuputStream = new FileOutputStream(file);
-			fileOuputStream.write(docAtividade.getDoc());
-			fileOuputStream.close();
-
-			System.out.println("Done");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		String fileName = (docAtividade.getNomeDoc() + docAtividade.getExtensao());
-		
-		this.downloadFile(fileName, file, docAtividade.getTypeName(), FacesContext.getCurrentInstance());
-		
-	}
-		
-	
-	public void teste(){
-		
-		System.out.println("entrou...");
-	}
-	
-	public  void downloadFile(String filename, File file,String mimeType, FacesContext facesContext) {
-		FileInputStream in = null;
-		try {
-			ExternalContext context = facesContext.getExternalContext();
-			System.out.println("Aqui para baixar o " + filename);
-			HttpServletResponse response = (HttpServletResponse) context
-					.getResponse();
-			response.setHeader("Content-Disposition", "attachment;filename=\""
-					+ filename + "\"");
-			response.setContentLength((int) file.length());
-			response.setContentType(mimeType);
-			in = new FileInputStream(file);
-			OutputStream out = response.getOutputStream();
-			byte[] buf = new byte[(int) file.length()];
-			int count;
-			while ((count = in.read(buf)) >= 0) {
-				out.write(buf, 0, count);
-			}
-			facesContext.responseComplete();
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-	}
-	
-	
 	public void initDoc(Atividade ativ){
 		
 		FacesContext fc = FacesContext.getCurrentInstance();
 		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
 		session.setAttribute("ativId", ativ.getAtividadeId());
 	}
+	
+	
+	
+	public void  saveApro () {
+		System.out.println("entrou..........");
+		this.usuarioAtividadeAtual.setPercentConclusao(this.percentApro);
+		
+		UsuarioAtividade u = usuarioAtividadeFacade.find(this.usuarioAtividadeAtual.getUsuarioAtividadeId());
+		u.setPercentConclusao(this.percentApro);
+		
+		usuarioAtividadeFacade.update(u);
+	}
+	
 	
 	public UsuarioFacade getUsuarioFacade() {
 		return usuarioFacade;
@@ -439,13 +428,13 @@ public class InitTgpMB  implements Serializable {
 	}
 
 
-	public Atividade getAtividadeAtucal() {
-		return atividadeAtucal;
+	public Atividade getAtividadeAtual() {
+		return atividadeAtual;
 	}
 
 
-	public void setAtividadeAtucal(Atividade atividadeAtucal) {
-		this.atividadeAtucal = atividadeAtucal;
+	public void setAtividadeAtual(Atividade atividadeAtual) {
+		this.atividadeAtual = atividadeAtual;
 	}
 
 
@@ -456,6 +445,46 @@ public class InitTgpMB  implements Serializable {
 
 	public void setUsuarioAtividades(List<UsuarioAtividade> usuarioAtividades) {
 		this.usuarioAtividades = usuarioAtividades;
+	}
+
+
+	public ConfigAtividadeFacade getConfigAtividadeFacade() {
+		return configAtividadeFacade;
+	}
+
+
+	public void setConfigAtividadeFacade(ConfigAtividadeFacade configAtividadeFacade) {
+		this.configAtividadeFacade = configAtividadeFacade;
+	}
+
+
+	public UsuarioAtividade getUsuarioAtividadeAtual() {
+		return usuarioAtividadeAtual;
+	}
+
+
+	public void setUsuarioAtividadeAtual(UsuarioAtividade usuarioAtividadeAtual) {
+		this.usuarioAtividadeAtual = usuarioAtividadeAtual;
+	}
+
+
+	public ConfigAtividade getConfigAtividadeAtual() {
+		return configAtividadeAtual;
+	}
+
+
+	public void setConfigAtividadeAtual(ConfigAtividade configAtividadeAtual) {
+		this.configAtividadeAtual = configAtividadeAtual;
+	}
+
+
+	public int getPercentApro() {
+		return percentApro;
+	}
+
+
+	public void setPercentApro(int percentApro) {
+		this.percentApro = percentApro;
 	}
 
 	
