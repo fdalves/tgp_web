@@ -311,12 +311,14 @@
 
 </h:form>
 
-<p:dialog id="docsActiv" header="Documentos Atividade"  appendTo="@(body)" modal="true"
+<p:dialog id="docsActiv" header="Documentos Atividade"   modal="true"
 		widgetVar="docsActiv" width="800px" height="300px" minimizable="true"
 		maximizable="true">
 		<h:form>
 		
 		<p:panel>
+	
+		
 		<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
 			value="#{initTgpMB.atividadeAtucal.docAtividades}" paginator="true"
 			rows="5">

@@ -21,24 +21,15 @@
 		</f:facet>
 
 		<style type="text/css" media="screen">
-.ui-picklist .ui-picklist-list {
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-	overflow: auto;
-	height: 400px;
-	width: 400px;
-}
-
-.ui-widget, .ui-widget .ui-widget {
+.ui-widget,.ui-widget .ui-widget {
 	font-size: 11px !important;
 }
 
-.download {  
-    background-image: url("../imagens/download-icon.pn") !important;
-    height: 60px;
-	width: 60px;  
-}  
+.download {
+	background-image: url("../imagens/download-icon.pn") !important;
+	height: 60px;
+	width: 60px;
+}
 </style>
 
 	</h:head>
@@ -47,7 +38,7 @@
 
 
 <h:form id="form">
-	
+
 	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
 		togglerTipOpen="Close Me">
 		<pe:layoutPane position="north" size="80" closable="false">
@@ -55,360 +46,388 @@
 				height="100%" />
 		</pe:layoutPane>
 		<pe:layoutPane position="center">
-			<pe:layoutPane position="center"  >
-					
-	
-	<p:messages id="msgs" showDetail="false" closable="true"/>
-	<p:growl id="growl" showDetail="false" sticky="false" closable="true" life="3000" />
-	<center>
-	
-	<p:tabView id="tab1" dynamic="true" cache="true" style="width: 80%;">
-		<p:ajax event="tabChange" listener="#{projetoMB.onTabChange}"
-			update=":form:msgs" />
-
-		<p:tab title="Cadastro Projeto">
+			<pe:layoutPane position="center">
 
 
-			<p:panel id="cadProj" header="Cadastro Projeto">
-
-
-				<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
-
-					<h:outputLabel for="nomeprojId" value="Nome Projeto: *" />
-					<p:inputText id="nomeprojId"
-						value="#{projetoMB.projeto.nomeProjeto}" required="true"
-						maxlength="100" style="width: 500px;" />
-					<h:outputLabel for="siglaProjetoId" value="Sigla Projeto: *"
-						maxlength="10" />
-					<p:inputText id="siglaProjetoId"
-						value="#{projetoMB.projeto.siglaProjeto}" maxlength="100"
-						required="true" style="width: 500px;" />
-					<h:outputLabel value="Desc. Projeto:" />
-					<p:inputTextarea rows="5" cols="30" counter="display" style="width: 500px;"
-						maxlength="255" counterTemplate="{0} characters remaining."
-						autoResize="false" value="#{projetoMB.projeto.descProjeto}" />
-					<h:inputHidden id="hidden3" />
-					<h:outputText id="display" />
-
-					<p:outputLabel for="escopoFechadoId" value="Escopo Fechado:" />
-					<p:selectOneRadio id="escopoFechadoId"
-						value="#{projetoMB.projeto.escopoFecahdo}">
-						<p:ajax update=":form:tab1:dateId" process="@this" event="change" />
-						<f:selectItem itemLabel="Sim" itemValue="true" />
-						<f:selectItem itemLabel="Não" itemValue="false" />
-					</p:selectOneRadio>
-
-
-
-				</h:panelGrid>
-
-				<h:inputHidden id="hidden2" />
-				<p:panelGrid id="dateId" cellpadding="5" columns="5">
-					<p:outputLabel for="dt_ini" value="Data Inicio:"
-						rendered="#{projetoMB.projeto.escopoFecahdo}" />
-					<p:calendar id="dt_ini" value="#{projetoMB.projeto.data_ini}"
-						pattern="dd/MM/yyyy" mask="true"
-						rendered="#{projetoMB.projeto.escopoFecahdo}" />
-					<p:outputLabel style="padding-left: 20px;" for="dt_fim"
-						value="Data Final:" rendered="#{projetoMB.projeto.escopoFecahdo}" />
-					<p:calendar id="dt_fim" value="#{projetoMB.projeto.data_fim}"
-						pattern="dd/MM/yyyy" mask="true"
-						rendered="#{projetoMB.projeto.escopoFecahdo}" />
-				</p:panelGrid>
-
-				<p:separator></p:separator>
-
+				<p:messages id="msgs" showDetail="false" closable="true" />
+				<p:growl id="growl" showDetail="false" sticky="false"
+					closable="true" life="3000" />
 				<center>
-				
-					<p:commandButton value="Savar" update=":form:tab1:dataTable,:form:tab1:dataTableDoc,:form:tab1:cadDoc,:form:tab1:matchGrid,:form:tab1:cadProj,:form:tab1:projSelect2,:form:msgs,:form:growl,:form:tab1:projSelect" process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"  actionListener="#{projetoMB.salvar}" icon="ui-icon-check" validateClient="true" style="margin-right:10px"/>
-					<p:commandButton value="Limpar"
-						update=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs"
-						icon="ui-icon-close" process="@this" style="margin-right:20px;">
-						<p:resetInput target=":form:tab1:cadProj,:form:tab1:matchGrid" />
-						
-						
-					</p:commandButton>
-				</center>
 
-			</p:panel>
+					<p:tabView id="tab1" dynamic="true" cache="true"
+						style="width: 80%;">
+						<p:ajax event="tabChange" listener="#{projetoMB.onTabChange}"
+							update=":form:msgs" />
 
-			<p:spacer height="50" />
+						<p:tab title="Cadastro Projeto">
 
-			<p:panel >
 
-				<p:dataTable id="dataTable" var="pro"
-					value="#{projetoMB.projetosList}" paginator="true" rows="5">
-					<f:facet name="header">
+							<p:panel id="cadProj">
+
+
+								<h:panelGrid columns="2" id="matchGrid" cellpadding="5">
+
+									<h:outputLabel for="nomeprojId" value="Nome Projeto: *" />
+									<p:inputText id="nomeprojId"
+										value="#{projetoMB.projeto.nomeProjeto}" required="true"
+										maxlength="100" style="width: 500px;" />
+									<h:outputLabel for="siglaProjetoId" value="Sigla Projeto: *"
+										maxlength="10" />
+									<p:inputText id="siglaProjetoId"
+										value="#{projetoMB.projeto.siglaProjeto}" maxlength="100"
+										required="true" style="width: 500px;" />
+									<h:outputLabel value="Desc. Projeto:" />
+									<p:inputTextarea rows="5" cols="30" counter="display"
+										style="width: 500px;" maxlength="255"
+										counterTemplate="{0} characters remaining." autoResize="false"
+										value="#{projetoMB.projeto.descProjeto}" />
+									<h:inputHidden id="hidden3" />
+									<h:outputText id="display" />
+
+									<p:outputLabel for="escopoFechadoId" value="Escopo Fechado:" />
+									<p:selectOneRadio id="escopoFechadoId"
+										value="#{projetoMB.projeto.escopoFecahdo}">
+										<p:ajax update=":form:tab1:dateId" process="@this"
+											event="change" />
+										<f:selectItem itemLabel="Sim" itemValue="true" />
+										<f:selectItem itemLabel="Não" itemValue="false" />
+									</p:selectOneRadio>
+
+
+
+								</h:panelGrid>
+
+								<h:inputHidden id="hidden2" />
+								<p:panelGrid id="dateId" cellpadding="5" columns="5">
+									<p:outputLabel for="dt_ini" value="Data Inicio:"
+										rendered="#{projetoMB.projeto.escopoFecahdo}" />
+									<p:calendar id="dt_ini" value="#{projetoMB.projeto.data_ini}"
+										pattern="dd/MM/yyyy" mask="true"
+										rendered="#{projetoMB.projeto.escopoFecahdo}" />
+									<p:outputLabel style="padding-left: 20px;" for="dt_fim"
+										value="Data Final:"
+										rendered="#{projetoMB.projeto.escopoFecahdo}" />
+									<p:calendar id="dt_fim" value="#{projetoMB.projeto.data_fim}"
+										pattern="dd/MM/yyyy" mask="true"
+										rendered="#{projetoMB.projeto.escopoFecahdo}" />
+								</p:panelGrid>
+
+								<p:separator></p:separator>
+
+								<center>
+
+									<p:commandButton value="Savar"
+										update=":form:tab1:dataTable,:form:tab1:dataTableDoc,:form:tab1:cadDoc,:form:tab1:matchGrid,:form:tab1:cadProj,:form:tab1:projSelect2,:form:msgs,:form:growl,:form:tab1:projSelect"
+										process=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs,:form:growl"
+										actionListener="#{projetoMB.salvar}" icon="ui-icon-check"
+										validateClient="true" style="margin-right:10px" />
+									<p:commandButton value="Limpar"
+										update=":form:tab1:cadProj,:form:tab1:matchGrid,:form:msgs"
+										icon="ui-icon-close" process="@this"
+										style="margin-right:20px;">
+										<p:resetInput target=":form:tab1:cadProj,:form:tab1:matchGrid" />
+
+
+									</p:commandButton>
+								</center>
+
+							</p:panel>
+
+							<p:spacer height="50" />
+
+							<p:panel>
+
+								<p:dataTable id="dataTable" var="pro"
+									value="#{projetoMB.projetosList}" paginator="true" rows="5">
+									<f:facet name="header">
             		Projetos
         			</f:facet>
 
 
-					<p:column filterBy="#{pro.nomeProjeto}" headerText="Nome"
-						 filterMatchMode="contains">
-						<h:outputText value="#{pro.nomeProjeto}" />
-					</p:column>
+									<p:column filterBy="#{pro.nomeProjeto}" headerText="Nome"
+										filterMatchMode="contains">
+										<h:outputText value="#{pro.nomeProjeto}" />
+									</p:column>
 
 
-					<p:column filterBy="#{pro.siglaProjeto}" headerText="Sigla Projeto"
-						 filterMatchMode="contains">
-						<h:outputText value="#{pro.siglaProjeto}" />
-					</p:column>
+									<p:column filterBy="#{pro.siglaProjeto}"
+										headerText="Sigla Projeto" filterMatchMode="contains">
+										<h:outputText value="#{pro.siglaProjeto}" />
+									</p:column>
 
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Desc. projeto" />
-						</f:facet>
-						<h:outputText value="#{pro.descProjeto}" />
-					</p:column>
-
-
-
-					<p:column style="width:80px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Escopo Fechado" />
-						</f:facet>
-						<center>
-							<p:graphicImage url="../imagens/green-fa-check-circle.png"
-								width="20px" height="20px" rendered="#{pro.escopoFecahdo}" />
-							<p:graphicImage url="../imagens/red-fa-times-circle.png"
-								width="20px" height="20px" rendered="#{pro.escopoFecahdo}}" />
-						</center>
-					</p:column>
-
-					<p:column headerText="Data Ini"
-						style="width:110px;text-align: center">
-						<p:inputMask id="date" value="#{pro.data_ini}"
-							style="width:100px;" readonly="true" mask="99/99/9999" />
-					</p:column>
-
-					<p:column headerText="Data Fim"
-						style="width:110px;text-align: center">
-						<p:inputMask id="datefim" value="#{pro.data_fim}"
-							style="width:100px;" readonly="true" mask="99/99/9999" />
-					</p:column>
-
-
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Editar" />
-						</f:facet>
-						<p:commandButton process="@this" ajax="true" 
-							update=":form:tab1:dataTable,:form:tab1:matchGrid,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect" icon="ui-icon-pencil"
-							title="Editar">
-							<f:setPropertyActionListener value="#{pro}"
-								target="#{projetoMB.projeto}" />
-						</p:commandButton>
-					</p:column>
-
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Excluir" />
-						</f:facet>
-
-						<p:commandButton icon="ui-icon-trash" title="Excluir"
-							update=":form:tab1:dataTable,:form:msgs,:form:growl,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect"
-							process="@this" ajax="true" action="#{projetoMB.excluir(pro)}"
-							immediate="true">
-							<p:confirm header="Confirmação Exclusão"
-								message="Você tem certeza?" icon="ui-icon-alert" />
-						</p:commandButton>
-					</p:column>
-
-				</p:dataTable>
-
-				<p:confirmDialog global="true" showEffect="fade"
-					hideEffect="explode">
-					<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
-						icon="ui-icon-check" />
-					<p:commandButton value="No" type="button"
-						styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-				</p:confirmDialog>
-
-			</p:panel>
-
-
-		</p:tab>
-		<p:tab title="Recursos do projeto" id="tab2">
-			
-			<p:panel id="cadrec" header="Cadastro Recursos">
-			
-			<h:panelGrid id="grid2" columns="2" cellpadding="10">
-				<h:outputText value="Projetos Cadastrados* :" />
-
-				<p:selectOneMenu id="projSelect"
-					value="#{projetoMB.projetoSelecionadoAba2}" filter="true"
-					filterMatchMode="startsWith" effect="fade" style="width:400px">
-
-					<f:selectItem itemLabel="Select One" itemValue="" />
-					<f:selectItems value="#{projetoMB.projetoSelectItems}" />
-					<f:ajax listener="#{projetoMB.selectProjeto()}" execute="@this"
-						render=":form:tab1:usuarios" />
-				</p:selectOneMenu>
-
-				<h:outputText value="Recursos Cadastrados* :" />
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Desc. projeto" />
+										</f:facet>
+										<h:outputText value="#{pro.descProjeto}" />
+									</p:column>
 
 
 
-				<p:pickList iconOnly="true" id="usuarios"
-					converter="usuarioConverter" showSourceControls="true"
-					showTargetControls="true" showCheckbox="true"
-					showSourceFilter="true" showTargetFilter="true"
-					filterMatchMode="contains" addAllLabel="Adicionar todos Usuários"
-					addLabel="Adionar Selecionado" removeLabel="Remover Usuário"
-					removeAllLabel="Remover todos Usuários" effect="bounce"
-					value="#{projetoMB.usuListModel}" var="usuario"
-					itemLabel="#{usuario.nome}" itemValue="#{usuario}">
+									<p:column style="width:80px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Escopo Fechado" />
+										</f:facet>
+										<center>
+											<p:graphicImage url="../imagens/green-fa-check-circle.png"
+												width="20px" height="20px" rendered="#{pro.escopoFecahdo}" />
+											<p:graphicImage url="../imagens/red-fa-times-circle.png"
+												width="20px" height="20px" rendered="#{pro.escopoFecahdo}}" />
+										</center>
+									</p:column>
 
-					<f:facet name="sourceCaption">Recursos Disponiveis</f:facet>
-					<f:facet name="targetCaption">Recursos Alocados No Projeto</f:facet>
+									<p:column headerText="Data Ini"
+										style="width:110px;text-align: center">
+										<p:inputMask id="date" value="#{pro.data_ini}"
+											style="width:100px;" readonly="true" mask="99/99/9999" />
+									</p:column>
 
-					<p:column style="width:15%">
-						<p:graphicImage url="../temp/#{usuario.usuarioId}.jpg"
-							width="60px" height="60px" />
-					</p:column>
+									<p:column headerText="Data Fim"
+										style="width:110px;text-align: center">
+										<p:inputMask id="datefim" value="#{pro.data_fim}"
+											style="width:100px;" readonly="true" mask="99/99/9999" />
+									</p:column>
 
-					<p:column style="width:85%;">
-						<h:outputText value="#{usuario.nome}" />
-					</p:column>
 
-				</p:pickList>
+									<p:column style="width:55px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Editar" />
+										</f:facet>
+										<p:commandButton process="@this" ajax="true"
+											update=":form:tab1:dataTable,:form:tab1:matchGrid,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect"
+											icon="ui-icon-pencil" title="Editar">
+											<f:setPropertyActionListener value="#{pro}"
+												target="#{projetoMB.projeto}" />
+										</p:commandButton>
+									</p:column>
 
-			</h:panelGrid>
-			</p:panel>
-			
-			<p:separator></p:separator>
-			<p:spacer></p:spacer>
-			<center>
+									<p:column style="width:55px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Excluir" />
+										</f:facet>
 
-				<p:commandButton id='varassociate'
-					actionListener="#{projetoMB.salvarUsuariosProjeto()}" value="Save"
-					icon="ui-icon-check" process="@this,:form:tab1:usuarios"
-					update=":form:msgs,:form:growl,:form:tab1:dataTableDoc" />
+										<p:commandButton icon="ui-icon-trash" title="Excluir"
+											update=":form:tab1:dataTable,:form:msgs,:form:growl,:form:tab1:dataTableDoc,:form:tab1:projSelect2,:form:tab1:projSelect"
+											process="@this" ajax="true"
+											action="#{projetoMB.excluir(pro)}" immediate="true">
+											<p:confirm header="Confirmação Exclusão"
+												message="Você tem certeza?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
 
-				<p:commandButton value="Limpar" icon="ui-icon-close"
-					actionListener="#{projetoMB.ini()}"
-					update=":form:tab1:cadProj,:form:tab1:grid2,:form:msgs,:form:growl"
-					process="@this" style="margin-right:20px;">
-					<p:resetInput target=":form:tab1:matchGrid,:form:tab1:grid2" />
-				</p:commandButton>
+								</p:dataTable>
 
-			</center>
+								<p:confirmDialog global="true" showEffect="fade"
+									hideEffect="explode">
+									<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+										icon="ui-icon-check" />
+									<p:commandButton value="No" type="button"
+										styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+								</p:confirmDialog>
 
-		</p:tab>
-		<p:tab title="Documentos do Projeto">
-			
-			<p:panel id="cadDoc" header="Cadastro Documentos">
-			<h:panelGrid id="grid3" columns="2" cellpadding="10">
-			
-			<h:outputText value="Projetos Cadastrados* :" />
-			<p:selectOneMenu id="projSelect2" required="true"
-					value="#{projetoMB.projetoSelecionadoAba3}" filter="true"
-					filterMatchMode="startsWith" effect="fade" style="width:300px" requiredMessage="Selecione Um Projeto">
-					
-					<f:selectItem itemLabel="Select One" itemValue="" />
-					<f:selectItems value="#{projetoMB.projetoSelectItems}" />
-					<f:ajax  execute="@this"/>
-				</p:selectOneMenu>
-				
-			<h:outputLabel for="docName" value="Nome Documento: *" />
-			<p:inputText id="docName" value="#{projetoMB.docProjeto.nomeDoc}"
-				required="true" maxlength="100" style="width: 300px;" requiredMessage="informe nome do documento" />
-			
-			
-			<h:outputLabel value="Desc. Documento:" />
-					<p:inputTextarea rows="5" style="width: 300px;" cols="30" counter="display2"
-						maxlength="255" counterTemplate="{0} characters remaining."
-						autoResize="false" value="#{projetoMB.docProjeto.descDoc}" />
-					<h:inputHidden id="hidden4" />
-					<h:outputText id="display2" />
-			
-			<h:outputLabel value="Documento: *" />
-			<p:fileUpload fileUploadListener="#{projetoMB.handleFileUpload}" required="true" requiredMessage="carregue um documento"
-				mode="advanced" dragDropSupport="true" update=":form:msgs"
-				sizeLimit="1000000000" />
-				
-				
-			</h:panelGrid>
-			</p:panel>
-			
-			
-			<center>
-			<p:commandButton value="salvar" update=":form:tab1:grid3,:form:tab1:dataTableDoc,:form:msgs,:form:growl" process="@this,:form:tab1:grid3" icon="ui-icon-check"  acvalidateClient="true"  actionListener="#{projetoMB.salvarDoc()}" style="margin-right:10px"/>
-			<p:commandButton value="Limpar"	update=":form:tab1:grid3,:form:msgs" actionListener="#{projetoMB.ini()}"
-						icon="ui-icon-close" process="@this" style="margin-right:20px;">
-						<p:resetInput target=":form:tab1:grid3,:form:msgs" />
-			</p:commandButton>
-			</center>
-			<p:separator></p:separator>
-			<p:spacer height="50"/>
-			<p:panel>
+							</p:panel>
 
-				<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
-					value="#{projetoMB.docProjetosList}" paginator="true" rows="5">
-					<f:facet name="header">
+
+						</p:tab>
+						<p:tab title="Recursos do projeto" id="tab2">
+
+							<p:panel id="cadrec">
+
+								<h:panelGrid id="grid2" columns="2">
+									<h:outputText value="Projetos Cadastrados* :" />
+
+									<p:selectOneMenu id="projSelect"
+										value="#{projetoMB.projetoSelecionadoAba2}" filter="true"
+										filterMatchMode="startsWith" effect="fade">
+
+										<f:selectItem itemLabel="Select One" itemValue="" />
+										<f:selectItems value="#{projetoMB.projetoSelectItems}" />
+										<f:ajax listener="#{projetoMB.selectProjeto()}"
+											execute="@this" render=":form:tab1:usuarios" />
+									</p:selectOneMenu>
+								</h:panelGrid>
+								<p:spacer height="10px"></p:spacer>
+								<h:panelGroup>
+									<p:pickList iconOnly="true" id="usuarios"
+										converter="usuarioConverter" showSourceControls="true"
+										showTargetControls="true" showCheckbox="true"
+										showSourceFilter="true" showTargetFilter="true"
+										filterMatchMode="contains"
+										addAllLabel="Adicionar todos Usuários"
+										addLabel="Adionar Selecionado" removeLabel="Remover Usuário"
+										removeAllLabel="Remover todos Usuários" effect="bounce"
+										value="#{projetoMB.usuListModel}" var="usuario"
+										itemLabel="#{usuario.nome}" itemValue="#{usuario}">
+
+										<f:facet name="sourceCaption">Recursos Disponiveis</f:facet>
+										<f:facet name="targetCaption">Recursos Alocados No Projeto</f:facet>
+
+										<p:column style="width:15%">
+											<p:graphicImage url="../temp/#{usuario.usuarioId}.jpg"
+												width="60px" height="60px" />
+										</p:column>
+
+										<p:column style="width:85%;">
+											<h:outputText value="#{usuario.nome}" />
+										</p:column>
+
+									</p:pickList>
+								</h:panelGroup>
+
+							</p:panel>
+
+							<p:spacer height="10px"></p:spacer>
+							<center>
+
+								<p:commandButton id='varassociate'
+									actionListener="#{projetoMB.salvarUsuariosProjeto()}"
+									value="Save" icon="ui-icon-check"
+									process="@this,:form:tab1:usuarios"
+									update=":form:msgs,:form:growl,:form:tab1:dataTableDoc" />
+
+								<p:commandButton value="Limpar" icon="ui-icon-close"
+									actionListener="#{projetoMB.ini()}"
+									update=":form:tab1:cadProj,:form:tab1:grid2,:form:msgs,:form:growl"
+									process="@this" style="margin-right:20px;">
+									<p:resetInput target=":form:tab1:matchGrid,:form:tab1:grid2" />
+								</p:commandButton>
+
+							</center>
+
+						</p:tab>
+						<p:tab title="Documentos do Projeto">
+
+							<p:panel id="cadDoc">
+								<h:panelGrid id="grid3" columns="2" cellpadding="10">
+
+									<h:outputText value="Projetos Cadastrados* :" />
+									<p:selectOneMenu id="projSelect2" required="true"
+										value="#{projetoMB.projetoSelecionadoAba3}" filter="true"
+										filterMatchMode="startsWith" effect="fade" style="width:300px"
+										requiredMessage="Selecione Um Projeto">
+
+										<f:selectItem itemLabel="Select One" itemValue="" />
+										<f:selectItems value="#{projetoMB.projetoSelectItems}" />
+										<f:ajax execute="@this" />
+									</p:selectOneMenu>
+
+									<h:outputLabel for="docName" value="Nome Documento: *" />
+									<p:inputText id="docName"
+										value="#{projetoMB.docProjeto.nomeDoc}" required="true"
+										maxlength="100" style="width: 300px;"
+										requiredMessage="informe nome do documento" />
+
+
+									<h:outputLabel value="Desc. Documento:" />
+									<p:inputTextarea rows="5" style="width: 300px;" cols="30"
+										counter="display2" maxlength="255"
+										counterTemplate="{0} characters remaining." autoResize="false"
+										value="#{projetoMB.docProjeto.descDoc}" />
+									<h:inputHidden id="hidden4" />
+									<h:outputText id="display2" />
+
+									<h:outputLabel value="Documento: *" />
+									<p:fileUpload
+										fileUploadListener="#{projetoMB.handleFileUpload}"
+										required="true" requiredMessage="carregue um documento"
+										mode="advanced" dragDropSupport="true" update=":form:msgs"
+										sizeLimit="1000000000" />
+
+
+								</h:panelGrid>
+							</p:panel>
+							<p:spacer height="10px"></p:spacer>
+
+							<center>
+								<p:commandButton value="salvar"
+									update=":form:tab1:grid3,:form:tab1:dataTableDoc,:form:msgs,:form:growl"
+									process="@this,:form:tab1:grid3" icon="ui-icon-check"
+									acvalidateClient="true"
+									actionListener="#{projetoMB.salvarDoc()}"
+									style="margin-right:10px" />
+								<p:commandButton value="Limpar"
+									update=":form:tab1:grid3,:form:msgs"
+									actionListener="#{projetoMB.ini()}" icon="ui-icon-close"
+									process="@this" style="margin-right:20px;">
+									<p:resetInput target=":form:tab1:grid3,:form:msgs" />
+								</p:commandButton>
+							</center>
+							<p:separator></p:separator>
+							<p:spacer height="50" />
+							<p:panel>
+
+								<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable"
+									value="#{projetoMB.docProjetosList}" paginator="true" rows="5">
+									<f:facet name="header">
             			Documentos
         			</f:facet>
-        			
-        	<p:column filterBy="#{doc.projeto.nomeProjeto}" headerText="Projetos"  filterMatchMode="exact">
-            <f:facet name="filter">
-                <p:selectOneMenu onchange="PF('docTable').filter()"  >
-                    <f:selectItem itemLabel="Select One" itemValue="#{null}" noSelectionOption="true" />
-                    <f:selectItems value="#{projetoMB.nomesProjetos}"  />
-                </p:selectOneMenu>
-            </f:facet>
-            <h:outputText value="#{doc.projeto.nomeProjeto}" />
-        	
-        	</p:column>
-					<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
-						<h:outputText value="#{doc.nomeDoc}" />
-					</p:column>
-					
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Desc. Doc" />
-						</f:facet>
-						<h:outputText value="#{doc.descDoc}" />
-					</p:column>
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Donwload" />
-						</f:facet>
-						<p:commandButton icon="fa fa-download" action="#{projetoMB.downloadDoc(doc)}" process="@this" ajax="false" type="submit" immediate="true"/>
-					</p:column>
-					
-					
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Editar" />
-						</f:facet>
-						<p:commandButton process="@this" ajax="true"
-							update=":form:tab1:grid3" icon="ui-icon-pencil" actionListener="#{projetoMB.setProjetoDoc(doc)}"
-							title="Editar">
-							<f:setPropertyActionListener value="#{doc}"
-								target="#{projetoMB.docProjeto}" />
-						</p:commandButton>
-					</p:column>
 
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Excluir" />
-						</f:facet>
+									<p:column filterBy="#{doc.projeto.nomeProjeto}"
+										headerText="Projetos" filterMatchMode="exact">
+										<f:facet name="filter">
+											<p:selectOneMenu onchange="PF('docTable').filter()">
+												<f:selectItem itemLabel="Select One" itemValue="#{null}"
+													noSelectionOption="true" />
+												<f:selectItems value="#{projetoMB.nomesProjetos}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<h:outputText value="#{doc.projeto.nomeProjeto}" />
 
-						<p:commandButton icon="ui-icon-trash" title="Excluir"
-							update=":form:tab1:dataTableDoc,:form:msgs,:form:growl"
-							process="@this" ajax="true" action="#{projetoMB.excluirDoc(doc)}"
-							immediate="true">
-							<p:confirm header="Confirmação Exclusão"
-								message="Você tem certeza?" icon="ui-icon-alert" />
-						</p:commandButton>
-					</p:column>
-       			</p:dataTable>
-      		</p:panel>
-		</p:tab>
-	</p:tabView>
-	</center>
-	
-	</pe:layoutPane>
+									</p:column>
+									<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc."
+										filterMatchMode="contains">
+										<h:outputText value="#{doc.nomeDoc}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Desc. Doc" />
+										</f:facet>
+										<h:outputText value="#{doc.descDoc}" />
+									</p:column>
+									<p:column style="width:55px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Donwload" />
+										</f:facet>
+										<p:commandButton icon="fa fa-download"
+											action="#{projetoMB.downloadDoc(doc)}" process="@this"
+											ajax="false" type="submit" immediate="true" />
+									</p:column>
+
+
+									<p:column style="width:55px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Editar" />
+										</f:facet>
+										<p:commandButton process="@this" ajax="true"
+											update=":form:tab1:grid3" icon="ui-icon-pencil"
+											actionListener="#{projetoMB.setProjetoDoc(doc)}"
+											title="Editar">
+											<f:setPropertyActionListener value="#{doc}"
+												target="#{projetoMB.docProjeto}" />
+										</p:commandButton>
+									</p:column>
+
+									<p:column style="width:55px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Excluir" />
+										</f:facet>
+
+										<p:commandButton icon="ui-icon-trash" title="Excluir"
+											update=":form:tab1:dataTableDoc,:form:msgs,:form:growl"
+											process="@this" ajax="true"
+											action="#{projetoMB.excluirDoc(doc)}" immediate="true">
+											<p:confirm header="Confirmação Exclusão"
+												message="Você tem certeza?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
+								</p:dataTable>
+							</p:panel>
+						</p:tab>
+					</p:tabView>
+				</center>
+
+			</pe:layoutPane>
 
 		</pe:layoutPane>
 		<pe:layoutPane position="west" size="320">
@@ -436,7 +455,7 @@
 		</pe:layoutPane>
 
 	</pe:layout>
-	
+
 </h:form>
 
 </html>
