@@ -25,10 +25,7 @@ import model.Usuario;
 import org.primefaces.event.FileUploadEvent;
 
 import ejb.AtividadeFacade;
-import ejb.ConfigAtividadeFacade;
 import ejb.DocAtividadeFacade;
-import ejb.ProjetoFacade;
-import ejb.UsuarioFacade;
 
 @ManagedBean(name="docMB")
 @ViewScoped
