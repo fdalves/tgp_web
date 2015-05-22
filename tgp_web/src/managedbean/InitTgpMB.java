@@ -290,6 +290,11 @@ public class InitTgpMB  implements Serializable {
 	}
 		
 	
+	public void teste(){
+		
+		System.out.println("entrou...");
+	}
+	
 	public  void downloadFile(String filename, File file,String mimeType, FacesContext facesContext) {
 		FileInputStream in = null;
 		try {

@@ -127,9 +127,9 @@
 
 					<p:column headerText="Docs." style="text-align: center;">
 						<p:commandButton icon="fa fa-file" value="Docs." ajax="true"
-							process="@this,:form:docsActiv"
+							process="@this" update="docsActiv"
 							actionListener="#{initTgpMB.initUsuariosAtividade(ativ)}"
-							update=":form:docsActiv" oncomplete="PF('docsActiv').show()">
+							 oncomplete="PF('docsActiv').show()">
 							<f:setPropertyActionListener value="#{ativ}"
 								target="#{initTgpMB.atividadeAtucal}" />
 						</p:commandButton>
@@ -307,11 +307,17 @@
 
 
 
-	<p:dialog id="docsActiv" header="Documentos Atividade"
+	
+
+</h:form>
+
+<p:dialog id="docsActiv" header="Documentos Atividade"  appendTo="@(body)" modal="true"
 		widgetVar="docsActiv" width="800px" height="300px" minimizable="true"
 		maximizable="true">
-
-		<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable"
+		<h:form>
+		
+		<p:panel>
+		<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
 			value="#{initTgpMB.atividadeAtucal.docAtividades}" paginator="true"
 			rows="5">
 			<f:facet name="header">
@@ -343,23 +349,21 @@
 						pattern="dd/MM/yyyy" />
 				</h:outputText>
 			</p:column>
-
-			<p:column style="width:55px;text-align: center">
-				<f:facet name="header">
-					<h:outputText value="Donwload" />
-				</f:facet>
-				<p:commandButton icon="fa fa-download"
-					actionListener="#{initTgpMB.downloadDoc(doc)}" />
+				
+			<p:column headerText="Data Insert.">
+				<p:commandButton id="teste2ss" value="teste" ajax="false" process="@this" immediate="true" type="submit" actionListener="#{initTgpMB.teste()}" />
 			</p:column>
-
-
+			
 		</p:dataTable>
-
+		</p:panel>
+		<p:commandButton id="teste2" value="teste2" ajax="false" process="@this" immediate="true" type="submit" actionListener="#{initTgpMB.teste()}"/>
+		</h:form>
+		
+		
 	</p:dialog>
 
 
 
-</h:form>
 
 
 
