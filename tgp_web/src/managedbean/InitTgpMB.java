@@ -319,6 +319,14 @@ public class InitTgpMB  implements Serializable {
 		}
 	}
 	
+	
+	public void initDoc(Atividade ativ){
+		
+		FacesContext fc = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+		session.setAttribute("ativId", ativ.getAtividadeId());
+	}
+	
 	public UsuarioFacade getUsuarioFacade() {
 		return usuarioFacade;
 	}

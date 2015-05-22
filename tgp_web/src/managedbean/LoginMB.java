@@ -18,6 +18,7 @@ import ejb.UsuarioFacade;
 @SessionScoped
 public class LoginMB  implements Serializable {
 	
+	private String hostName = "localhost";
 	private static final long serialVersionUID = 1L;
 	
 	@EJB
@@ -25,6 +26,8 @@ public class LoginMB  implements Serializable {
 	private Usuario usuario =  new  Usuario();
 	private String login = new String();
 	private String senha = new String();
+	
+	
 	
 	
 	public LoginMB() {
@@ -105,7 +108,18 @@ public class LoginMB  implements Serializable {
 	public void setSenha(String senha) {
 		this.senha = senha;
 	}
-	
+
+
+	public String getHostName() {
+		return hostName;
+	}
+
+
+	public void setHostName(String hostName) {
+		this.hostName = hostName;
+	}
+
+
 	
 	
 	

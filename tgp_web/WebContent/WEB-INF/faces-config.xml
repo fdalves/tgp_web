@@ -55,6 +55,10 @@
   <referenced-bean-name>meetingMB</referenced-bean-name>
   <referenced-bean-class>managedbean.MeetingMB</referenced-bean-class>
  </referenced-bean>
+ <referenced-bean>
+  <referenced-bean-name>docMB</referenced-bean-name>
+  <referenced-bean-class>managedbean.DocMB</referenced-bean-class>
+ </referenced-bean>
  <validator>
   <validator-id>custom.emailValidator</validator-id>
   <validator-class>util.EmailValidator</validator-class>
