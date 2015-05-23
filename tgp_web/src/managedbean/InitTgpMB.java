@@ -66,7 +66,6 @@ public class InitTgpMB  implements Serializable {
 	private List<UsuarioAtividade> usuarioAtividades = new ArrayList<UsuarioAtividade>();
 	private UsuarioAtividade usuarioAtividadeAtual = new UsuarioAtividade();
 	private ConfigAtividade configAtividadeAtual = new ConfigAtividade();
-	private int percentApro = 0;
 	
 	
 	public InitTgpMB() {
@@ -111,8 +110,7 @@ public class InitTgpMB  implements Serializable {
 		this.atividadeAtual = new Atividade();
 		this.usuarioAtividadeAtual = new UsuarioAtividade();
 		this.configAtividadeAtual = new ConfigAtividade();
-		this.percentApro = 80;
-		System.out.println("entro init");
+		
 		
 	}
 	
@@ -217,19 +215,13 @@ public class InitTgpMB  implements Serializable {
 				this.calculaData(atividade.getDtIni(), atividade.getDtFim(), configAtividade, usuarioAtividade, usuarioAtividades.size());
 				if (usuarioAtividade.getUsuario().getUsuarioId() == usuario.getUsuarioId())	{
 					this.usuarioAtividadeAtual = usuarioAtividadeFacade.find(usuarioAtividade.getUsuarioAtividadeId());
+					this.usuarioAtividadeAtual.setHorasTrabalho(usuarioAtividade.getHorasTrabalho());
+					this.usuarioAtividadeAtual.setDiasTrabalhados(usuarioAtividade.getDiasTrabalhados());
 				}
 			}
 		}
 		
-		if (this.usuarioAtividadeAtual.getPercentConclusao() != null){
-			this.percentApro = this.usuarioAtividadeAtual.getPercentConclusao();
-		} else {
-			this.percentApro = 0;
-		}
-		
-		  
-	}
-	
+	}	
 	
 	
 	private void calculaData(Date dtIni, Date dtFim,  ConfigAtividade configAtividade, UsuarioAtividade usuarioAtividade,Integer quantUser){
@@ -260,7 +252,7 @@ public class InitTgpMB  implements Serializable {
 	        
 	       
         	if (configAtividade.getQuantDiasFolgaFeriado() >= diasT ){
-        		String info = "Verifique a configuraÃ§Ã£o de Dias Ãšteis";
+        		String info = "Verifique a configuração de dias úteis";
     			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
         		return;
         	}
@@ -306,14 +298,16 @@ public class InitTgpMB  implements Serializable {
 	
 	
 	public void  saveApro () {
-		System.out.println("entrou..........");
-		this.usuarioAtividadeAtual.setPercentConclusao(this.percentApro);
-		
 		UsuarioAtividade u = usuarioAtividadeFacade.find(this.usuarioAtividadeAtual.getUsuarioAtividadeId());
-		u.setPercentConclusao(this.percentApro);
-		
+		u.setPercentConclusao(this.usuarioAtividadeAtual.getPercentConclusao());
+		u.setHorasApropriadas(this.usuarioAtividadeAtual.getHorasApropriadas());
 		usuarioAtividadeFacade.update(u);
+		this.initApropHoras(this.getAtividadeAtual());
+		String info = "Apropiação de Horas atualizada com sucesso!";
+		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	}
+	
+	
 	
 	
 	public UsuarioFacade getUsuarioFacade() {
@@ -477,17 +471,6 @@ public class InitTgpMB  implements Serializable {
 		this.configAtividadeAtual = configAtividadeAtual;
 	}
 
-
-	public int getPercentApro() {
-		return percentApro;
-	}
-
-
-	public void setPercentApro(int percentApro) {
-		this.percentApro = percentApro;
-	}
-
-	
 
 	
 }

@@ -132,7 +132,7 @@
 
 					<p:column headerText="Apropriação H." style="text-align: center;">
 						<p:commandButton icon="fa fa-pencil-square-o" value="Aprop." actionListener="#{initTgpMB.initApropHoras(ativ)}"
-							process="@this" update=":form:apropAtiv,:form:output,:form:txt2" 
+							process="@this"  update=":form:pgas,:form:apropAtiv" 
 							oncomplete="PF('dlApropAtiv').show()">
 							<f:setPropertyActionListener value="#{ativ}"
 								target="#{initTgpMB.atividadeAtual}" />
@@ -272,7 +272,7 @@
 	
 
    <p:dialog id="apropAtiv" header="Apropriação de Horas"   
-		widgetVar="dlApropAtiv" width="800px" height="700px" minimizable="true"
+		widgetVar="dlApropAtiv" width="800px" height="500px" minimizable="true"
 		maximizable="true">
 		<p:panel>
 			<f:facet name="header">
@@ -314,7 +314,7 @@
 				</h:panelGrid>
 				
 				<p:dataTable id="dataTableUserAtivaaa" var="usuativ"
-				value="#{initTgpMB.usuarioAtividades}" paginator="true" rows="5">
+				value="#{initTgpMB.usuarioAtividades}" paginator="true" rows="2">
 
 
 
@@ -349,16 +349,16 @@
 				<h:outputLabel value="Percentual de Conclusão:" />
 				
 			    <h:panelGrid columns="1" id="sliderId"  style="margin-bottom: 10px">
-			        <h:outputText id="output" value="Aproximadamente %#{initTgpMB.percentApro}" />
-			        <h:inputHidden id="txt2" value="#{initTgpMB.percentApro}" />
-			        <p:slider for="txt2" display="output" style="width: 200px" displayTemplate="Aproximadamente %{value}" />
+			        <h:outputText id="output" value="#{initTgpMB.usuarioAtividadeAtual.percentConclusao} % Concluído"  />
+			        <h:inputHidden id="txt2" value="#{initTgpMB.usuarioAtividadeAtual.percentConclusao}" />
+			        <p:slider for="txt2" display="output" style="width: 200px" displayTemplate="{value} % Concluído" />
 			    </h:panelGrid>
+				
 				
 			</h:panelGrid>
 			
 			<center>
-				<p:commandButton value="Save" ajax="true" process="@this" actionListener="#{initTgpMB.saveApro()}"  />
-				<p:commandButton value="Reset" />
+				<p:commandButton value="Save" ajax="true" process="@this,:form:pgas"  update=":form:messages,:form:pgPop,:form:dataTableUserAtivaaa" actionListener="#{initTgpMB.saveApro()}"  />
 			</center>
 		</p:panel>	
 	</p:dialog>
