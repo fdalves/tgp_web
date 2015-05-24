@@ -27,6 +27,20 @@
    <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/pages/crudProjeto.xhtml</from-view-id>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/pages/crudUsuario.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>go_proj</from-outcome>
+   <to-view-id>/pages/crudProjeto.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativ</from-outcome>
+   <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
  <referenced-bean>
   <referenced-bean-name>usuarioMB</referenced-bean-name>
   <referenced-bean-class>managedbean.UsuarioMB</referenced-bean-class>

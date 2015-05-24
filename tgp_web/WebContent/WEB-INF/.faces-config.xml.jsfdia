@@ -25,12 +25,24 @@
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudUsuario.xhtml"
-  PATH="/pages/crudUsuario.xhtml" SHAPE="472,96,50,25"
-  model-entity="JSFProcessGroup" persistent="true"/>
+  PATH="/pages/crudUsuario.xhtml" SHAPE="496,40,50,41" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#crudUsuario.xhtml:0" NAME="item"
+   PATH="/pages/crudUsuario.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
+    NAME="output" PATH="/pages/crudProjeto.xhtml"
+    TARGET="rules:#pages#crudProjeto.xhtml" TITLE="go_proj" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
+    NAME="output1" PATH="/pages/crudAtividade.xhtml"
+    TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudProjeto.xhtml"
-  PATH="/pages/crudProjeto.xhtml" SHAPE="472,160,50,25"
-  model-entity="JSFProcessGroup" persistent="true"/>
+  PATH="/pages/crudProjeto.xhtml" SHAPE="456,152,50,41"
+  model-entity="JSFProcessGroup" persistent="true">
+  <PROCESS-ITEM ID="rules:#pages#crudProjeto.xhtml:0" NAME="item"
+   PATH="/pages/crudProjeto.xhtml" model-entity="JSFProcessItem"/>
+ </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudAtividade.xhtml"
-  PATH="/pages/crudAtividade.xhtml" SHAPE="486,231,0,0"
+  PATH="/pages/crudAtividade.xhtml" SHAPE="488,368,50,25"
   model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>

@@ -7,18 +7,19 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 
-<f:view contentType="text/html">
+<f:view contentType="text/html" encoding="CP1252">
 	<h:head>
-		<f:facet name="first">
-			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
-			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
-		</f:facet>
+		
 		<style type="text/css" media="screen">
 .ui-widget,.ui-widget .ui-widget {
 	font-size: 11px !important;
 }
+
+.ui-column-title {
+	font-size: 11px !important;
+}
 </style>
-	</h:head>
+</h:head>
 </f:view>
 
 
@@ -28,14 +29,13 @@
 
 	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
 		togglerTipOpen="Close Me">
-		<pe:layoutPane position="north" size="80" closable="false">
-			<p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%"
-				height="100%" />
-		</pe:layoutPane>
+		
+		<ui:include src="../pages/topPage.xhtml" />
+		
 		<pe:layoutPane position="center">
 			<pe:layoutPane position="center"  >
 				<f:facet name="header">
-					<h:outputText value="Cadastro Usuário" />
+					<p:outputLabel value="Cadastro Usuário" />
 				</f:facet>
 
 
@@ -48,28 +48,28 @@
 
 
 
-						<h:outputLabel for="loginiD" value="Login: *" />
+						<p:outputLabel for="loginiD" value="Login: " />
 						<p:inputText id="loginiD" value="#{usuarioMB.usuario.login}"
-							required="true" maxlength="100" style="width: 500px;" />
-						<h:outputLabel for="pwd" value="Senha: *" />
+							required="true" maxlength="10" style="width: 500px;" />
+						<p:outputLabel for="pwd" value="Senha: " />
 						<p:password id="pwd" value="#{usuarioMB.usuario.senha}"
 							label="Password" maxlength="8" feedback="true" match="pwd2"
 							required="true" style="width: 500px;" />
-						<h:outputLabel for="pwd2" value="Repita Senha: *" />
+						<p:outputLabel for="pwd2" value="Repita Senha: " />
 						<p:password id="pwd2" label="Password2 " maxlength="8"
 							required="true" feedback="true" style="width: 500px;" />
-						<h:outputLabel for="nomeId" value="Nome: *" maxlength="100" />
+						<p:outputLabel for="nomeId" value="Nome: " maxlength="100" />
 						<p:inputText id="nomeId" value="#{usuarioMB.usuario.nome}"
-							maxlength="100" required="true" style="width: 500px;" />
+							maxlength="25" required="true" style="width: 500px;" />
 
 
-						<h:outputLabel for="email1" value="Email*:" />
+						<p:outputLabel for="email1" value="Email :" />
 						<p:inputText id="email1" value="#{usuarioMB.usuario.email}"
-							maxlength="100" required="true" style="width: 500px;">
+							maxlength="25" required="true" style="width: 500px;">
 							<f:validator validatorId="custom.emailValidator" />
 						</p:inputText>
 
-						<h:outputLabel value="Foto: " />
+						<p:outputLabel value="Foto: " />
 						<p:fileUpload fileUploadListener="#{usuarioMB.handleFileUpload}"
 							mode="advanced" dragDropSupport="true" update="messages"
 							sizeLimit="1000000000" allowTypes="/(\.|\/)(jpg|gif|jpeg|png)$/" />
@@ -98,12 +98,7 @@
 
 				<p:separator></p:separator>
 				
-				
-				
-				
 				<p:spacer height="50" />
-
-				
 
 					<p:dataTable id="dataTable" var="usu"
 						value="#{usuarioMB.usarioList}" paginator="true" rows="3">
@@ -113,29 +108,29 @@
 
 
 						<p:column filterBy="#{usu.login}" headerText="Login"
-							footerText="contains" filterMatchMode="contains">
-							<h:outputText value="#{usu.login}" />
+							 filterMatchMode="contains">
+							<p:outputLabel value="#{usu.login}" />
 						</p:column>
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="Nome" />
+								<p:outputLabel value="Nome" />
 							</f:facet>
-							<h:outputText value="#{usu.nome}" />
+							<p:outputLabel value="#{usu.nome}" />
 						</p:column>
 
 
 						<p:column>
 							<f:facet name="header">
-								<h:outputText value="E-mail" />
+								<p:outputLabel value="E-mail" />
 							</f:facet>
-							<h:outputText value="#{usu.email}" />
+							<p:outputLabel value="#{usu.email}" />
 						</p:column>
 
 
 						<p:column style="width:80px;text-align: center">
 							<f:facet name="header">
-								<h:outputText value="Super User" />
+								<p:outputLabel value="Super User" />
 							</f:facet>
 							<center>
 								<p:graphicImage url="../imagens/green-fa-check-circle.png"
@@ -147,7 +142,7 @@
 
 						<p:column style="width:80px;text-align: center">
 							<f:facet name="header">
-								<h:outputText value="Foto" />
+								<p:outputLabel value="Foto" />
 							</f:facet>
 							<center>
 								<p:graphicImage url="../temp/#{usu.usuarioId}.jpg" width="60px"
@@ -157,7 +152,7 @@
 
 						<p:column style="width:55px;text-align: center">
 							<f:facet name="header">
-								<h:outputText value="Editar" />
+								<p:outputLabel value="Editar" />
 							</f:facet>
 							<p:commandButton process="@this" ajax="true"
 								update=":form:matchGrid" icon="ui-icon-pencil" title="Editar">
@@ -168,7 +163,7 @@
 
 						<p:column style="width:55px;text-align: center">
 							<f:facet name="header">
-								<h:outputText value="Excluir" />
+								<p:outputLabel value="Excluir" />
 							</f:facet>
 
 							<p:commandButton icon="ui-icon-trash" title="Excluir"
@@ -196,29 +191,7 @@
 			</pe:layoutPane>
 
 		</pe:layoutPane>
-		<pe:layoutPane position="west" size="320">
-			<pe:layoutPane position="center" minHeight="60">
-				<p:panelMenu style="width:300px">
-					<p:submenu label="Admin Menu">
-						<p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false"
-							action="go_user" />
-						<p:menuitem value="CRUD Projeto" icon="fa fa-sitemap"
-							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-						<p:menuitem value="CRUD Projeto" icon="fa fa-newspaper-o"
-							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-					</p:submenu>
-					<p:submenu label="User Menu">
-						<p:menuitem value="Delete" ajax="false" icon="ui-icon-close" />
-					</p:submenu>
-					<p:separator />
-					<p:submenu label="Comunication Menu">
-						<p:menuitem value="Web Chat RTC" icon="fa fa-comments"
-							onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-					</p:submenu>
-				</p:panelMenu>
-			</pe:layoutPane>
-
-		</pe:layoutPane>
+		<ui:include src="../pages/leftPage.xhtml" />
 
 	</pe:layout>
 

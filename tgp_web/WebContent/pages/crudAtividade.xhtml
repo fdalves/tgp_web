@@ -19,7 +19,7 @@
 }
 </style>
 
-<script type="text/javascript">
+		<script type="text/javascript">
     function handleDrop(event, ui) {
         var droppedCar = ui.draggable;
  
@@ -38,414 +38,412 @@
 
 	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
 		togglerTipOpen="Close Me">
-		<pe:layoutPane position="north" size="80" closable="false">
-			<p:graphicImage url="../imagens/uptiva_projetos.jpg" width="100%"
-				height="100%" />
-		</pe:layoutPane>
+		<ui:include src="../pages/topPage.xhtml" />
+
 		<pe:layoutPane position="center">
-			<pe:layoutPane position="center"  >
-					
-	
-	
-	<center>
-
-	<p:growl id="growl"  sticky="true" closable="true"  life="2000"/>
-	<p:messages id="messages"  closable="true" />
-	<p:panel id="cadUsuer" header="Cadastro Atividades">
-
-		<h:panelGrid columns="4" id="matchGrid" cellpadding="5" >
-			
-			
-			<h:outputLabel for="NomeAtividade" value="Atividade:*"  />
-			
-			<p:inputText id="NomeAtividade" style="width:500px"
-				value="#{atividadeMB.atividade.atividadeNome}" required="true"
-				maxlength="100"  />
-			
-			
-			<h:outputLabel value="Prioridade:" />
-			
-			<p:selectOneButton value="#{atividadeMB.atividade.prioridade}" required="true">
-            	<f:selectItem itemLabel="Alta" itemValue="alta"/>
-            	<f:selectItem itemLabel="Normal" itemValue="normal" />
-            	<f:selectItem itemLabel="Baixa" itemValue="baixa" />
-        	</p:selectOneButton>
-				
-			
-			<h:outputText value="Proj.:*" />
-
-				<p:selectOneMenu id="projSelect" required="true"
-					value="#{atividadeMB.idProjetoSelect}" filter="true"
-					filterMatchMode="startsWith" effect="fade" style="width:500px">
-
-					<f:selectItem itemLabel="Select One" itemValue="" />
-					<f:selectItems value="#{atividadeMB.projetoSelectItems}" />
-		
-				</p:selectOneMenu>
-			
-			
-			<h:outputText value="Gerente Proj./Ati.:*" />
-
-				<p:selectOneMenu id="usuSelect" required="true"
-					value="#{atividadeMB.idUsuSelect}" filter="true"
-					filterMatchMode="startsWith" effect="fade" style="width:300px">
-
-					<f:selectItem itemLabel="Select One" itemValue="" />
-					<f:selectItems value="#{atividadeMB.usuariosSelectItems}" />
-		
-				</p:selectOneMenu>
-			
-
-			
-			
-			
-			
-			
-			
-			<h:outputLabel value="Duração:" />
-			
-				<h:panelGroup style="width:500px">
-
-					<p:outputLabel for="dt_ini" value="Data Inicio:" />
-
-					<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}" required="true"
-						pattern="dd/MM/yyyy" mask="true">
-						<p:ajax process="@this"
-							update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
-							event="dateSelect" listener="#{atividadeMB.calculaData()}" />
-					</p:calendar>
-					<p:outputLabel style="padding-left: 20px;" for="dt_fim" 	value="Data Final:" />
-					<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}" required="true" 
-						pattern="dd/MM/yyyy" mask="true">
-						<p:ajax process="@this" 
-							update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
-							event="dateSelect" listener="#{atividadeMB.calculaData()}" />
-					</p:calendar>
-				</h:panelGroup>
-				
-				<p:commandButton icon="fa fa-wrench"
-						value="Configaração Hora/Dias Úteis" ajax="true"
-						actionListener="#{atividadeMB.openPopupConfig()}"
-						process="@this,:form:dt_ini,:form:dt_fim,:form:diasId,:form:h1,:form:pgPop"
-						update=":form:slId,:form:popUp,:form:messages,:form:growl,:form:h1">
-				</p:commandButton>
-				
-				<h:panelGroup>
-				<h:outputLabel	style="font-weight:bold;font-size:13px;cellpadding=5;" id="diasId"
-						value="Dias Trabalho: #{atividadeMB.diasTrabalhados}" />
-				<h:outputLabel	style="font-weight:bold;font-size:13px;padding-left: 50‒;cellpadding=5;padding-left: 10px;padding-right: 10;"
-						id="horasId"
-						value="Horas de Trabalho: #{atividadeMB.horasTrabalho}" />
-				</h:panelGroup>
+			<pe:layoutPane position="center">
 
 
-			<h:outputLabel value="Desc. Ati:" />
-			<h:panelGroup>
-			<p:inputTextarea rows="8" cols="30" counter="display"
-				style="width: 500px;" maxlength="500"
-				counterTemplate="{0} characters remaining." autoResize="false"
-				value="#{atividadeMB.atividade.descAtividade}" />
-			<h:inputHidden id="hidden3" />
-			<br/>
-			<h:outputText id="display" />
-			</h:panelGroup>
-			
 
-			<h:inputHidden />
+				<center>
+
+					<p:growl id="growl" sticky="true" closable="true" life="2000" />
+					<p:messages id="messages" closable="true" />
+					<p:panel id="cadUsuer" header="Cadastro Atividades">
+
+						<h:panelGrid columns="4" id="matchGrid" cellpadding="5">
 
 
-			
-		</h:panelGrid>
-		
-		</p:panel>
+							<h:outputLabel for="NomeAtividade" value="Atividade:*" />
 
-	<p:spacer height="10" />
-		
-		
-		<p:accordionPanel id="tab1" activeIndex="-1" style="width: 80%;" multiple="false" >
-				<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}" process="@this" update=":form:tab1:availableUser,:form:tab1,:form:tab1:t1,:form:messages,:form:growl" />
-				
-				<p:tab id="t1" title="Usuários vinculados a Atividade" >
-					<p:panel>
-					<h:panelGrid columns="1" cellpadding="10" width="500px">
+							<p:inputText id="NomeAtividade" style="width:500px"
+								value="#{atividadeMB.atividade.atividadeNome}" required="true"
+								maxlength="100" />
 
-						<h:panelGrid columns="2" style="margin-bottom:10px" cellpadding="5">
-        					<p:outputLabel for="typeq" value="Tempo da Atv. entre Usuários:" />
-        						<p:selectOneRadio  id="typeq" value="#{atividadeMB.atividade.divideReplicaTempo}">
-            						<p:ajax listener="#{atividadeMB.divideReplicaTempo}"
-    								 update=":form:tab1:selectedUserTable" process="@this" />
-            						<f:selectItem noSelectionOption="true" itemLabel="Replicar Tempo Atividade" itemValue="R" />
-            						<f:selectItem itemLabel="Dividir Tempo da Atividade" itemValue="D" />
-            					</p:selectOneRadio>
+
+							<h:outputLabel value="Prioridade:" />
+
+							<p:selectOneButton value="#{atividadeMB.atividade.prioridade}"
+								required="true">
+								<f:selectItem itemLabel="Alta" itemValue="alta" />
+								<f:selectItem itemLabel="Normal" itemValue="normal" />
+								<f:selectItem itemLabel="Baixa" itemValue="baixa" />
+							</p:selectOneButton>
+
+
+							<h:outputText value="Proj.:*" />
+
+							<p:selectOneMenu id="projSelect" required="true"
+								value="#{atividadeMB.idProjetoSelect}" filter="true"
+								filterMatchMode="startsWith" effect="fade" style="width:500px">
+
+								<f:selectItem itemLabel="Select One" itemValue="" />
+								<f:selectItems value="#{atividadeMB.projetoSelectItems}" />
+
+							</p:selectOneMenu>
+
+
+							<h:outputText value="Gerente Proj./Ati.:*" />
+
+							<p:selectOneMenu id="usuSelect" required="true"
+								value="#{atividadeMB.idUsuSelect}" filter="true"
+								filterMatchMode="startsWith" effect="fade" style="width:300px">
+
+								<f:selectItem itemLabel="Select One" itemValue="" />
+								<f:selectItems value="#{atividadeMB.usuariosSelectItems}" />
+
+							</p:selectOneMenu>
+
+							<h:outputLabel value="Duração:" />
+
+							<h:panelGroup style="width:500px">
+
+								<p:outputLabel for="dt_ini" value="Data Inicio:" />
+
+								<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}"
+									required="true" pattern="dd/MM/yyyy" mask="true">
+									<p:ajax process="@this"
+										update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
+										event="dateSelect" listener="#{atividadeMB.calculaData()}" />
+								</p:calendar>
+								<p:outputLabel style="padding-left: 20px;" for="dt_fim"
+									value="Data Final:" />
+								<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}"
+									required="true" pattern="dd/MM/yyyy" mask="true">
+									<p:ajax process="@this"
+										update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
+										event="dateSelect" listener="#{atividadeMB.calculaData()}" />
+								</p:calendar>
+							</h:panelGroup>
+
+							<p:commandButton icon="fa fa-wrench"
+								value="Configaração Hora/Dias Úteis" ajax="true"
+								actionListener="#{atividadeMB.openPopupConfig()}"
+								process="@this,:form:dt_ini,:form:dt_fim,:form:diasId,:form:h1,:form:pgPop"
+								update=":form:slId,:form:popUp,:form:messages,:form:growl,:form:h1">
+							</p:commandButton>
+
+							<h:panelGroup>
+								<h:outputLabel
+									style="font-weight:bold;font-size:13px;cellpadding=5;"
+									id="diasId"
+									value="Dias Trabalho: #{atividadeMB.diasTrabalhados}" />
+								<h:outputLabel
+									style="font-weight:bold;font-size:13px;padding-left: 50‒;cellpadding=5;padding-left: 10px;padding-right: 10;"
+									id="horasId"
+									value="Horas de Trabalho: #{atividadeMB.horasTrabalho}" />
+							</h:panelGroup>
+
+
+							<h:outputLabel value="Desc. Ati:" />
+							<h:panelGroup>
+								<p:inputTextarea rows="8" cols="30" counter="display"
+									style="width: 500px;" maxlength="500"
+									counterTemplate="{0} characters remaining." autoResize="false"
+									value="#{atividadeMB.atividade.descAtividade}" />
+								<h:inputHidden id="hidden3" />
+								<br />
+								<h:outputText id="display" />
+							</h:panelGroup>
+
+
+							<h:inputHidden />
+
+
+
 						</h:panelGrid>
-						
-						
-						<p:fieldset id="availableUserFild" legend="Usuários Disponíveis" >
 
-							<p:dataGrid id="availableUser" var="userDispo" 
-								value="#{atividadeMB.usuarioDispo}" columns="3">
+					</p:panel>
 
-								<p:panel id="pnl" header="#{userDispo.usuario.nome}" 
-									style="text-align:center">
-									<center>
-									<h:panelGrid columns="1" >
-										<p:graphicImage url="../temp/#{userDispo.usuario.usuarioId}.jpg"
-											width="60px" height="60px" />
+					<p:spacer height="10" />
+
+
+					<p:accordionPanel id="tab1" activeIndex="-1" style="width: 80%;"
+						multiple="false">
+						<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}"
+							process="@this"
+							update=":form:tab1:availableUser,:form:tab1,:form:tab1:t1,:form:messages,:form:growl" />
+
+						<p:tab id="t1" title="Usuários vinculados a Atividade">
+							<p:panel>
+								<h:panelGrid columns="1" cellpadding="10" width="500px">
+
+									<h:panelGrid columns="2" style="margin-bottom:10px"
+										cellpadding="5">
+										<p:outputLabel for="typeq"
+											value="Tempo da Atv. entre Usuários:" />
+										<p:selectOneRadio id="typeq"
+											value="#{atividadeMB.atividade.divideReplicaTempo}">
+											<p:ajax listener="#{atividadeMB.divideReplicaTempo}"
+												update=":form:tab1:selectedUserTable" process="@this" />
+											<f:selectItem noSelectionOption="true"
+												itemLabel="Replicar Tempo Atividade" itemValue="R" />
+											<f:selectItem itemLabel="Dividir Tempo da Atividade"
+												itemValue="D" />
+										</p:selectOneRadio>
 									</h:panelGrid>
-									</center>
-								</p:panel>
 
-								<p:draggable   for="pnl" revert="true" handle=".ui-panel-titlebar"
-									stack=".ui-panel">
-								</p:draggable>
-							</p:dataGrid>
-						</p:fieldset>
 
-					
-						<p:fieldset id="selectedUser" legend="Usuários Selecionados"
-							style="margin-top:20px">
-							<p:outputPanel id="dropArea" >
-								<h:outputText value="!!!Drop Aqui!!!"
-									rendered="#{empty atividadeMB.usuariosSelect}"
-									style="font-size:24px;" />
-								<p:dataTable id="selectedUserTable" var="user" 
-									value="#{atividadeMB.usuariosSelect}">
-									<p:column headerText="Nome">
-										<h:outputText value="#{user.usuario.nome}" />
-									</p:column>
-									
-									<p:column headerText="Dias Atv.">
-										<h:outputText value="#{atividadeMB.diaAtvUser} Dias" />
-									</p:column>
-									
-									<p:column headerText="Horas Atv.">
-										<h:outputText value="#{atividadeMB.horaAtvUser} Horas" />
-									</p:column>
-									
-									<p:column style="width:55px;text-align: center">
-          								<f:facet name="header">
-                							<h:outputText value="Cargo Atv." />
-            						</f:facet>
-            						
-            						<p:commandButton title="Cargo na Atv." actionListener="#{atividadeMB.carregaCargo(user)}"  process="@this" update=":form:display2" oncomplete="PF('userDialog').show()" icon="fa fa-wrench"/>
-                        				
-                        			
-                        			</p:column>
-									
-									<p:column style="width:55px;text-align: center">
-          								<f:facet name="header">
-                							<h:outputText value="Excluir" />
-            							</f:facet>
-            
-           						 	<p:commandButton  ajax="true"  
-										 icon="ui-icon-trash" update="form:tab1" process="@this,form:tab1" actionListener="#{atividadeMB.deleteUsu(user)}" title="Excluir">
+									<p:fieldset id="availableUserFild"
+										legend="Usuários Disponíveis">
+
+										<p:dataGrid id="availableUser" var="userDispo"
+											value="#{atividadeMB.usuarioDispo}" columns="3">
+
+											<p:panel id="pnl" header="#{userDispo.usuario.nome}"
+												style="text-align:center">
+												<center>
+													<h:panelGrid columns="1">
+														<p:graphicImage
+															url="../temp/#{userDispo.usuario.usuarioId}.jpg"
+															width="60px" height="60px" />
+													</h:panelGrid>
+												</center>
+											</p:panel>
+
+											<p:draggable for="pnl" revert="true"
+												handle=".ui-panel-titlebar" stack=".ui-panel">
+											</p:draggable>
+										</p:dataGrid>
+									</p:fieldset>
+
+
+									<p:fieldset id="selectedUser" legend="Usuários Selecionados"
+										style="margin-top:20px">
+										<p:outputPanel id="dropArea">
+											<h:outputText value="!!!Drop Aqui!!!"
+												rendered="#{empty atividadeMB.usuariosSelect}"
+												style="font-size:24px;" />
+											<p:dataTable id="selectedUserTable" var="user"
+												value="#{atividadeMB.usuariosSelect}">
+												<p:column headerText="Nome">
+													<h:outputText value="#{user.usuario.nome}" />
+												</p:column>
+
+												<p:column headerText="Dias Atv.">
+													<h:outputText value="#{atividadeMB.diaAtvUser} Dias" />
+												</p:column>
+
+												<p:column headerText="Horas Atv.">
+													<h:outputText value="#{atividadeMB.horaAtvUser} Horas" />
+												</p:column>
+
+												<p:column style="width:55px;text-align: center">
+													<f:facet name="header">
+														<h:outputText value="Cargo Atv." />
+													</f:facet>
+
+													<p:commandButton title="Cargo na Atv."
+														actionListener="#{atividadeMB.carregaCargo(user)}"
+														process="@this" update=":form:display2"
+														oncomplete="PF('userDialog').show()" icon="fa fa-wrench" />
+
+
+												</p:column>
+
+												<p:column style="width:55px;text-align: center">
+													<f:facet name="header">
+														<h:outputText value="Excluir" />
+													</f:facet>
+
+													<p:commandButton ajax="true" icon="ui-icon-trash"
+														update="form:tab1" process="@this,form:tab1"
+														actionListener="#{atividadeMB.deleteUsu(user)}"
+														title="Excluir">
+													</p:commandButton>
+
+												</p:column>
+
+											</p:dataTable>
+										</p:outputPanel>
+									</p:fieldset>
+
+									<p:droppable for=":form:tab1:selectedUser" tolerance="touch"
+										activeStyleClass="ui-state-highlight"
+										datasource=":form:tab1:availableUser" onDrop="handleDrop">
+										<p:ajax listener="#{atividadeMB.addUser}"
+											update=":form:tab1:dropArea,:form:tab1:availableUser" />
+									</p:droppable>
+
+								</h:panelGrid>
+							</p:panel>
+						</p:tab>
+						<p:tab title="Documentos vinculados a Atividade">
+							<p:panel>
+								<h:panelGrid columns="2" id="docG" cellpadding="10">
+									<h:outputLabel for="docName" value="Nome Documento: *" />
+									<p:inputText id="docName"
+										value="#{atividadeMB.docAtividade.nomeDoc}" maxlength="100"
+										style="width: 300px;" />
+
+									<h:outputLabel value="Desc. Documento:" />
+									<p:inputTextarea rows="3" style="width: 300px;" cols="30"
+										counter="display2" maxlength="255"
+										counterTemplate="{0} characters remaining." autoResize="false"
+										value="#{atividadeMB.docAtividade.descDoc}" />
+									<h:inputHidden id="hidden4" />
+									<h:outputText id="display2" />
+
+									<h:outputLabel value="Documento: *" />
+									<p:fileUpload
+										fileUploadListener="#{atividadeMB.handleFileUpload}"
+										mode="advanced" dragDropSupport="true" update=":form:growl"
+										sizeLimit="1000000000" />
+								</h:panelGrid>
+
+								<center>
+									<p:commandButton value="salvarDoc"
+										update=":form:tab1:docG,:form:messages,:form:growl,form:tab1:dataTableDoc"
+										ajax="true" process="@this,:form:tab1:docG"
+										icon="ui-icon-check"
+										actionListener="#{atividadeMB.salvarDoc()}"
+										style="margin-right:10px" />
+									<p:commandButton value="Limpar"
+										update=":form:tab1:docG,:form:messages,:form:growl"
+										icon="ui-icon-close" process="@this,:form:tab1:docG"
+										style="margin-right:20px;">
+										<p:resetInput
+											target=":form:tab1:docG,:form:messages,:form:growl" />
 									</p:commandButton>
-        							
-        							</p:column>
-									
+								</center>
+							</p:panel>
+
+
+
+
+							<p:spacer height="20" />
+							<p:panel>
+
+								<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable"
+									value="#{atividadeMB.atividade.docAtividades}" paginator="true"
+									rows="5">
+									<f:facet name="header">
+            						Documentos
+        							</f:facet>
+
+									<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc."
+										filterMatchMode="contains">
+										<h:outputText value="#{doc.nomeDoc}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="Desc. Doc" />
+										</f:facet>
+										<h:outputText value="#{doc.descDoc}" />
+									</p:column>
+
+									<p:column>
+										<f:facet name="header">
+											<h:outputText value="User" />
+										</f:facet>
+										<h:outputText value="#{doc.usuarioAtualizador}" />
+									</p:column>
+
+									<p:column headerText="Data Insert.">
+										<h:outputText value="#{doc.dataInsert}">
+											<f:convertDateTime locale="pt,BR" dateStyle="default"
+												pattern="dd/MM/yyyy" />
+										</h:outputText>
+									</p:column>
+
+									<p:column style="width:55px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Donwload" />
+										</f:facet>
+										<p:commandButton icon="fa fa-download"
+											action="#{atividadeMB.downloadDoc(doc)}" process="@this"
+											ajax="false" type="submit" immediate="true" />
+									</p:column>
+
+
+									<p:column style="width:55px;text-align: center">
+										<f:facet name="header">
+											<h:outputText value="Excluir" />
+										</f:facet>
+
+										<p:commandButton icon="ui-icon-trash" title="Excluir"
+											update=":form:tab1:docG,:form:messages,:form:growl,form:tab1:dataTableDoc"
+											process="@this" ajax="true"
+											action="#{atividadeMB.excluirDoc(doc)}" immediate="true">
+											<p:confirm header="Confirmação Exclusão"
+												message="Você tem certeza?" icon="ui-icon-alert" />
+										</p:commandButton>
+									</p:column>
 								</p:dataTable>
-							</p:outputPanel>
-						</p:fieldset>
+							</p:panel>
 
-						<p:droppable for=":form:tab1:selectedUser" tolerance="touch"
-							activeStyleClass="ui-state-highlight"
-							datasource=":form:tab1:availableUser" onDrop="handleDrop">
-							<p:ajax listener="#{atividadeMB.addUser}"
-								update=":form:tab1:dropArea,:form:tab1:availableUser" />
-						</p:droppable>
 
-					</h:panelGrid>
-					</p:panel>
-				</p:tab>
-				<p:tab title="Documentos vinculados a Atividade">
-					<p:panel>
-					<h:panelGrid columns="2" id="docG" cellpadding="10">
-						<h:outputLabel for="docName" value="Nome Documento: *" />
-						<p:inputText id="docName" value="#{atividadeMB.docAtividade.nomeDoc}"
-						 maxlength="100" style="width: 300px;"  />
-			
-						<h:outputLabel value="Desc. Documento:" />
-						<p:inputTextarea rows="3" style="width: 300px;" cols="30" counter="display2"
-						maxlength="255" counterTemplate="{0} characters remaining."
-						autoResize="false" value="#{atividadeMB.docAtividade.descDoc}" />
-						<h:inputHidden id="hidden4" />
-						<h:outputText id="display2" />
-			
-						<h:outputLabel value="Documento: *" />
-						<p:fileUpload fileUploadListener="#{atividadeMB.handleFileUpload}" 
-						mode="advanced" dragDropSupport="true" update=":form:growl"
-						sizeLimit="1000000000" />
-					</h:panelGrid>
-					
+
+						</p:tab>
+
+					</p:accordionPanel>
+
+
+					<p:separator></p:separator>
+
 					<center>
-					<p:commandButton value="salvarDoc" update=":form:tab1:docG,:form:messages,:form:growl,form:tab1:dataTableDoc" ajax="true" process="@this,:form:tab1:docG" icon="ui-icon-check"   actionListener="#{atividadeMB.salvarDoc()}" style="margin-right:10px"/>
-					<p:commandButton value="Limpar"	update=":form:tab1:docG,:form:messages,:form:growl" icon="ui-icon-close" process="@this,:form:tab1:docG" style="margin-right:20px;">
-						<p:resetInput target=":form:tab1:docG,:form:messages,:form:growl" />
-					</p:commandButton>
-					</center>
-					</p:panel>
-					
-					
-					
-			
-			<p:spacer height="20"/>
-			<p:panel>
-
-				<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable" 
-					value="#{atividadeMB.atividade.docAtividades}" paginator="true" rows="5">
-					<f:facet name="header">
-            			Documentos
-        			</f:facet>
-        			
-        			<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
-						<h:outputText value="#{doc.nomeDoc}" />
-					</p:column>
-					
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="Desc. Doc" />
-						</f:facet>
-						<h:outputText value="#{doc.descDoc}" />
-					</p:column>
-					
-					<p:column>
-						<f:facet name="header">
-							<h:outputText value="User" />
-						</f:facet>
-						<h:outputText value="#{doc.usuarioAtualizador}" />
-					</p:column>
-					
-					<p:column headerText="Data Insert.">
-						<h:outputText value="#{doc.dataInsert}">  
-  							<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />  
-						</h:outputText>  
-					</p:column>
-					
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Donwload" />
-						</f:facet>
-						<p:commandButton icon="fa fa-download" action="#{atividadeMB.downloadDoc(doc)}" process="@this" ajax="false" type="submit" immediate="true"/>
-					</p:column>
-					
-					
-					<p:column style="width:55px;text-align: center">
-						<f:facet name="header">
-							<h:outputText value="Excluir" />
-						</f:facet>
-
-						<p:commandButton icon="ui-icon-trash" title="Excluir"
-							update=":form:tab1:docG,:form:messages,:form:growl,form:tab1:dataTableDoc"
-							process="@this" ajax="true" action="#{atividadeMB.excluirDoc(doc)}"
-							immediate="true">
-							<p:confirm header="Confirmação Exclusão"
-								message="Você tem certeza?" icon="ui-icon-alert" />
+						<p:commandButton value="Savar" type="Submit" ajax="false"
+							icon="ui-icon-check"
+							update=":form:matchGrid,:form:messages,:form:growl,form:dataTable"
+							process="@this" validateClient="true"
+							actionListener="#{atividadeMB.salvar()}" />
+						<p:commandButton value="Limpar" icon="ui-icon-close"
+							update=":form:matchGrid,:form:popUp,:form:tab1,:form:messages,:form:growl"
+							actionListener="#{atividadeMB.ini()}" process="@this"
+							style="margin-right:20px;">
+							<p:resetInput
+								target=":form:matchGrid,:form:popUp,:form:tab1,:form:messages,:form:growl" />
 						</p:commandButton>
-					</p:column>
-       			</p:dataTable>
-      		</p:panel>
-					
-					
-					
-				</p:tab>
+					</center>
 
-			</p:accordionPanel>
-		
+					<h:inputHidden id="h1" value="#{atividadeMB.popUpSalve}" />
 
-		<p:separator></p:separator>
+					<p:separator></p:separator>
 
-		<center>
-			<p:commandButton value="Savar" type="Submit" ajax="false" icon="ui-icon-check"
-				update=":form:matchGrid,:form:messages,:form:growl,form:dataTable" process="@this"
-				validateClient="true"
-				actionListener="#{atividadeMB.salvar()}" />
-			<p:commandButton value="Limpar" icon="ui-icon-close"
-				update=":form:matchGrid,:form:popUp,:form:tab1,:form:messages,:form:growl" actionListener="#{atividadeMB.ini()}" process="@this"
-				style="margin-right:20px;">
-				<p:resetInput target=":form:matchGrid,:form:popUp,:form:tab1,:form:messages,:form:growl" />
-			</p:commandButton>
-		</center>
+					<p:panel header="Atividade Cadastrados" style="width:800px">
 
-
-	
+						<p:dataTable id="dataTable" var="ativ"
+							value="#{atividadeMB.atividadesList}" paginator="true" rows="5">
 
 
 
+							<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
+								footerText="contains" filterMatchMode="contains">
+								<h:outputText value="#{ativ.atividadeNome}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">
+									<h:outputText value="Projeto" />
+								</f:facet>
+								<h:outputText value="#{ativ.projeto.nomeProjeto}" />
+							</p:column>
 
 
-	
 
-	<h:inputHidden id="h1" value="#{atividadeMB.popUpSalve}" />
-	
-	
-	
-	
-	<p:separator></p:separator>
-	
-	<p:panel header="Atividade Cadastrados" style="width:800px">
-		
-		<p:dataTable id="dataTable"  var="ativ" value="#{atividadeMB.atividadesList}"
-			paginator="true" rows="5">
-			
+							<p:column style="width:55px;text-align: center">
+								<f:facet name="header">
+									<h:outputText value="Editar" />
+								</f:facet>
+								<p:commandButton process="@this" ajax="true"
+									update=":form:matchGrid,:form:tab1,:form:popUp,:form:h1"
+									icon="ui-icon-pencil" title="Editar"
+									actionListener="#{atividadeMB.edtarAtiv(ativ)}" />
+							</p:column>
+						</p:dataTable>
+
+					</p:panel>
 
 
-			<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
-				footerText="contains" filterMatchMode="contains">
-				<h:outputText value="#{ativ.atividadeNome}" />
-			</p:column>
+				</center>
 
-			<p:column>
-				<f:facet name="header">
-					<h:outputText value="Projeto" />
-				</f:facet>
-				<h:outputText value="#{ativ.projeto.nomeProjeto}" />
-			</p:column>
-
-				
-
-			<p:column style="width:55px;text-align: center">
-				<f:facet name="header">
-					<h:outputText value="Editar" />
-				</f:facet>
-				<p:commandButton process="@this" ajax="true"
-					update=":form:matchGrid,:form:tab1,:form:popUp,:form:h1" icon="ui-icon-pencil" title="Editar" actionListener="#{atividadeMB.edtarAtiv(ativ)}"/>
-			</p:column>
-		</p:dataTable>
-		
-	</p:panel>
-	
-	
-	</center>
-	
-	</pe:layoutPane>
-
-		</pe:layoutPane>
-		<pe:layoutPane position="west" size="320">
-			<pe:layoutPane position="center" minHeight="60">
-				<p:panelMenu style="width:300px">
-					<p:submenu label="Admin Menu">
-						<p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false"
-							action="go_user" />
-						<p:menuitem value="CRUD Projeto" icon="fa fa-sitemap"
-							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-						<p:menuitem value="CRUD Projeto" icon="fa fa-newspaper-o"
-							onclick="myWindow = window.open('http://localhost:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-					</p:submenu>
-					<p:submenu label="User Menu">
-						<p:menuitem value="Delete" ajax="false" icon="ui-icon-close" />
-					</p:submenu>
-					<p:separator />
-					<p:submenu label="Comunication Menu">
-						<p:menuitem value="Web Chat RTC" icon="fa fa-comments"
-							onclick="myWindow = window.open('http://192.168.1.4:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
-					</p:submenu>
-				</p:panelMenu>
 			</pe:layoutPane>
 
 		</pe:layoutPane>
-
+		<ui:include src="../pages/leftPage.xhtml" />
 	</pe:layout>
-	
+
 	<p:dialog id="popUp" header="Configuração Horas" widgetVar="dlg2"
 		modal="true" height="200" visible="#{atividadeMB.mostraPopUpConfig}">
 		<p:panel>
@@ -491,32 +489,40 @@
 		</p:panel>
 
 	</p:dialog>
-	
-	
-	<p:dialog header="Cargo Atividade" widgetVar="userDialog" resizable="false" draggable="false"
-              showEffect="fade" hideEffect="fade" modal="true">
- 
-        <p:outputPanel id="display2">
-            <h:panelGrid id="grid3" columns="2" cellpadding="5">
-                <f:facet name="Cargo do Usuário na Atividade"/>
-                    <h:outputText value="Testador: " />
-        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.testador}" />
-                    <h:outputText value="Programador: " />
-        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.programador}" />
-        			<h:outputText value="Analista: " />
-        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.analista}" />
-        			<h:outputText value="Gerente: " />
-        			<p:selectBooleanCheckbox value="#{atividadeMB.usuarioAtividadeSelect.cargo.gerente}" />
-        			
-        		 
-            </h:panelGrid>
-            <center>
-            <p:commandButton ajax="true" icon="ui-icon-check"  oncomplete="PF('userDialog').hide()" update=":form:grid3"  process="@this,:form:grid3" value="Salvar" actionListener="#{atividadeMB.salvaCargo()}"/>
-            </center>
-        </p:outputPanel>
-    </p:dialog>
-	
-	
+
+
+	<p:dialog header="Cargo Atividade" widgetVar="userDialog"
+		resizable="false" draggable="false" showEffect="fade"
+		hideEffect="fade" modal="true">
+
+		<p:outputPanel id="display2">
+			<h:panelGrid id="grid3" columns="2" cellpadding="5">
+				<f:facet name="Cargo do Usuário na Atividade" />
+				<h:outputText value="Testador: " />
+				<p:selectBooleanCheckbox
+					value="#{atividadeMB.usuarioAtividadeSelect.cargo.testador}" />
+				<h:outputText value="Programador: " />
+				<p:selectBooleanCheckbox
+					value="#{atividadeMB.usuarioAtividadeSelect.cargo.programador}" />
+				<h:outputText value="Analista: " />
+				<p:selectBooleanCheckbox
+					value="#{atividadeMB.usuarioAtividadeSelect.cargo.analista}" />
+				<h:outputText value="Gerente: " />
+				<p:selectBooleanCheckbox
+					value="#{atividadeMB.usuarioAtividadeSelect.cargo.gerente}" />
+
+
+			</h:panelGrid>
+			<center>
+				<p:commandButton ajax="true" icon="ui-icon-check"
+					oncomplete="PF('userDialog').hide()" update=":form:grid3"
+					process="@this,:form:grid3" value="Salvar"
+					actionListener="#{atividadeMB.salvaCargo()}" />
+			</center>
+		</p:outputPanel>
+	</p:dialog>
+
+
 
 	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
 		<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
@@ -524,7 +530,7 @@
 		<p:commandButton value="No" type="button"
 			styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
 	</p:confirmDialog>
-	
+
 </h:form>
 
 </html>

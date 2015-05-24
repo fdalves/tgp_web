@@ -60,15 +60,15 @@ public class UsuarioMB  implements Serializable {
 			
 
 			if (!this.validaEmail(this.usuario.getEmail())){
-				String info = "E-mail ja Cadastrado..";
-				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
+				String info = " E-mail já Cadastrado..";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail() + info , null));
 				return;
 			}
 			
 			
 			if (!this.validaLogin(this.usuario.getLogin())){
-				String info = "Login ja Cadastrado..";
-				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
+				String info = " Login já Cadastrado..";
+				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin() + info, null));
 				return;
 			}
 			
@@ -79,8 +79,8 @@ public class UsuarioMB  implements Serializable {
 			
 			
 			this.usuarioFacade.save(usuario);
-			String info = "Usuario Cadastrado com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuario " + usuario.getLogin(), info));
+			String info = "Usuário Cadastrado com Sucesso ";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,usuario.getLogin() + info , null));
 		} else {
 			Usuario usuarioPersist = this.usuarioFacade.find(usuario.getUsuarioId());
 			
@@ -88,8 +88,8 @@ public class UsuarioMB  implements Serializable {
 				usuarioPersist.setEmail(this.usuario.getEmail());
 			} else {
 				if (!this.validaEmail(this.usuario.getEmail())){
-					String info = "E-mail Ja Cadastrado..";
-					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"E-mail " + usuario.getEmail(), info));
+					String info = " E-mail Já Cadastrado..";
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR, usuario.getEmail()+ info , null));
 					return;
 				}
 			}
@@ -98,8 +98,8 @@ public class UsuarioMB  implements Serializable {
 				usuarioPersist.setLogin(this.usuario.getLogin());
 			} else {
 				if (!this.validaLogin(this.usuario.getLogin())){
-					String info = "Login Ja Cadastrado..";
-					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,"Login " + usuario.getLogin(), info));
+					String info = " Login Já Cadastrado..";
+					FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR, usuario.getLogin() +  info, null ));
 					return;
 				}
 			}
@@ -112,8 +112,8 @@ public class UsuarioMB  implements Serializable {
 			
 			
 			this.usuarioFacade.update(usuarioPersist);
-			String info = "Usuario Alterado com Sucesso";
-			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"Usuario " + usuario.getLogin(), info));
+			String info = " Usuário Alterado com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO, usuario.getLogin() + info, null));
 		}
 		
 		this.ini();
@@ -150,8 +150,8 @@ public class UsuarioMB  implements Serializable {
 
 	public void excluir(Usuario usuario){
 		this.usuarioFacade.delete(usuario);
-		String info = "Usuario Excluido com Sucesso";
-		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,"", info));
+		String info = "Usuário Excluido com Sucesso";
+		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info,"" ));
 		this.ini();
 	}
 	
