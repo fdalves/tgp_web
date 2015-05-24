@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+
+		<pe:layoutPane position="west" size="180">
+
+			<pe:layoutPane position="center" minHeight="60">
+
+				<p:panelMenu style="width:165px">
+					<p:submenu label="Admin Menu">
+						<p:menuitem value="CRUD Usuário" icon="fa fa-users" ajax="false"
+							action="go_user" immediate="true" />
+						<p:menuitem value="CRUD Projeto" icon="fa fa-sitemap" ajax="false"
+							action="go_proj" immediate="true" />
+						<p:menuitem value="CRUD Atividade" icon="fa fa-newspaper-o"
+							ajax="false" action="go_ativ" immediate="true" />
+					</p:submenu>
+					<p:submenu label="User Menu">
+						<p:menuitem value="Home" ajax="false" icon="fa fa-home" />
+						<p:menuitem value="Agendar Meeting" ajax="false"
+							icon="fa fa-gears" />
+						<p:menuitem value="Minhas Atividades" ajax="false"
+							icon="fa fa-list-alt" />
+						<p:menuitem value="Calendário" ajax="false" icon="fa fa-calendar" />
+					</p:submenu>
+					<p:separator />
+					<p:submenu label="Comunication Menu">
+						<p:menuitem value="Web Chat RTC" icon="fa fa-comments"
+							onclick="myWindow = window.open('http://#{loginMB.hostName}:8080/tgp_web/webChatRTC/index.jsf', 'myWindow', 'width=700, height=500');" />
+						<p:menuitem value="Meeting RTC" icon="fa fa-video-camera"
+							onclick="myWindow = window.open('http://#{loginMB.hostName}:8080/tgp_web/pages/RTCMultiConnection.xhtml', 'myWindow', 'width=1200, height=600');" />
+					</p:submenu>
+
+					<p:submenu label="Relatórios">
+						<p:menuitem value="Report 1" ajax="false" icon="fa fa-file-pdf-o" />
+						<p:menuitem value="Report 2" ajax="false" icon="fa fa-file-pdf-o" />
+						<p:menuitem value="Report 3" ajax="false" icon="fa fa-file-pdf-o" />
+
+					</p:submenu>
+
+				</p:panelMenu>
+
+			</pe:layoutPane>
+
+		</pe:layoutPane>
+
+	
+
+
+
+
+	
+
+
+</html>
