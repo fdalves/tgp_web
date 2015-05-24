@@ -10,7 +10,7 @@
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#initTgp.xhtml"
-  PATH="/pages/initTgp.xhtml" SHAPE="278,100,0,0" model-entity="JSFProcessGroup">
+  PATH="/pages/initTgp.xhtml" SHAPE="256,48,50,73" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#initTgp.xhtml:0" NAME="item"
    PATH="/pages/initTgp.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
@@ -25,7 +25,7 @@
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudUsuario.xhtml"
-  PATH="/pages/crudUsuario.xhtml" SHAPE="496,40,50,41" model-entity="JSFProcessGroup">
+  PATH="/pages/crudUsuario.xhtml" SHAPE="480,432,50,57" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#crudUsuario.xhtml:0" NAME="item"
    PATH="/pages/crudUsuario.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
@@ -37,12 +37,19 @@
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudProjeto.xhtml"
-  PATH="/pages/crudProjeto.xhtml" SHAPE="456,152,50,41"
+  PATH="/pages/crudProjeto.xhtml" SHAPE="496,32,50,57"
   model-entity="JSFProcessGroup" persistent="true">
   <PROCESS-ITEM ID="rules:#pages#crudProjeto.xhtml:0" NAME="item"
-   PATH="/pages/crudProjeto.xhtml" model-entity="JSFProcessItem"/>
+   PATH="/pages/crudProjeto.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
+    NAME="output" PATH="/pages/crudUsuario.xhtml"
+    TARGET="rules:#pages#crudUsuario.xhtml" TITLE="go_user" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
+    NAME="output1" PATH="/pages/crudAtividade.xhtml"
+    TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudAtividade.xhtml"
-  PATH="/pages/crudAtividade.xhtml" SHAPE="488,368,50,25"
+  PATH="/pages/crudAtividade.xhtml" SHAPE="736,208,50,25"
   model-entity="JSFProcessGroup" persistent="true"/>
 </PROCESS>
