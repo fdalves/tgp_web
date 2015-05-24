@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PROCESS model-entity="JSFProcess">
  <PROCESS-ITEM NAME="rules:#pages#login.xhtml" PATH="/pages/login.xhtml"
-  SHAPE="64,192,50,41" model-entity="JSFProcessGroup">
+  SHAPE="32,32,50,41" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#login.xhtml:0" NAME="item"
    PATH="/pages/login.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="go_initTgp::#pages#initTgp.xhtml"
@@ -10,7 +10,7 @@
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#initTgp.xhtml"
-  PATH="/pages/initTgp.xhtml" SHAPE="232,224,50,73" model-entity="JSFProcessGroup">
+  PATH="/pages/initTgp.xhtml" SHAPE="216,24,50,105" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#initTgp.xhtml:0" NAME="item"
    PATH="/pages/initTgp.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
@@ -22,10 +22,16 @@
    <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
     NAME="output2" PATH="/pages/crudAtividade.xhtml"
     TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativUser::#pages#ativUser.xhtml"
+    NAME="output3" PATH="/pages/ativUser.xhtml"
+    TARGET="rules:#pages#ativUser.xhtml" TITLE="go_ativUser" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
+    NAME="output4" PATH="/pages/calendar.xhtml"
+    TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudUsuario.xhtml"
-  PATH="/pages/crudUsuario.xhtml" SHAPE="752,304,50,57" model-entity="JSFProcessGroup">
+  PATH="/pages/crudUsuario.xhtml" SHAPE="208,408,50,105" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#crudUsuario.xhtml:0" NAME="item"
    PATH="/pages/crudUsuario.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
@@ -34,10 +40,19 @@
    <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
     NAME="output1" PATH="/pages/crudAtividade.xhtml"
     TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_home::#pages#initTgp.xhtml"
+    NAME="output2" PATH="/pages/initTgp.xhtml"
+    TARGET="rules:#pages#initTgp.xhtml" TITLE="go_home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativUser::#pages#ativUser.xhtml"
+    NAME="output3" PATH="/pages/ativUser.xhtml"
+    TARGET="rules:#pages#ativUser.xhtml" TITLE="go_ativUser" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
+    NAME="output4" PATH="/pages/calendar.xhtml"
+    TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudProjeto.xhtml"
-  PATH="/pages/crudProjeto.xhtml" SHAPE="992,40,50,57"
+  PATH="/pages/crudProjeto.xhtml" SHAPE="1104,24,50,105"
   model-entity="JSFProcessGroup" persistent="true">
   <PROCESS-ITEM ID="rules:#pages#crudProjeto.xhtml:0" NAME="item"
    PATH="/pages/crudProjeto.xhtml" model-entity="JSFProcessItem">
@@ -47,10 +62,19 @@
    <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
     NAME="output1" PATH="/pages/crudAtividade.xhtml"
     TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_home::#pages#initTgp.xhtml"
+    NAME="output2" PATH="/pages/initTgp.xhtml"
+    TARGET="rules:#pages#initTgp.xhtml" TITLE="go_home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativUser::#pages#ativUser.xhtml"
+    NAME="output3" PATH="/pages/ativUser.xhtml"
+    TARGET="rules:#pages#ativUser.xhtml" TITLE="go_ativUser" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
+    NAME="output4" PATH="/pages/calendar.xhtml"
+    TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudAtividade.xhtml"
-  PATH="/pages/crudAtividade.xhtml" SHAPE="504,88,50,57" model-entity="JSFProcessGroup">
+  PATH="/pages/crudAtividade.xhtml" SHAPE="688,16,50,105" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#crudAtividade.xhtml:0" NAME="item"
    PATH="/pages/crudAtividade.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
@@ -58,6 +82,59 @@
     TARGET="rules:#pages#crudProjeto.xhtml" TITLE="go_proj" model-entity="JSFProcessItemOutput"/>
    <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
     NAME="output1" PATH="/pages/crudUsuario.xhtml"
+    TARGET="rules:#pages#crudUsuario.xhtml" TITLE="go_user" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_home::#pages#initTgp.xhtml"
+    NAME="output2" PATH="/pages/initTgp.xhtml"
+    TARGET="rules:#pages#initTgp.xhtml" TITLE="go_home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativUser::#pages#ativUser.xhtml"
+    NAME="output3" PATH="/pages/ativUser.xhtml"
+    TARGET="rules:#pages#ativUser.xhtml" TITLE="go_ativUser" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
+    NAME="output4" PATH="/pages/calendar.xhtml"
+    TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#ativUser.xhtml"
+  PATH="/pages/ativUser.xhtml" SHAPE="784,424,50,105" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#ativUser.xhtml:0" NAME="item"
+   PATH="/pages/ativUser.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="go_home::#pages#initTgp.xhtml" NAME="output"
+    PATH="/pages/initTgp.xhtml"
+    SHAPE="833,456,1112,456,1112,296,160,296,160,32,215,32"
+    TARGET="rules:#pages#initTgp.xhtml" TITLE="go_home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
+    NAME="output1" PATH="/pages/crudProjeto.xhtml"
+    TARGET="rules:#pages#crudProjeto.xhtml" TITLE="go_proj" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
+    NAME="output2" PATH="/pages/crudUsuario.xhtml"
+    TARGET="rules:#pages#crudUsuario.xhtml" TITLE="go_user" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
+    NAME="output3" PATH="/pages/crudAtividade.xhtml"
+    SHAPE="833,504,1128,504,1128,216,368,216,368,24,687,24"
+    TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
+    NAME="output4" PATH="/pages/calendar.xhtml"
+    TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#calendar.xhtml"
+  PATH="/pages/calendar.xhtml" SHAPE="1088,416,50,105" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#calendar.xhtml:0" NAME="item"
+   PATH="/pages/calendar.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="go_home::#pages#initTgp.xhtml" NAME="output"
+    PATH="/pages/initTgp.xhtml" TARGET="rules:#pages#initTgp.xhtml"
+    TITLE="go_home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
+    NAME="output1" PATH="/pages/crudProjeto.xhtml"
+    TARGET="rules:#pages#crudProjeto.xhtml" TITLE="go_proj" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
+    NAME="output2" PATH="/pages/crudAtividade.xhtml"
+    TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativUser::#pages#ativUser.xhtml"
+    NAME="output3" PATH="/pages/ativUser.xhtml"
+    TARGET="rules:#pages#ativUser.xhtml" TITLE="go_ativUser" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
+    NAME="output4" PATH="/pages/crudUsuario.xhtml"
     TARGET="rules:#pages#crudUsuario.xhtml" TITLE="go_user" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>

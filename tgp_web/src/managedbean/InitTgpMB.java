@@ -427,7 +427,7 @@ public class InitTgpMB  implements Serializable {
 			if (isConcluida(uaList)){
 				a.setSituacao("Concluída");
 			} else {
-				a.setSituacao("em Andamento");
+				a.setSituacao("Em Andamento");
 			}
 			
 			if (isNova(uaList)) a.setSituacao("Nova");

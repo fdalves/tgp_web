@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui"
+	xmlns:of="http://omnifaces.org/functions"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:pe="http://primefaces.org/ui/extensions">
+
+
+<f:view contentType="text/html">
+	<h:head>
+		<style type="text/css" media="screen">
+.ui-widget,.ui-widget .ui-widget {
+	font-size: 11px !important;
+}
+</style>
+	</h:head>
+	
+
+	
+</f:view>
+
+
+
+
+
+
+
+<h:form id="form">
+
+	<p:growl id="messages" showDetail="true" />
+
+	<pe:layout resizerTip="Resize Me" togglerTipClosed="Open Me"
+		togglerTipOpen="Close Me">
+		
+		<ui:include src="../pages/topPage.xhtml" />
+		<pe:layoutPane position="center">
+			
+			<pe:layoutPane position="center" minHeight="60">
+				<f:facet name="header">
+            			Calendario Atividades
+  			</f:facet>
+				<center>
+
+					<h:panelGrid columnClasses="value">
+
+						<p:schedule id="schedule" value="#{scheduleView.eventModel}"
+							widgetVar="myschedule" locale="pt">
+
+							<p:ajax event="dateSelect"
+								listener="#{scheduleView.onDateSelect}"
+								update=":form:eventDetails"
+								oncomplete="PF('eventDialog').show();" />
+							<p:ajax event="eventSelect"
+								listener="#{scheduleView.onEventSelect}"
+								update=":form:eventDetails"
+								oncomplete="PF('eventDialog').show();" />
+							<p:ajax event="eventMove" listener="#{scheduleView.onEventMove}"
+								update=":form:messages" />
+							<p:ajax event="eventResize"
+								listener="#{scheduleView.onEventResize}" update=":form:messages" />
+
+						</p:schedule>
+
+
+					</h:panelGrid>
+				</center>
+			</pe:layoutPane>
+		</pe:layoutPane>
+		
+		<ui:include src="../pages/leftPage.xhtml" />
+		
+
+	</pe:layout>
+
+
+
+
+	<p:dialog widgetVar="eventDialog" header="Event Details"
+		showEffect="clip" hideEffect="clip">
+		<h:panelGrid id="eventDetails" columns="2">
+			<h:outputLabel for="title" value="Title:" />
+			<p:inputText id="title" value="#{scheduleView.event.title}" />
+
+			<h:outputLabel for="from" value="From:" />
+			<p:inputMask id="from" value="#{scheduleView.event.startDate}"
+				mask="99/99/9999">
+				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+			</p:inputMask>
+
+			<h:outputLabel for="to" value="To:" />
+			<p:inputMask id="to" value="#{scheduleView.event.endDate}"
+				mask="99/99/9999">
+				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
+			</p:inputMask>
+
+			<h:outputLabel for="allDay" value="All Day:" />
+			<h:selectBooleanCheckbox id="allDay"
+				value="#{scheduleView.event.allDay}" />
+
+			<p:commandButton type="reset" value="Reset" />
+			<p:commandButton id="addButton" value="Save"
+				actionListener="#{scheduleView.addEvent}"
+				oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
+		</h:panelGrid>
+	</p:dialog>
+
+
+
+
+
+
+	
+
+
+	
+
+
+
+
+
+
+
+	
+	<p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+		<p:commandButton value="Yes" styleClass="ui-confirmdialog-yes"
+			icon="ui-icon-check" />
+		<p:commandButton value="No" type="button"
+			styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+	</p:confirmDialog>
+
+</h:form>
+
+
+
+
+
+
+
+<h:outputStylesheet library="css" name="global.css" />
+
+<h:outputStylesheet id="layoutCSS">  
+    body {  
+        margin: 4px !important;  
+    }  
+</h:outputStylesheet>
+
+
+<script type="text/javascript">
+
+function centro(p,n,l,a,v1,v2,v3,v4,v5,v6,v7,v8,v9){
+var l = l;
+var a = a;
+var t = (screen.height/2)-(a/2);
+var d = (screen.width/2)-(l/2);
+window.open(p,n,'width='+l+',height='+a+',top='+t+',left='+d+',scrollbars='+v1+',menubar='+v2+',directories='+v3+',location='+v4+',copyhistory='+v5+',status='+v6+',toolbar='+v7+',maximized='+v8+',resizable='+v9+'');
+}
+
+</script>
+
+
+<script type="text/javascript">
+    PrimeFaces.locales['pt'] = {
+    		closeText: 'Fechar',    
+            prevText: 'Anterior',    
+            nextText: 'Próximo',    
+            currentText: 'Começo',    
+            monthNames: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],    
+            monthNamesShort: ['Jan','Fev','Mar','Abr','Mai','Jun', 'Jul','Ago','Set','Out','Nov','Dez'],    
+            dayNames: ['Domingo','Segunda','Terça','Quarta','Quinta','Sexta','Sábado'],    
+            dayNamesShort: ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'],    
+            dayNamesMin: ['D','S','T','Q','Q','S','S'],    
+            weekHeader: 'Semana',    
+            firstDay: 1,    
+            isRTL: false,    
+            showMonthAfterYear: false,    
+            yearSuffix: '',    
+            timeOnlyTitle: 'Só Horas',    
+            timeText: 'Tempo',    
+            hourText: 'Hora',    
+            minuteText: 'Minuto',    
+            secondText: 'Segundo',    
+            currentText: 'Data Atual',    
+            ampm: false,    
+            month: 'Mês',    
+            week: 'Semana',    
+            day: 'Dia',    
+            allDayText : 'Todo Dia'  
+    };
+</script>
+<style type="text/css">
+.value {
+	width: 1000px;
+}
+</style>
+
+
+</html>

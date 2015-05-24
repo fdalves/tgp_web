@@ -26,6 +26,14 @@
    <from-outcome>go_ativ</from-outcome>
    <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativUser</from-outcome>
+   <to-view-id>/pages/ativUser.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_calendar</from-outcome>
+   <to-view-id>/pages/calendar.xhtml</to-view-id>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/pages/crudProjeto.xhtml</from-view-id>
@@ -36,6 +44,18 @@
   <navigation-case>
    <from-outcome>go_ativ</from-outcome>
    <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_home</from-outcome>
+   <to-view-id>/pages/initTgp.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativUser</from-outcome>
+   <to-view-id>/pages/ativUser.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_calendar</from-outcome>
+   <to-view-id>/pages/calendar.xhtml</to-view-id>
   </navigation-case>
  </navigation-rule>
  <navigation-rule>
@@ -48,12 +68,82 @@
    <from-outcome>go_ativ</from-outcome>
    <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
   </navigation-case>
+  <navigation-case>
+   <from-outcome>go_home</from-outcome>
+   <to-view-id>/pages/initTgp.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativUser</from-outcome>
+   <to-view-id>/pages/ativUser.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_calendar</from-outcome>
+   <to-view-id>/pages/calendar.xhtml</to-view-id>
+  </navigation-case>
  </navigation-rule>
  <navigation-rule>
   <from-view-id>/pages/crudAtividade.xhtml</from-view-id>
   <navigation-case>
    <from-outcome>go_proj</from-outcome>
    <to-view-id>/pages/crudProjeto.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_user</from-outcome>
+   <to-view-id>/pages/crudUsuario.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_home</from-outcome>
+   <to-view-id>/pages/initTgp.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativUser</from-outcome>
+   <to-view-id>/pages/ativUser.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_calendar</from-outcome>
+   <to-view-id>/pages/calendar.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/pages/ativUser.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>go_home</from-outcome>
+   <to-view-id>/pages/initTgp.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_proj</from-outcome>
+   <to-view-id>/pages/crudProjeto.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_user</from-outcome>
+   <to-view-id>/pages/crudUsuario.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativ</from-outcome>
+   <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_calendar</from-outcome>
+   <to-view-id>/pages/calendar.xhtml</to-view-id>
+  </navigation-case>
+ </navigation-rule>
+ <navigation-rule>
+  <from-view-id>/pages/calendar.xhtml</from-view-id>
+  <navigation-case>
+   <from-outcome>go_home</from-outcome>
+   <to-view-id>/pages/initTgp.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_proj</from-outcome>
+   <to-view-id>/pages/crudProjeto.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativ</from-outcome>
+   <to-view-id>/pages/crudAtividade.xhtml</to-view-id>
+  </navigation-case>
+  <navigation-case>
+   <from-outcome>go_ativUser</from-outcome>
+   <to-view-id>/pages/ativUser.xhtml</to-view-id>
   </navigation-case>
   <navigation-case>
    <from-outcome>go_user</from-outcome>
