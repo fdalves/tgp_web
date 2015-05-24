@@ -49,7 +49,15 @@
   					</f:facet>
 					
 					
-					<p:column headerText="Situação" style="text-align: center;">
+					<p:column headerText="Situação" filterBy="#{ativ.situacao}" width="12%" filterMatchMode="exact" style="text-align: center;">
+						 
+						 <f:facet name="filter">
+							<p:selectOneMenu onchange="PF('dataTable').filter()">
+								<f:selectItem itemLabel="Select One" itemValue="#{null}"
+									noSelectionOption="true" />
+								<f:selectItems value="#{initTgpMB.situacoes}" />
+							</p:selectOneMenu>
+						</f:facet>
 						 <h:outputText value="#{ativ.situacao}" />
 					</p:column>
 					
@@ -61,7 +69,7 @@
 
 
 					<p:column filterBy="#{ativ.projeto.nomeProjeto}"
-						headerText="Projetos" filterMatchMode="exact" width="20%">
+						headerText="Projetos" filterMatchMode="exact" width="15%">
 						<f:facet name="filter">
 							<p:selectOneMenu onchange="PF('dataTable').filter()">
 								<f:selectItem itemLabel="Select One" itemValue="#{null}"
@@ -94,7 +102,7 @@
 
 
 
-					<p:column filterBy="#{ativ.prioridade}" style="text-align: center;"
+					<p:column filterBy="#{ativ.prioridade}" style="text-align: center;" width="12%"
 						filterMatchMode="in">
 						<f:facet name="filter">
 							<p:selectCheckboxMenu label="Prioridade"

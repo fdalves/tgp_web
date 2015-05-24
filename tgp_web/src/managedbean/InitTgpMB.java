@@ -74,6 +74,7 @@ public class InitTgpMB  implements Serializable {
 	private ConfigAtividade configAtividadeAtual = new ConfigAtividade();
 	private DocAtividade docAtividade = new DocAtividade();
 	private List<DocAtividade> docsAtividades = new ArrayList<DocAtividade>();
+	private String[] situacoes = null;
 	
 	
 	public InitTgpMB() {
@@ -112,6 +113,13 @@ public class InitTgpMB  implements Serializable {
 		 prioridades[0] = "baixa";
 		 prioridades[1] = "normal";
 		 prioridades[2] = "alta";
+		 
+		 
+		 this.situacoes = new  String [4];
+		 situacoes[0] = "Atrasada";
+		 situacoes[1] = "Concluída";
+		 situacoes[2] = "Em Andamento";
+		 situacoes[3] = "Novas";
 		 
 		this.atividadeAtual = new Atividade();
 		this.usuarioAtividadeAtual = new UsuarioAtividade();
@@ -652,6 +660,16 @@ public class InitTgpMB  implements Serializable {
 
 	public void setDocsAtividades(List<DocAtividade> docsAtividades) {
 		this.docsAtividades = docsAtividades;
+	}
+
+
+	public String[] getSituacoes() {
+		return situacoes;
+	}
+
+
+	public void setSituacoes(String[] situacoes) {
+		this.situacoes = situacoes;
 	}
 
 
