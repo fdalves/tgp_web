@@ -93,14 +93,13 @@ public class InitTgpMB  implements Serializable {
 		
 		List<UsuarioAtividade> list = atividadeFacade.findAtividadeByUsuario(usuario.getUsuarioId());
 		
+		this.usuario = usuario;
+		
 		for (UsuarioAtividade atividade : list) {
-			this.atividadesList.add(atividade.getAtividade());
+			Atividade a = atividade.getAtividade();
+			this.atividadesList.add(this.initSituacao(a));
 		}
-		
-		
-		
 		List<Projeto> listProjetos = projetoFacade.findAll();
-		
 		
 		nomesProjetos = new String[listProjetos.size()];
 		int count = 0;
@@ -109,7 +108,6 @@ public class InitTgpMB  implements Serializable {
 			nomesProjetos[count] = projeto.getNomeProjeto();
 			count++;
 		}
-		
 		 this.prioridades = new String [3];
 		 prioridades[0] = "baixa";
 		 prioridades[1] = "normal";
@@ -120,18 +118,9 @@ public class InitTgpMB  implements Serializable {
 		this.configAtividadeAtual = new ConfigAtividade();
 		this.docAtividade = new DocAtividade();
 		 docsAtividades = new ArrayList<DocAtividade>();
-		
-		
 	}
-	
-	
-	
 	
 
-	public String goUser(){
-		return "go_user";
-	}
-	 
 	
 	private void listaFotosUser() {
 
@@ -158,7 +147,6 @@ public class InitTgpMB  implements Serializable {
 	 
 	private void criaArquivo(byte[] bytes, String arquivo) {
 		FileOutputStream fos;
-
 		try {
 			fos = new FileOutputStream(arquivo);
 			fos.write(bytes);
@@ -174,23 +162,14 @@ public class InitTgpMB  implements Serializable {
 
 
 	public void carregaGravacao(){
-	
-			DocAtividade docAtividade = new DocAtividade();
-			
-			  byte[] value =  FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hiden").getBytes();
-				
-			  docAtividade.setDoc(value);
-			  docAtividade.setAtividade(atividadeFacade.find(24));
-			  docAtividade.setNomeDoc("teste");
-			  docAtividade.setExtensao(".wav");
-			  docAtividade.setTypeName(".wav");
-			  
-			  docAtividadeFacade.save(docAtividade);
-				 
-			
-			System.out.println("entrou");
-			
-		
+		  DocAtividade docAtividade = new DocAtividade();
+		  byte[] value =  FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("hiden").getBytes();
+		  docAtividade.setDoc(value);
+		  docAtividade.setAtividade(atividadeFacade.find(24));
+		  docAtividade.setNomeDoc("teste");
+		  docAtividade.setExtensao(".wav");
+		  docAtividade.setTypeName(".wav");
+		  docAtividadeFacade.save(docAtividade);
 	}
 	
 	
@@ -314,6 +293,15 @@ public class InitTgpMB  implements Serializable {
 		u.setHorasApropriadas(this.usuarioAtividadeAtual.getHorasApropriadas());
 		usuarioAtividadeFacade.update(u);
 		this.initApropHoras(this.getAtividadeAtual());
+		
+		this.atividadesList = new ArrayList<Atividade>();
+		
+		List<UsuarioAtividade> list = atividadeFacade.findAtividadeByUsuario(usuario.getUsuarioId());
+		for (UsuarioAtividade atividade : list) {
+			Atividade a = atividade.getAtividade();
+			this.atividadesList.add(this.initSituacao(a));
+		}
+		
 		String info = "Apropiação de Horas atualizada com sucesso!";
 		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	}
@@ -345,22 +333,13 @@ public class InitTgpMB  implements Serializable {
 			Usuario usuario = (Usuario) session.getAttribute("user");
 			
 			if (usuario != null){
-				
 				docAtividade.setUsuarioAtualizador(usuario.getNome());
 			}
-			
 			this.docAtividade.setDataInsert(new Date());
-			
-			
-			
 			this.docAtividade.setAtividade(this.atividadeAtual);
-			
-			docAtividadeFacade.save(this.docAtividade);
-			
+			this.docAtividadeFacade.save(this.docAtividade);
 			this.docsAtividades.add(this.docAtividade);
-			
 			this.docAtividade = new DocAtividade();
-			
 			String info = "Doc. carregado com sucesso.";
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info, ""));
 		} else {
@@ -429,7 +408,60 @@ public class InitTgpMB  implements Serializable {
 	}
 	
 	
+	public Atividade initSituacao(Atividade a){
+		
+		a = atividadeFacade.find(a.getAtividadeId());
+		
+		List<UsuarioAtividade> uaList = atividadeFacade.findUsuarioAtividade(a.getAtividadeId());
+		
+		Date dateFinal = a.getDtFim();
+		
+		if((new Date()).after(dateFinal)){
+			if(isConcluida(uaList)){
+				a.setSituacao("Concluída");
+			} else {
+				a.setSituacao("Atrasada");
+			}
+		} else{
+			
+			if (isConcluida(uaList)){
+				a.setSituacao("Concluída");
+			} else {
+				a.setSituacao("em Andamento");
+			}
+			
+			if (isNova(uaList)) a.setSituacao("Nova");
+		}
+		
+		return a;
+	}
 	
+	
+	
+	private boolean isConcluida(List<UsuarioAtividade> uaList) {
+		for (UsuarioAtividade usuarioAtividade : uaList) {
+			if (this.usuario.getUsuarioId() == usuarioAtividade.getUsuario().getUsuarioId()){
+				if (usuarioAtividade.getPercentConclusao() == null){
+					return false;
+				} else if (usuarioAtividade.getPercentConclusao().intValue() == 100) 
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isNova(List<UsuarioAtividade> uaList) {
+		for (UsuarioAtividade usuarioAtividade : uaList) {
+			if (this.usuario.getUsuarioId() == usuarioAtividade.getUsuario().getUsuarioId()){
+				if (usuarioAtividade.getPercentConclusao() == null ){
+					return true;
+				} else if (usuarioAtividade.getPercentConclusao().intValue() == 0 ) return true;
+			}
+		}
+		return false;
+	}
+
+
 	public UsuarioFacade getUsuarioFacade() {
 		return usuarioFacade;
 	}
