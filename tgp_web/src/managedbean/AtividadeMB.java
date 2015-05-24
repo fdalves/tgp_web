@@ -84,6 +84,7 @@ public class AtividadeMB  implements Serializable {
 	private List<SelectItem> usuariosSelectItems = new ArrayList<SelectItem>();
 	private DocAtividade docAtividade = new DocAtividade();
 	private List<Atividade> atividadesList = new ArrayList<Atividade>();
+	private String tabIndex = "-";
 	
 	
 	public AtividadeMB() {
@@ -105,7 +106,7 @@ public class AtividadeMB  implements Serializable {
 			projetoSelectItems.add(item);
 		}
 		
-		this.idUsuSelect =0 ;
+		
 		this.usuariosList = new ArrayList<Usuario>();
 		this.usuariosList =  this.usuarioFacade.findAll();
 		this.usuariosSelectItems = new ArrayList<SelectItem>();
@@ -120,9 +121,19 @@ public class AtividadeMB  implements Serializable {
 		this.atividade.setDocAtividades(docAtividades);
 		this.atividadesList = new ArrayList<Atividade>();
 		this.atividadesList = this.atividadeFacade.findAll();
-		
+		this.idUsuSelect =0 ;
+		this.idProjetoSelect =0;
 		this.iniPopUpConfig();
 		this.iniUsu();
+		
+		
+		FacesContext context = FacesContext.getCurrentInstance();
+		AccordionPanel accordionPanel = (AccordionPanel) context.getViewRoot().findComponent(":form:tab1");
+	    
+		if(accordionPanel != null){
+			accordionPanel.setActiveIndex("-1");
+		}
+		
 		
 	}
 	
@@ -182,7 +193,7 @@ public class AtividadeMB  implements Serializable {
 					return;
 				}
 			} else {
-				String info = "Selecione pelo menos um usuÃ¡rio respossÃ¡vel pela atividade !";
+				String info = "Selecione pelo menos um usuário respossável pela atividade !";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,info, ""));
 				return;
 			}
@@ -204,6 +215,10 @@ public class AtividadeMB  implements Serializable {
 																usuarioAtividadesOld,usuarioAtividadesNew,
 																docAtividadesOld,docAtividadesNew);
 			System.out.println(msg);
+			
+			String info = "Atividade Alterada com Sucesso";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info, ""));
+			this.ini();
 		}
 			
 		
@@ -248,7 +263,7 @@ public class AtividadeMB  implements Serializable {
 	        
 	        if (this.popUpSalve){
 	        	if (this.atividade.getConfigAtividade().getQuantDiasFolgaFeriado() >= diasT ){
-	        		String info = "Verifique a configuraÃ§Ã£o de Dias Ãšteis";
+	        		String info = "Verifique a configuração de Dias úteis";
 	    			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	        		return;
 	        	}
@@ -491,7 +506,7 @@ public class AtividadeMB  implements Serializable {
 	
 	 public void excluirDoc(DocAtividade docAtividade){
 	    	this.atividade.getDocAtividades().remove(docAtividade);
-			String info = "Doc Atividade Excluido com Sucesso";
+			String info = "Doc Atividade Excluida com Sucesso";
 			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,info,null));
 	}
 	 
@@ -538,6 +553,9 @@ public class AtividadeMB  implements Serializable {
 				
 		return atividade;
 	}
+	
+	
+	
 	
 	public AtividadeFacade getAtividadeFacade() {
 		return atividadeFacade;
@@ -795,6 +813,19 @@ public class AtividadeMB  implements Serializable {
 	public void setAtividadesList(List<Atividade> atividadesList) {
 		this.atividadesList = atividadesList;
 	}
+
+
+	public String getTabIndex() {
+		return tabIndex;
+	}
+
+
+	public void setTabIndex(String tabIndex) {
+		this.tabIndex = tabIndex;
+	}
+
+
+	
 
 
 	

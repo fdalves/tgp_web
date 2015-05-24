@@ -7,16 +7,17 @@
 	xmlns:pe="http://primefaces.org/ui/extensions">
 
 
-<f:view contentType="text/html">
+<f:view contentType="text/html" encoding="CP1252">
 	<h:head>
-		<f:facet name="first">
-			<meta http-equiv="X-UA-Compatible" content="EmulateIE8" />
-			<meta content='text/html; charset=UTF-8' http-equiv="Content-Type" />
-		</f:facet>
+		
 		<style type="text/css" media="screen">
 .ui-widget,.ui-widget .ui-widget {
 	font-size: 11px !important;
 }
+.ui-column-title {
+	font-size: 11px !important;
+}
+
 </style>
 
 		<script type="text/javascript">
@@ -40,7 +41,7 @@
 		togglerTipOpen="Close Me">
 		<ui:include src="../pages/topPage.xhtml" />
 
-		<pe:layoutPane position="center">
+		<pe:layoutPane position="center" >
 			<pe:layoutPane position="center">
 
 
@@ -49,19 +50,19 @@
 
 					<p:growl id="growl" sticky="true" closable="true" life="2000" />
 					<p:messages id="messages" closable="true" />
-					<p:panel id="cadUsuer" header="Cadastro Atividades">
+					<p:panel id="cadUsuer" header="Cadastro Atividades" style="width: 80%;" >
 
 						<h:panelGrid columns="4" id="matchGrid" cellpadding="5">
 
 
-							<h:outputLabel for="NomeAtividade" value="Atividade:*" />
+							<p:outputLabel for="NomeAtividade" value="Atividade:" />
 
-							<p:inputText id="NomeAtividade" style="width:500px"
+							<p:inputText id="NomeAtividade"  style="width: 300px"
 								value="#{atividadeMB.atividade.atividadeNome}" required="true"
-								maxlength="100" />
+								maxlength="30" />
 
 
-							<h:outputLabel value="Prioridade:" />
+							<p:outputLabel value="Prioridade:" />
 
 							<p:selectOneButton value="#{atividadeMB.atividade.prioridade}"
 								required="true">
@@ -71,50 +72,49 @@
 							</p:selectOneButton>
 
 
-							<h:outputText value="Proj.:*" />
+							<p:outputLabel value="Proj.:*" />
 
-							<p:selectOneMenu id="projSelect" required="true"
+							<p:selectOneMenu id="projSelect" required="true" style="width: 300px"
 								value="#{atividadeMB.idProjetoSelect}" filter="true"
-								filterMatchMode="startsWith" effect="fade" style="width:500px">
+								filterMatchMode="startsWith" effect="fade" >
 
-								<f:selectItem itemLabel="Select One" itemValue="" />
+								<f:selectItem noSelectionOption="true" itemLabel="Select One" itemValue="0" />
 								<f:selectItems value="#{atividadeMB.projetoSelectItems}" />
 
 							</p:selectOneMenu>
 
 
-							<h:outputText value="Gerente Proj./Ati.:*" />
+							<p:outputLabel value="Gerente Proj./Ati.:*" />
 
 							<p:selectOneMenu id="usuSelect" required="true"
 								value="#{atividadeMB.idUsuSelect}" filter="true"
-								filterMatchMode="startsWith" effect="fade" style="width:300px">
+								filterMatchMode="startsWith" effect="fade" >
 
-								<f:selectItem itemLabel="Select One" itemValue="" />
+								<f:selectItem noSelectionOption="true" itemLabel="Select One" itemValue="0" />
 								<f:selectItems value="#{atividadeMB.usuariosSelectItems}" />
 
 							</p:selectOneMenu>
 
-							<h:outputLabel value="Duração:" />
 
-							<h:panelGroup style="width:500px">
+						<p:outputLabel for="dt_ini" value="Data Inicio:" />
 
-								<p:outputLabel for="dt_ini" value="Data Inicio:" />
-
-								<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}"
-									required="true" pattern="dd/MM/yyyy" mask="true">
-									<p:ajax process="@this"
-										update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
-										event="dateSelect" listener="#{atividadeMB.calculaData()}" />
-								</p:calendar>
-								<p:outputLabel style="padding-left: 20px;" for="dt_fim"
-									value="Data Final:" />
-								<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}"
-									required="true" pattern="dd/MM/yyyy" mask="true">
-									<p:ajax process="@this"
-										update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
-										event="dateSelect" listener="#{atividadeMB.calculaData()}" />
-								</p:calendar>
-							</h:panelGroup>
+						<p:calendar id="dt_ini" value="#{atividadeMB.atividade.dtIni}"
+							required="true" pattern="dd/MM/yyyy" mask="true">
+							<p:ajax process="@this"
+								update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
+								event="dateSelect" listener="#{atividadeMB.calculaData()}" />
+						</p:calendar>
+						
+						<p:outputLabel  for="dt_fim"
+							value="Data Final:" />
+						<p:calendar id="dt_fim" value="#{atividadeMB.atividade.dtFim}"
+							required="true" pattern="dd/MM/yyyy" mask="true">
+							<p:ajax process="@this"
+								update=":form:diasId,:form:horasId,:form:messages,:form:growl,form:slId,form:tab1:selectedUserTable"
+								event="dateSelect" listener="#{atividadeMB.calculaData()}" />
+						</p:calendar>
+							
+							<p:outputLabel value="Config:" />
 
 							<p:commandButton icon="fa fa-wrench"
 								value="Configaração Hora/Dias Úteis" ajax="true"
@@ -122,32 +122,34 @@
 								process="@this,:form:dt_ini,:form:dt_fim,:form:diasId,:form:h1,:form:pgPop"
 								update=":form:slId,:form:popUp,:form:messages,:form:growl,:form:h1">
 							</p:commandButton>
-
+							
+							<p:outputLabel value="Tempo Previsto:" />
+							
 							<h:panelGroup>
-								<h:outputLabel
+								<p:outputLabel
 									style="font-weight:bold;font-size:13px;cellpadding=5;"
 									id="diasId"
 									value="Dias Trabalho: #{atividadeMB.diasTrabalhados}" />
-								<h:outputLabel
+								<p:outputLabel
 									style="font-weight:bold;font-size:13px;padding-left: 50‒;cellpadding=5;padding-left: 10px;padding-right: 10;"
 									id="horasId"
 									value="Horas de Trabalho: #{atividadeMB.horasTrabalho}" />
 							</h:panelGroup>
 
 
-							<h:outputLabel value="Desc. Ati:" />
-							<h:panelGroup>
-								<p:inputTextarea rows="8" cols="30" counter="display"
-									style="width: 500px;" maxlength="500"
+							<p:outputLabel value="Desc. Ati:" />
+							<h:panelGroup colspan="3">
+								<p:inputTextarea rows="3"  style="width: 300px" counter="display"
+									 maxlength="500"
 									counterTemplate="{0} characters remaining." autoResize="false"
 									value="#{atividadeMB.atividade.descAtividade}" />
 								<h:inputHidden id="hidden3" />
 								<br />
-								<h:outputText id="display" />
+								<p:outputLabel id="display" />
 							</h:panelGroup>
 
 
-							<h:inputHidden />
+							
 
 
 
@@ -158,7 +160,7 @@
 					<p:spacer height="10" />
 
 
-					<p:accordionPanel id="tab1" activeIndex="-1" style="width: 80%;"
+					<p:accordionPanel id="tab1" activeIndex="-1"  
 						multiple="false">
 						<p:ajax event="tabChange" listener="#{atividadeMB.onTabChange}"
 							process="@this"
@@ -211,26 +213,26 @@
 									<p:fieldset id="selectedUser" legend="Usuários Selecionados"
 										style="margin-top:20px">
 										<p:outputPanel id="dropArea">
-											<h:outputText value="!!!Drop Aqui!!!"
+											<p:outputLabel value="!!!Drop Aqui!!!"
 												rendered="#{empty atividadeMB.usuariosSelect}"
 												style="font-size:24px;" />
 											<p:dataTable id="selectedUserTable" var="user"
 												value="#{atividadeMB.usuariosSelect}">
 												<p:column headerText="Nome">
-													<h:outputText value="#{user.usuario.nome}" />
+													<p:outputLabel value="#{user.usuario.nome}" />
 												</p:column>
 
 												<p:column headerText="Dias Atv.">
-													<h:outputText value="#{atividadeMB.diaAtvUser} Dias" />
+													<p:outputLabel value="#{atividadeMB.diaAtvUser} Dias" />
 												</p:column>
 
 												<p:column headerText="Horas Atv.">
-													<h:outputText value="#{atividadeMB.horaAtvUser} Horas" />
+													<p:outputLabel value="#{atividadeMB.horaAtvUser} Horas" />
 												</p:column>
 
 												<p:column style="width:55px;text-align: center">
 													<f:facet name="header">
-														<h:outputText value="Cargo Atv." />
+														<p:outputLabel value="Cargo Atv." />
 													</f:facet>
 
 													<p:commandButton title="Cargo na Atv."
@@ -243,7 +245,7 @@
 
 												<p:column style="width:55px;text-align: center">
 													<f:facet name="header">
-														<h:outputText value="Excluir" />
+														<p:outputLabel value="Excluir" />
 													</f:facet>
 
 													<p:commandButton ajax="true" icon="ui-icon-trash"
@@ -269,22 +271,22 @@
 							</p:panel>
 						</p:tab>
 						<p:tab title="Documentos vinculados a Atividade">
-							<p:panel>
+							<p:panel style="width: 80%;">
 								<h:panelGrid columns="2" id="docG" cellpadding="10">
-									<h:outputLabel for="docName" value="Nome Documento: *" />
+									<p:outputLabel for="docName" value="Nome Documento: *" />
 									<p:inputText id="docName"
 										value="#{atividadeMB.docAtividade.nomeDoc}" maxlength="100"
 										style="width: 300px;" />
 
-									<h:outputLabel value="Desc. Documento:" />
+									<p:outputLabel value="Desc. Documento:" />
 									<p:inputTextarea rows="3" style="width: 300px;" cols="30"
 										counter="display2" maxlength="255"
 										counterTemplate="{0} characters remaining." autoResize="false"
 										value="#{atividadeMB.docAtividade.descDoc}" />
 									<h:inputHidden id="hidden4" />
-									<h:outputText id="display2" />
+									<p:outputLabel id="display2" />
 
-									<h:outputLabel value="Documento: *" />
+									<p:outputLabel value="Documento: *" />
 									<p:fileUpload
 										fileUploadListener="#{atividadeMB.handleFileUpload}"
 										mode="advanced" dragDropSupport="true" update=":form:growl"
@@ -312,7 +314,7 @@
 
 
 							<p:spacer height="20" />
-							<p:panel>
+							<p:panel style="width: 80%;">
 
 								<p:dataTable id="dataTableDoc" var="doc" widgetVar="docTable"
 									value="#{atividadeMB.atividade.docAtividades}" paginator="true"
@@ -323,33 +325,33 @@
 
 									<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc."
 										filterMatchMode="contains">
-										<h:outputText value="#{doc.nomeDoc}" />
+										<p:outputLabel value="#{doc.nomeDoc}" />
 									</p:column>
 
 									<p:column>
 										<f:facet name="header">
-											<h:outputText value="Desc. Doc" />
+											<p:outputLabel value="Desc. Doc" />
 										</f:facet>
-										<h:outputText value="#{doc.descDoc}" />
+										<p:outputLabel value="#{doc.descDoc}" />
 									</p:column>
 
 									<p:column>
 										<f:facet name="header">
-											<h:outputText value="User" />
+											<p:outputLabel value="User" />
 										</f:facet>
-										<h:outputText value="#{doc.usuarioAtualizador}" />
+										<p:outputLabel value="#{doc.usuarioAtualizador}" />
 									</p:column>
 
 									<p:column headerText="Data Insert.">
-										<h:outputText value="#{doc.dataInsert}">
+										<p:outputLabel value="#{doc.dataInsert}">
 											<f:convertDateTime locale="pt,BR" dateStyle="default"
 												pattern="dd/MM/yyyy" />
-										</h:outputText>
+										</p:outputLabel>
 									</p:column>
 
 									<p:column style="width:55px;text-align: center">
 										<f:facet name="header">
-											<h:outputText value="Donwload" />
+											<p:outputLabel value="Donwload" />
 										</f:facet>
 										<p:commandButton icon="fa fa-download"
 											action="#{atividadeMB.downloadDoc(doc)}" process="@this"
@@ -359,7 +361,7 @@
 
 									<p:column style="width:55px;text-align: center">
 										<f:facet name="header">
-											<h:outputText value="Excluir" />
+											<p:outputLabel value="Excluir" />
 										</f:facet>
 
 										<p:commandButton icon="ui-icon-trash" title="Excluir"
@@ -380,13 +382,13 @@
 					</p:accordionPanel>
 
 
-					<p:separator></p:separator>
+					<p:spacer height="10px" />
 
 					<center>
 						<p:commandButton value="Savar" type="Submit" ajax="false"
 							icon="ui-icon-check"
-							update=":form:matchGrid,:form:messages,:form:growl,form:dataTable"
-							process="@this" validateClient="true"
+							update=":form:matchGrid,:form:messages,:form:growl,form:dataTable,:form:usuSelect,:form:tab1"
+							process="@this,:form:usuSelect,:form:tab1" validateClient="true"
 							actionListener="#{atividadeMB.salvar()}" />
 						<p:commandButton value="Limpar" icon="ui-icon-close"
 							update=":form:matchGrid,:form:popUp,:form:tab1,:form:messages,:form:growl"
@@ -400,7 +402,7 @@
 					<h:inputHidden id="h1" value="#{atividadeMB.popUpSalve}" />
 
 					<p:separator></p:separator>
-
+					<p:spacer height="50px" />
 					<p:panel header="Atividade Cadastrados" style="width:800px">
 
 						<p:dataTable id="dataTable" var="ativ"
@@ -409,22 +411,22 @@
 
 
 							<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
-								footerText="contains" filterMatchMode="contains">
-								<h:outputText value="#{ativ.atividadeNome}" />
+								 filterMatchMode="contains">
+								<p:outputLabel value="#{ativ.atividadeNome}" />
 							</p:column>
 
 							<p:column>
 								<f:facet name="header">
-									<h:outputText value="Projeto" />
+									<p:outputLabel value="Projeto" />
 								</f:facet>
-								<h:outputText value="#{ativ.projeto.nomeProjeto}" />
+								<p:outputLabel value="#{ativ.projeto.nomeProjeto}" />
 							</p:column>
 
 
 
 							<p:column style="width:55px;text-align: center">
 								<f:facet name="header">
-									<h:outputText value="Editar" />
+									<p:outputLabel value="Editar" />
 								</f:facet>
 								<p:commandButton process="@this" ajax="true"
 									update=":form:matchGrid,:form:tab1,:form:popUp,:form:h1"
@@ -448,20 +450,20 @@
 		modal="true" height="200" visible="#{atividadeMB.mostraPopUpConfig}">
 		<p:panel>
 			<h:panelGrid columns="2" id="pgPop" cellpadding="5">
-				<h:outputLabel value="Horas p/ Dia:" />
+				<p:outputLabel value="Horas p/ Dia:" />
 				<p:spinner
 					value="#{atividadeMB.atividade.configAtividade.quantHorasDias}"
 					min="0.5" max="24" stepFactor="0.5" showOn="hover" />
-				<h:outputLabel value="Trab.Fim semana:" />
+				<p:outputLabel value="Trab.Fim semana:" />
 				<h:panelGroup>
-					<h:outputText style="margin-bottom: 10px;" value="Sabádos " />
+					<p:outputLabel style="margin-bottom: 10px;" value="Sabádos " />
 					<p:selectBooleanCheckbox
 						value="#{atividadeMB.atividade.configAtividade.trabSab}" />
-					<h:outputText value="Domingos " />
+					<p:outputLabel value="Domingos " />
 					<p:selectBooleanCheckbox
 						value="#{atividadeMB.atividade.configAtividade.trabDom}" />
 				</h:panelGroup>
-				<h:outputLabel value="Feriados/Folgas Periodo" />
+				<p:outputLabel value="Feriados/Folgas Periodo" />
 
 				<h:panelGrid columns="1" style="margin-bottom: 10px">
 					<p:inputText id="sliderId"
@@ -474,7 +476,7 @@
 
 			<center>
 				<p:commandButton value="Savar" ajax="true" icon="ui-icon-check"
-					update=":form:popUp,:form:pgPop,:form:diasId,:form:horasId,:form:h1,form:tab1:selectedUserTable"
+					update=":form:popUp,:form:pgPop,:form:diasId,:form:horasId,:form:h1,form:tab1:selectedUserTable,:form:usuSelect"
 					process="@this,:form:dt_ini,:form:dt_fim,:form:popUp,:form:h1"
 					actionListener="#{atividadeMB.salvaConfigPopUp()}" />
 				<p:commandButton value="Limpar" icon="ui-icon-close"
@@ -498,16 +500,16 @@
 		<p:outputPanel id="display2">
 			<h:panelGrid id="grid3" columns="2" cellpadding="5">
 				<f:facet name="Cargo do Usuário na Atividade" />
-				<h:outputText value="Testador: " />
+				<p:outputLabel value="Testador: " />
 				<p:selectBooleanCheckbox
 					value="#{atividadeMB.usuarioAtividadeSelect.cargo.testador}" />
-				<h:outputText value="Programador: " />
+				<p:outputLabel value="Programador: " />
 				<p:selectBooleanCheckbox
 					value="#{atividadeMB.usuarioAtividadeSelect.cargo.programador}" />
-				<h:outputText value="Analista: " />
+				<p:outputLabel value="Analista: " />
 				<p:selectBooleanCheckbox
 					value="#{atividadeMB.usuarioAtividadeSelect.cargo.analista}" />
-				<h:outputText value="Gerente: " />
+				<p:outputLabel value="Gerente: " />
 				<p:selectBooleanCheckbox
 					value="#{atividadeMB.usuarioAtividadeSelect.cargo.gerente}" />
 
