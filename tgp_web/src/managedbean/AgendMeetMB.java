@@ -103,6 +103,8 @@ public class AgendMeetMB  implements Serializable {
 				DateFormat df = DateFormat.getDateInstance(DateFormat.FULL);
 				SimpleDateFormat format = new SimpleDateFormat("HH:mm");  
 				
+				SimpleDateFormat formatM = new SimpleDateFormat("dd/MM/yyyy HH:mm");  
+				
 				System.out.println(format.format(date));
 				System.out.println(df.format(this.getDate()));
 				System.out.println(assunto);
@@ -116,7 +118,7 @@ public class AgendMeetMB  implements Serializable {
 				atividade.setGerente(usuario);
 				atividade.setDtIni(date);
 				atividade.setDtFim(date);
-				atividade.setAtividadeNome("Meeting - "+ df.format(this.getDate()));
+				atividade.setAtividadeNome("Meeting - "+ formatM.format(this.getDate()));
 				atividade.setDescAtividade(assunto);
 				atividade.setDtInsert(new Date());
 				atividade.setUsuarioAtividades(null);
