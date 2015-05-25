@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -102,6 +103,9 @@ public class InitTgpMB  implements Serializable {
 			Atividade a = atividade.getAtividade();
 			this.atividadesList.add(this.initSituacao(a));
 		}
+		
+		Collections.sort(this.atividadesList);
+		
 		List<Projeto> listProjetos = projetoFacade.findAll();
 		
 		nomesProjetos = new String[listProjetos.size()];
@@ -311,6 +315,8 @@ public class InitTgpMB  implements Serializable {
 			Atividade a = atividade.getAtividade();
 			this.atividadesList.add(this.initSituacao(a));
 		}
+		
+		Collections.sort(this.atividadesList);
 		
 		String info = "Apropiação de Horas atualizada com sucesso!";
 		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
