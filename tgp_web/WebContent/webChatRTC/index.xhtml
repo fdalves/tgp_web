@@ -193,7 +193,7 @@
         <div class="main">
             <div class="new-message" style="overflow: hidden;height: 150px;">
                 <div class="user-info" style="height: 100%">
-                    <img  src="../temp/#{tgpMB.usuario.usuarioId}.jpg"/>
+                    <img  src="../temp/#{loginMB.usuario.usuarioId}.jpg"/>
                 </div>
 				
                 <div class="user-activity">
@@ -202,7 +202,7 @@
                     <h2 class="header">Web Chat RTC!</h2>
                     <p class="message">
                         <input type="text"  id="room-name" value="chat" placeholder="Private Room-ID" style="border: 1px solid rgb(253, 253, 253);box-shadow: inset 0 0 0 1px rgb(53, 52, 52);visibility: hidden;outline: 1px solid rgb(7, 7, 7);" title="Your private rooms unique-id. It is required!"/><br />
-                        <input type="text" id="your-name" value="#{tgpMB.usuario.nome}" disabled="disabled" placeholder="(optional)" title="Optional but Recommended!"/><button id="continue" title="Click to join the room!">conect</button>
+                        <input type="text" id="your-name" value="#{loginMB.usuario.nome}" disabled="disabled" placeholder="" style="visibility: hidden;" title="Optional but Recommended!"/><button id="continue" title="Click to join the room!">conect</button>
                     </p>
                 </div>
             </div>

@@ -21,6 +21,7 @@ public class LoginMB  implements Serializable {
 	private String hostName = "192.168.1.4";
 	private static final long serialVersionUID = 1L;
 	
+	
 	@EJB
 	private UsuarioFacade usuarioFacade;
 	private Usuario usuario =  new  Usuario();
