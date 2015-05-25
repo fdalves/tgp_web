@@ -26,14 +26,15 @@ import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.primefaces.event.FileUploadEvent;
-
 import model.Atividade;
 import model.ConfigAtividade;
 import model.DocAtividade;
 import model.Projeto;
 import model.Usuario;
 import model.UsuarioAtividade;
+
+import org.primefaces.event.FileUploadEvent;
+
 import ejb.AtividadeFacade;
 import ejb.ConfigAtividadeFacade;
 import ejb.DocAtividadeFacade;
@@ -85,6 +86,7 @@ public class InitTgpMB  implements Serializable {
 	@PostConstruct
 	public void ini(){
 		
+			
 		this.usarioList = usuarioFacade.findAll();
 		this.listaFotosUser();
 		

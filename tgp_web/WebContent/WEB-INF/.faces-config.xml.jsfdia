@@ -28,10 +28,13 @@
    <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
     NAME="output4" PATH="/pages/calendar.xhtml"
     TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="agndMeet::#pages#agndMeet.xhtml"
+    NAME="output5" PATH="/pages/agndMeet.xhtml"
+    TARGET="rules:#pages#agndMeet.xhtml" TITLE="agndMeet" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudUsuario.xhtml"
-  PATH="/pages/crudUsuario.xhtml" SHAPE="208,408,50,105" model-entity="JSFProcessGroup">
+  PATH="/pages/crudUsuario.xhtml" SHAPE="352,456,50,121" model-entity="JSFProcessGroup">
   <PROCESS-ITEM ID="rules:#pages#crudUsuario.xhtml:0" NAME="item"
    PATH="/pages/crudUsuario.xhtml" model-entity="JSFProcessItem">
    <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
@@ -49,6 +52,9 @@
    <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
     NAME="output4" PATH="/pages/calendar.xhtml"
     TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="agndMeet::#pages#agndMeet.xhtml"
+    NAME="output5" PATH="/pages/agndMeet.xhtml"
+    TARGET="rules:#pages#agndMeet.xhtml" TITLE="agndMeet" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudProjeto.xhtml"
@@ -71,6 +77,9 @@
    <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
     NAME="output4" PATH="/pages/calendar.xhtml"
     TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="agndMeet::#pages#agndMeet.xhtml"
+    NAME="output5" PATH="/pages/agndMeet.xhtml"
+    TARGET="rules:#pages#agndMeet.xhtml" TITLE="agndMeet" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#crudAtividade.xhtml"
@@ -92,6 +101,9 @@
    <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
     NAME="output4" PATH="/pages/calendar.xhtml"
     TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="agndMeet::#pages#agndMeet.xhtml"
+    NAME="output5" PATH="/pages/agndMeet.xhtml"
+    TARGET="rules:#pages#agndMeet.xhtml" TITLE="agndMeet" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#ativUser.xhtml"
@@ -115,6 +127,9 @@
    <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
     NAME="output4" PATH="/pages/calendar.xhtml"
     TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="agndMeet::#pages#agndMeet.xhtml"
+    NAME="output5" PATH="/pages/agndMeet.xhtml"
+    TARGET="rules:#pages#agndMeet.xhtml" TITLE="agndMeet" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
  <PROCESS-ITEM NAME="rules:#pages#calendar.xhtml"
@@ -136,6 +151,33 @@
    <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
     NAME="output4" PATH="/pages/crudUsuario.xhtml"
     TARGET="rules:#pages#crudUsuario.xhtml" TITLE="go_user" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="agndMeet::#pages#agndMeet.xhtml"
+    NAME="output5" PATH="/pages/agndMeet.xhtml"
+    TARGET="rules:#pages#agndMeet.xhtml" TITLE="agndMeet" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#pages#agndMeet.xhtml"
+  PATH="/pages/agndMeet.xhtml" SHAPE="40,312,50,121" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#pages#agndMeet.xhtml:0" NAME="item"
+   PATH="/pages/agndMeet.xhtml" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT ID="go_home::#pages#initTgp.xhtml" NAME="output"
+    PATH="/pages/initTgp.xhtml" TARGET="rules:#pages#initTgp.xhtml"
+    TITLE="go_home" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativ::#pages#crudAtividade.xhtml"
+    NAME="output1" PATH="/pages/crudAtividade.xhtml"
+    TARGET="rules:#pages#crudAtividade.xhtml" TITLE="go_ativ" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_proj::#pages#crudProjeto.xhtml"
+    NAME="output2" PATH="/pages/crudProjeto.xhtml"
+    TARGET="rules:#pages#crudProjeto.xhtml" TITLE="go_proj" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_user::#pages#crudUsuario.xhtml"
+    NAME="output3" PATH="/pages/crudUsuario.xhtml"
+    TARGET="rules:#pages#crudUsuario.xhtml" TITLE="go_user" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_ativUser::#pages#ativUser.xhtml"
+    NAME="output4" PATH="/pages/ativUser.xhtml"
+    TARGET="rules:#pages#ativUser.xhtml" TITLE="go_ativUser" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="go_calendar::#pages#calendar.xhtml"
+    NAME="output5" PATH="/pages/calendar.xhtml"
+    TARGET="rules:#pages#calendar.xhtml" TITLE="go_calendar" model-entity="JSFProcessItemOutput"/>
   </PROCESS-ITEM>
  </PROCESS-ITEM>
 </PROCESS>
