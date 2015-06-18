@@ -49,7 +49,7 @@
   					</f:facet>
 					
 					
-					<p:column headerText="Situação" filterBy="#{ativ.situacao}" width="12%" filterMatchMode="exact" style="text-align: center;">
+					<p:column headerText="Situação" filterBy="#{ativ.situacao}" width="8%" filterMatchMode="exact" style="text-align: center;">
 						 
 						 <f:facet name="filter">
 							<p:selectOneMenu onchange="PF('dataTable').filter()">
@@ -58,12 +58,12 @@
 								<f:selectItems value="#{initTgpMB.situacoes}" />
 							</p:selectOneMenu>
 						</f:facet>
-						 <h:outputText value="#{ativ.situacao}" />
+						 <p:outputLabel value="#{ativ.situacao}" />
 					</p:column>
 					
 					<p:column filterBy="#{ativ.atividadeNome}" headerText="Atividade"
 						filterMatchMode="contains" width="20%">
-						<h:outputText value="#{ativ.atividadeNome}" />
+						<p:outputLabel value="#{ativ.atividadeNome}" />
 					</p:column>
 
 
@@ -77,16 +77,16 @@
 								<f:selectItems value="#{initTgpMB.nomesProjetos}" />
 							</p:selectOneMenu>
 						</f:facet>
-						<h:outputText value="#{ativ.projeto.nomeProjeto}" />
+						<p:outputLabel value="#{ativ.projeto.nomeProjeto}" />
 
 					</p:column>
 
 					<p:column headerText="Data Ini." width="8%"
 						style="text-align: center; ">
-						<h:outputText value="#{ativ.dtIni}">
+						<p:outputLabel value="#{ativ.dtIni}">
 							<f:convertDateTime locale="pt,BR" dateStyle="default"
 								pattern="dd/MM/yyyy" />
-						</h:outputText>
+						</p:outputLabel>
 					</p:column>
 
 
@@ -94,10 +94,10 @@
 
 					<p:column headerText="Data Fim." width="8%"
 						style="text-align: center;">
-						<h:outputText value="#{ativ.dtFim}">
+						<p:outputLabel value="#{ativ.dtFim}">
 							<f:convertDateTime locale="pt,BR" dateStyle="default"
 								pattern="dd/MM/yyyy" />
-						</h:outputText>
+						</p:outputLabel>
 					</p:column>
 
 
@@ -110,7 +110,7 @@
 								<f:selectItems value="#{initTgpMB.prioridades}" />
 							</p:selectCheckboxMenu>
 						</f:facet>
-						<h:outputText value="#{ativ.prioridade}" />
+						<p:outputLabel value="#{ativ.prioridade}" />
 					</p:column>
 
 			        
@@ -255,14 +255,14 @@
 				<h:outputLabel value="G.P. Resposável" />
 				<p:outputLabel value="#{initTgpMB.atividadeAtual.gerente.nome}"></p:outputLabel>
 				<p:outputLabel value="Data Ini." />
-				<h:outputText value="#{initTgpMB.atividadeAtual.dtIni}">
+				<p:outputLabel value="#{initTgpMB.atividadeAtual.dtIni}">
 					<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />
-				</h:outputText>
+				</p:outputLabel>
 				
 				<p:outputLabel value="Data Fim." />
-				<h:outputText value="#{initTgpMB.atividadeAtual.dtFim}">
+				<p:outputLabel value="#{initTgpMB.atividadeAtual.dtFim}">
 					<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />
-				</h:outputText>
+				</p:outputLabel>
 
 
 				
@@ -290,15 +290,15 @@
 
 
 			<p:column headerText="Usuário">
-				<h:outputText value="#{usuativ.usuario.nome}" />
+				<p:outputLabel value="#{usuativ.usuario.nome}" />
 			</p:column>
 
 			<p:column headerText="Horas Previstas">
-				<h:outputText value="#{usuativ.horasTrabalho}" />
+				<p:outputLabel value="#{usuativ.horasTrabalho}" />
 			</p:column>
 
 			<p:column headerText="Horas Alocadas">
-				<h:outputText value="#{usuativ.horasApropriadas}" />
+				<p:outputLabel value="#{usuativ.horasApropriadas}" />
 			</p:column>
 
 		</p:dataTable>
@@ -320,7 +320,7 @@
 				<h:outputLabel value="Percentual de Conclusão:" />
 				
 			    <h:panelGrid columns="1" id="sliderId"  style="margin-bottom: 10px">
-			        <h:outputText id="output" value="#{initTgpMB.usuarioAtividadeAtual.percentConclusao} % Concluído"  />
+			        <p:outputLabel id="output" value="#{initTgpMB.usuarioAtividadeAtual.percentConclusao} % Concluído"  />
 			        <h:inputHidden id="txt2" value="#{initTgpMB.usuarioAtividadeAtual.percentConclusao}" />
 			        <p:slider for="txt2" display="output" style="width: 200px" displayTemplate="{value} % Concluído" />
 			    </h:panelGrid>
@@ -346,7 +346,7 @@
 		
 		<p:panel >
 					<f:facet name="header">
-               			<h:outputText value="DOC. Atividade" />
+               			<p:outputLabel value="DOC. Atividade" />
         			</f:facet>
 					<h:panelGrid columns="2" id="docG" cellpadding="10">
 						<h:outputLabel value="Atividade" />
@@ -360,7 +360,7 @@
 						maxlength="255" counterTemplate="{0} characters remaining."
 						autoResize="false" value="#{initTgpMB.docAtividade.descDoc}" />
 						<h:inputHidden id="hidden4" />
-						<h:outputText id="display2" />
+						<p:outputLabel id="display2" />
 			
 						<h:outputLabel value="Documento: *" />
 						<p:fileUpload fileUploadListener="#{initTgpMB.handleFileUpload}" 
@@ -389,32 +389,32 @@
         			</f:facet>
         			
         			<p:column filterBy="#{doc.nomeDoc}" headerText="Nome Doc." filterMatchMode="contains">
-						<h:outputText value="#{doc.nomeDoc}" />
+						<p:outputLabel value="#{doc.nomeDoc}" />
 					</p:column>
 					
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="Desc. Doc" />
+							<p:outputLabel value="Desc. Doc" />
 						</f:facet>
-						<h:outputText value="#{doc.descDoc}" />
+						<p:outputLabel value="#{doc.descDoc}" />
 					</p:column>
 					
 					<p:column>
 						<f:facet name="header">
-							<h:outputText value="User" />
+							<p:outputLabel value="User" />
 						</f:facet>
-						<h:outputText value="#{doc.usuarioAtualizador}" />
+						<p:outputLabel value="#{doc.usuarioAtualizador}" />
 					</p:column>
 					
 					<p:column headerText="Data Insert.">
-						<h:outputText value="#{doc.dataInsert}">  
+						<p:outputLabel value="#{doc.dataInsert}">  
   							<f:convertDateTime locale="pt,BR" dateStyle="default" pattern="dd/MM/yyyy" />  
-						</h:outputText>  
+						</p:outputLabel>  
 					</p:column>
 					
 					<p:column style="width:55px;text-align: center">
 						<f:facet name="header">
-							<h:outputText value="Donwload" />
+							<p:outputLabel value="Donwload" />
 						</f:facet>
 						<p:commandButton icon="fa fa-download" action="#{initTgpMB.downloadDoc(doc)}" process="@this" ajax="false" type="submit" immediate="true"/>
 					</p:column>
@@ -422,7 +422,7 @@
 					
 					<p:column style="width:55px;text-align: center">
 						<f:facet name="header">
-							<h:outputText value="Excluir" />
+							<p:outputLabel value="Excluir" />
 						</f:facet>
 
 						<p:commandButton icon="ui-icon-trash" title="Excluir"
