@@ -4,15 +4,24 @@ package managedbean;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
+import javax.servlet.http.HttpSession;
+
+import model.Atividade;
+import model.ConfigAtividade;
+import model.Usuario;
+import model.UsuarioAtividade;
 
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
@@ -22,6 +31,9 @@ import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
+
+import ejb.AtividadeFacade;
+import ejb.ConfigAtividadeFacade;
  
 @ManagedBean(name="scheduleView")
 @ViewScoped
@@ -32,7 +44,19 @@ public class ScheduleView implements Serializable {
     private ScheduleModel lazyEventModel;
  
     private ScheduleEvent event = new DefaultScheduleEvent();
+    
+    @EJB
+    private AtividadeFacade atividadeFacade;
+    
+    @EJB
+    private ConfigAtividadeFacade configAtividadeFacade;
+    
+    private Usuario usuario =  new  Usuario();
+    private List<Atividade> atividadesList = new ArrayList<Atividade>();
  
+  
+    
+    /*
     @PostConstruct
     public void init() {
         eventModel = new DefaultScheduleModel();
@@ -53,6 +77,111 @@ public class ScheduleView implements Serializable {
             }   
         };
     }
+    
+    **/
+    
+    @PostConstruct
+    public void init() {
+    	
+    	this.initCalendar();
+    }
+    
+    
+    public void initCalendar(){
+    	
+    	FacesContext fc = FacesContext.getCurrentInstance();
+		HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+		Usuario usuario = (Usuario) session.getAttribute("user");
+		
+		List<UsuarioAtividade> list = atividadeFacade.findAtividadeByUsuario(usuario.getUsuarioId());
+		
+		this.usuario = usuario;
+		
+		for (UsuarioAtividade atividade : list) {
+			Atividade a = atividade.getAtividade();
+			this.atividadesList.add(this.initSituacao(a));
+		}
+		
+		this.carregaCalendar();
+    }
+    
+    
+    public void carregaCalendar(){
+    	
+    	
+    	
+    	List<Atividade> atividades = this.atividadesList;
+    	eventModel = new DefaultScheduleModel();
+    	
+    	for (Atividade atividade : atividades) {
+			
+    		ConfigAtividade configAtividade = configAtividadeFacade.find(atividade.getConfigAtividade().getConfigAtividadeId());
+    		
+    		Calendar start = Calendar.getInstance();
+    		start.setTime(atividade.getDtIni());
+    		start.set(Calendar.HOUR, new Float(configAtividade.getQuantHorasDias()).intValue());
+    		
+    		
+    		Calendar end = Calendar.getInstance();
+    		end.setTime(atividade.getDtFim());
+    		end.set(Calendar.HOUR, new Float(configAtividade.getQuantHorasDias()).intValue());
+    		eventModel.addEvent(new DefaultScheduleEvent(atividade.getAtividadeNome(), start.getTime(), end.getTime()));
+ 			
+		}
+    	
+    }
+    
+    public Atividade initSituacao(Atividade a){
+		
+		a = atividadeFacade.find(a.getAtividadeId());
+		
+		List<UsuarioAtividade> uaList = atividadeFacade.findUsuarioAtividade(a.getAtividadeId());
+		
+		Date dateFinal = a.getDtFim();
+		
+		if((new Date()).after(dateFinal)){
+			if(isConcluida(uaList)){
+				a.setSituacao("Conclu�da");
+			} else {
+				a.setSituacao("Atrasada");
+			}
+		} else{
+			
+			if (isConcluida(uaList)){
+				a.setSituacao("Conclu�da");
+			} else {
+				a.setSituacao("Em Andamento");
+			}
+			
+			if (isNova(uaList)) a.setSituacao("Nova");
+		}
+		
+		return a;
+	}
+    
+    private boolean isConcluida(List<UsuarioAtividade> uaList) {
+		for (UsuarioAtividade usuarioAtividade : uaList) {
+			if (this.usuario.getUsuarioId() == usuarioAtividade.getUsuario().getUsuarioId()){
+				if (usuarioAtividade.getPercentConclusao() == null){
+					return false;
+				} else if (usuarioAtividade.getPercentConclusao().intValue() == 100) 
+					return true;
+			}
+		}
+		return false;
+	}
+	
+	private boolean isNova(List<UsuarioAtividade> uaList) {
+		for (UsuarioAtividade usuarioAtividade : uaList) {
+			if (this.usuario.getUsuarioId() == usuarioAtividade.getUsuario().getUsuarioId()){
+				if (usuarioAtividade.getPercentConclusao() == null ){
+					return true;
+				} else if (usuarioAtividade.getPercentConclusao().intValue() == 0 ) return true;
+			}
+		}
+		return false;
+	}
+    
      
     public Date getRandomDate(Date base) {
         Calendar date = Calendar.getInstance();
@@ -194,4 +323,37 @@ public class ScheduleView implements Serializable {
     private void addMessage(FacesMessage message) {
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+
+
+	public AtividadeFacade getAtividadeFacade() {
+		return atividadeFacade;
+	}
+
+
+	public void setAtividadeFacade(AtividadeFacade atividadeFacade) {
+		this.atividadeFacade = atividadeFacade;
+	}
+
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+
+	public List<Atividade> getAtividadesList() {
+		return atividadesList;
+	}
+
+
+	public void setAtividadesList(List<Atividade> atividadesList) {
+		this.atividadesList = atividadesList;
+	}
+    
+    
+    
 }
