@@ -46,21 +46,21 @@
 
 					<h:panelGrid columnClasses="value">
 
-						<p:schedule id="schedule" value="#{scheduleView.eventModel}"
+						<p:schedule id="schedule" value="#{initTgpMB.eventModel}"
 							widgetVar="myschedule" locale="pt">
 
 							<p:ajax event="dateSelect"
-								listener="#{scheduleView.onDateSelect}"
+								listener="#{initTgpMB.onDateSelect}"
 								update=":form:eventDetails"
 								oncomplete="PF('eventDialog').show();" />
 							<p:ajax event="eventSelect"
-								listener="#{scheduleView.onEventSelect}"
+								listener="#{initTgpMB.onEventSelect}"
 								update=":form:eventDetails"
 								oncomplete="PF('eventDialog').show();" />
-							<p:ajax event="eventMove" listener="#{scheduleView.onEventMove}"
+							<p:ajax event="eventMove" listener="#{initTgpMB.onEventMove}"
 								update=":form:messages" />
 							<p:ajax event="eventResize"
-								listener="#{scheduleView.onEventResize}" update=":form:messages" />
+								listener="#{initTgpMB.onEventResize}" update=":form:messages" />
 
 						</p:schedule>
 
@@ -78,35 +78,26 @@
 
 
 
-	<p:dialog widgetVar="eventDialog" header="Event Details"
+	<p:dialog widgetVar="eventDialog" header="Atividade Details"
 		showEffect="clip" hideEffect="clip">
 		<h:panelGrid id="eventDetails" columns="2">
-			<h:outputLabel for="title" value="Title:" />
-			<p:inputText id="title" value="#{scheduleView.event.title}" />
+			<p:outputLabel for="title" value="Atividade:" />
+			<p:inputText id="title" readonly="true" value="#{initTgpMB.event.title}" />
 
-			<h:outputLabel for="from" value="From:" />
-			<p:inputMask id="from" value="#{scheduleView.event.startDate}"
+			<p:outputLabel for="from" value="Data Inicio:" />
+			<p:inputMask id="from" readonly="true" value="#{initTgpMB.event.startDate}"
 				mask="99/99/9999">
 				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 			</p:inputMask>
 
-			<h:outputLabel for="to" value="To:" />
-			<p:inputMask id="to" value="#{scheduleView.event.endDate}"
+			<p:outputLabel for="to" value="Data Fim:" />
+			<p:inputMask id="to" readonly="true" value="#{initTgpMB.event.endDate}"
 				mask="99/99/9999">
 				<f:convertDateTime pattern="dd/MM/yyyy" timeZone="GMT+2" />
 			</p:inputMask>
 
-			<h:outputLabel for="allDay" value="All Day:" />
-			<h:selectBooleanCheckbox id="allDay"
-				value="#{scheduleView.event.allDay}" />
-
-			<p:commandButton type="reset" value="Reset" />
-			<p:commandButton id="addButton" value="Save"
-				actionListener="#{scheduleView.addEvent}"
-				oncomplete="PF('myschedule').update();PF('eventDialog').hide();" />
 		</h:panelGrid>
 	</p:dialog>
-
 
 
 

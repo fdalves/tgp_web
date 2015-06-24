@@ -23,6 +23,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -35,6 +36,13 @@ import model.Usuario;
 import model.UsuarioAtividade;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultScheduleEvent;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleEvent;
+import org.primefaces.model.ScheduleModel;
 
 import ejb.AtividadeFacade;
 import ejb.ConfigAtividadeFacade;
@@ -77,6 +85,8 @@ public class InitTgpMB  implements Serializable {
 	private DocAtividade docAtividade = new DocAtividade();
 	private List<DocAtividade> docsAtividades = new ArrayList<DocAtividade>();
 	private String[] situacoes = null;
+	private ScheduleModel eventModel;
+	private ScheduleEvent event = new DefaultScheduleEvent();
 	
 	
 	public InitTgpMB() {
@@ -123,15 +133,17 @@ public class InitTgpMB  implements Serializable {
 		 
 		 this.situacoes = new  String [4];
 		 situacoes[0] = "Atrasada";
-		 situacoes[1] = "Concluída";
+		 situacoes[1] = "Concluï¿½da";
 		 situacoes[2] = "Em Andamento";
-		 situacoes[3] = "Novas";
+		 situacoes[3] = "Nova";
 		 
 		this.atividadeAtual = new Atividade();
 		this.usuarioAtividadeAtual = new UsuarioAtividade();
 		this.configAtividadeAtual = new ConfigAtividade();
 		this.docAtividade = new DocAtividade();
-		 docsAtividades = new ArrayList<DocAtividade>();
+		docsAtividades = new ArrayList<DocAtividade>();
+		
+		this.initCalendar();
 	}
 	
 
@@ -255,7 +267,7 @@ public class InitTgpMB  implements Serializable {
 	        
 	       
         	if (configAtividade.getQuantDiasFolgaFeriado() >= diasT ){
-        		String info = "Verifique a configuração de dias úteis";
+        		String info = "Verifique a configuraï¿½ï¿½o de dias ï¿½teis";
     			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
         		return;
         	}
@@ -318,7 +330,7 @@ public class InitTgpMB  implements Serializable {
 		
 		Collections.sort(this.atividadesList);
 		
-		String info = "Apropiação de Horas atualizada com sucesso!";
+		String info = "Apropiaï¿½ï¿½o de Horas atualizada com sucesso!";
 		FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	}
 	
@@ -434,14 +446,14 @@ public class InitTgpMB  implements Serializable {
 		
 		if((new Date()).after(dateFinal)){
 			if(isConcluida(uaList)){
-				a.setSituacao("Concluída");
+				a.setSituacao("Concluï¿½da");
 			} else {
 				a.setSituacao("Atrasada");
 			}
 		} else{
 			
 			if (isConcluida(uaList)){
-				a.setSituacao("Concluída");
+				a.setSituacao("Concluï¿½da");
 			} else {
 				a.setSituacao("Em Andamento");
 			}
@@ -478,6 +490,82 @@ public class InitTgpMB  implements Serializable {
 	}
 
 
+	
+	 public void initCalendar(){
+	    	
+	    	FacesContext fc = FacesContext.getCurrentInstance();
+			HttpSession session = (HttpSession) fc.getExternalContext().getSession(false);
+			Usuario usuario = (Usuario) session.getAttribute("user");
+			
+			List<UsuarioAtividade> list = atividadeFacade.findAtividadeByUsuario(usuario.getUsuarioId());
+			
+			this.usuario = usuario;
+			
+			for (UsuarioAtividade atividade : list) {
+				Atividade a = atividade.getAtividade();
+				this.atividadesList.add(this.initSituacao(a));
+			}
+			
+			this.carregaCalendar();
+	    }
+	    
+	    
+	    public void carregaCalendar(){
+	    	
+	    	List<Atividade> atividades = this.atividadesList;
+	    	eventModel = new DefaultScheduleModel();
+	    	
+	    	for (Atividade atividade : atividades) {
+				
+	    		ConfigAtividade configAtividade = configAtividadeFacade.find(atividade.getConfigAtividade().getConfigAtividadeId());
+	    		
+	    		Calendar start = Calendar.getInstance();
+	    		start.setTime(atividade.getDtIni());
+	    		start.set(Calendar.HOUR, new Float(configAtividade.getQuantHorasDias()).intValue());
+	    		
+	    		
+	    		Calendar end = Calendar.getInstance();
+	    		end.setTime(atividade.getDtFim());
+	    		end.set(Calendar.HOUR, new Float(configAtividade.getQuantHorasDias()).intValue());
+	    		eventModel.addEvent(new DefaultScheduleEvent(atividade.getAtividadeNome(), start.getTime(), end.getTime()));
+	 			
+			}
+	    	
+	    }
+	
+	    
+    public void addEvent(ActionEvent actionEvent) {
+        if(event.getId() == null)
+            eventModel.addEvent(event);
+        else
+        	eventModel.updateEvent(event);
+	        event = new DefaultScheduleEvent();
+    }
+	     
+    public void onEventSelect(SelectEvent selectEvent) {
+        event = (ScheduleEvent) selectEvent.getObject();
+    }
+     
+    public void onDateSelect(SelectEvent selectEvent) {
+        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+    }
+     
+    public void onEventMove(ScheduleEntryMoveEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+         
+        addMessage(message);
+    }
+     
+    public void onEventResize(ScheduleEntryResizeEvent event) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:" + event.getDayDelta() + ", Minute delta:" + event.getMinuteDelta());
+         
+        addMessage(message);
+    }
+     
+    private void addMessage(FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+	
 	public UsuarioFacade getUsuarioFacade() {
 		return usuarioFacade;
 	}
@@ -485,6 +573,18 @@ public class InitTgpMB  implements Serializable {
 
 	public void setUsuarioFacade(UsuarioFacade usuarioFacade) {
 		this.usuarioFacade = usuarioFacade;
+	}
+
+	
+	
+
+	public ScheduleEvent getEvent() {
+		return event;
+	}
+
+
+	public void setEvent(ScheduleEvent event) {
+		this.event = event;
 	}
 
 
@@ -678,6 +778,16 @@ public class InitTgpMB  implements Serializable {
 
 	public void setSituacoes(String[] situacoes) {
 		this.situacoes = situacoes;
+	}
+
+
+	public ScheduleModel getEventModel() {
+		return eventModel;
+	}
+
+
+	public void setEventModel(ScheduleModel eventModel) {
+		this.eventModel = eventModel;
 	}
 
 
