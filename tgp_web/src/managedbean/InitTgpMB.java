@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -144,10 +145,30 @@ public class InitTgpMB  implements Serializable {
 		docsAtividades = new ArrayList<DocAtividade>();
 		
 		this.initCalendar();
+		this.initMsgLogin();
 	}
 	
 
 	
+	
+	public void initMsgLogin() {
+		
+		Date d = this.usuario.getUltimoLogin();
+		DateFormat df = DateFormat.getDateInstance();
+		
+		//if (d == null){
+			String info = "Bem Vindo";
+			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_ERROR,info, ""));
+		//}
+		
+		usuario.setUltimoLogin(new Date());
+		usuarioFacade.update(usuario);
+		
+		
+		
+	}
+
+
 	private void listaFotosUser() {
 
 		try {
