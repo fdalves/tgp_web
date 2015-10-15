@@ -193,7 +193,7 @@ public class AtividadeMB  implements Serializable {
 					return;
 				}
 			} else {
-				String info = "Selecione pelo menos um usuário respossável pela atividade !";
+				String info = "Selecione pelo menos um usuï¿½rio respossï¿½vel pela atividade !";
 				FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_FATAL,info, ""));
 				return;
 			}
@@ -263,7 +263,7 @@ public class AtividadeMB  implements Serializable {
 	        
 	        if (this.popUpSalve){
 	        	if (this.atividade.getConfigAtividade().getQuantDiasFolgaFeriado() >= diasT ){
-	        		String info = "Verifique a configuração de Dias úteis";
+	        		String info = "Verifique a configuraï¿½ï¿½o de Dias ï¿½teis";
 	    			FacesContext.getCurrentInstance().addMessage(null,	new FacesMessage(FacesMessage.SEVERITY_INFO,  info, ""));
 	        		return;
 	        	}
