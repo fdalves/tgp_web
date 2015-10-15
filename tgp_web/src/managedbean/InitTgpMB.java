@@ -98,6 +98,7 @@ public class InitTgpMB  implements Serializable {
 	@PostConstruct
 	public void ini(){
 		
+		
 			
 		this.usarioList = usuarioFacade.findAll();
 		this.listaFotosUser();
